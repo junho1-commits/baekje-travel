@@ -407,14 +407,22 @@ body {
     </div>
   </div>
 
-  <!-- 🧩 십자말풀이 바로가기 배너 -->
-  <div style="margin:0 16px 14px;">
-    <a href="crossword.html" style="display:flex;align-items:center;justify-content:space-between;background:#0F172A;border:2px solid #3B82F6;border-radius:14px;padding:14px 16px;text-decoration:none;color:#FFF;box-shadow:0 3px 10px rgba(0,0,0,0.15);">
+  <!-- 🧩 십자말풀이 & 🔢 두뇌 스도쿠 바로가기 -->
+  <div style="display:flex;gap:8px;margin:0 16px 14px;">
+    <a href="crossword.html" style="flex:1;display:flex;flex-direction:column;justify-content:space-between;background:#0F172A;border:2px solid #3B82F6;border-radius:14px;padding:12px 14px;text-decoration:none;color:#FFF;box-shadow:0 3px 10px rgba(0,0,0,0.15);">
       <div>
-        <div style="font-size:15px;font-weight:800;color:#60A5FA;">🧩 백제 역사 & 상식 십자말풀이</div>
-        <div style="font-size:13px;color:#94A3B8;margin-top:2px;">가로세로 낱말 맞추고 +1,000원 보너스!</div>
+        <div style="font-size:14px;font-weight:800;color:#60A5FA;">🧩 십자말풀이</div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">상식 & 역사 낱말퍼즐</div>
       </div>
-      <span style="background:#2563EB;color:#FFF;padding:6px 12px;border-radius:10px;font-size:13px;font-weight:800;">게임 시작 →</span>
+      <div style="margin-top:8px;font-size:12px;font-weight:800;color:#38BDF8;">+1,000원 보너스 →</div>
+    </a>
+
+    <a href="sudoku.html" style="flex:1;display:flex;flex-direction:column;justify-content:space-between;background:#0F172A;border:2px solid #6366F1;border-radius:14px;padding:12px 14px;text-decoration:none;color:#FFF;box-shadow:0 3px 10px rgba(0,0,0,0.15);">
+      <div>
+        <div style="font-size:14px;font-weight:800;color:#A5B4FC;">🔢 두뇌 스도쿠</div>
+        <div style="font-size:11px;color:#94A3B8;margin-top:2px;">초등 맞춤 4×4 / 6×6 / 9×9</div>
+      </div>
+      <div style="margin-top:8px;font-size:12px;font-weight:800;color:#818CF8;">+1,000원 보너스 →</div>
     </a>
   </div>
 
@@ -2296,26 +2304,41 @@ const QUESTIONS = [
 ];
 
 // ══════════════════════════════════════
-// APP STATE
+// APP STATE (통합 지갑 연동)
 // ══════════════════════════════════════
 const COIN_PER_Q=350;
 const MAX_COINS=50000;
 let state=loadState();
 
 function defaultState(){
-  return{coins:0,stages:{1:{},2:{},3:{},4:{},5:{}},wrongNotes:[],stageCoins:{1:0,2:0,3:0,4:0,5:0}};
+  return{coins:0,stages:{1:{},2:{},3:{},4:{},5:{}},wrongNotes:[],stageCoins:{1:0,2:0,3:0,4:0,5:0},history:[]};
 }
+
 function loadState(){
   try{
-    const s=localStorage.getItem('baekje_master');
-    const parsed = s ? JSON.parse(s) : defaultState();
+    const masterStr = localStorage.getItem('baekje_master_state');
+    let parsed = masterStr ? JSON.parse(masterStr) : null;
+    if(!parsed){
+      const s = localStorage.getItem('baekje_master');
+      parsed = s ? JSON.parse(s) : defaultState();
+    }
+    const legacyCoins = parseInt(localStorage.getItem('baekje_coins') || '0');
+    if(legacyCoins > (parsed.coins || 0)){
+      parsed.coins = legacyCoins;
+    }
     if(!Array.isArray(parsed.wrongNotes)) parsed.wrongNotes = [];
     if(!parsed.stageCoins) parsed.stageCoins = {1:0,2:0,3:0,4:0,5:0};
     if(!parsed.stages) parsed.stages = {1:{},2:{},3:{},4:{},5:{}};
+    if(!parsed.history) parsed.history = [];
     return parsed;
   }catch(e){return defaultState();}
 }
-function saveState(){localStorage.setItem('baekje_master',JSON.stringify(state));}
+
+function saveState(){
+  localStorage.setItem('baekje_master_state', JSON.stringify(state));
+  localStorage.setItem('baekje_master', JSON.stringify(state));
+  localStorage.setItem('baekje_coins', state.coins.toString());
+}
 
 // ══════════════════════════════════════
 // SCREEN NAV

@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>백제 역사 & 상식 십자말풀이</title>
+<title>초등 상식 & 역사 크로스워드</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
   --primary: #1E293B;
-  --accent: #2563EB;
-  --correct: #059669;
-  --wrong: #DC2626;
-  --gold: #D97706;
+  --accent: #3B82F6;
+  --correct: #10B981;
+  --wrong: #EF4444;
+  --gold: #F59E0B;
   --bg: #0F172A;
   --card-bg: #1E293B;
   --card-border: #334155;
   --text: #F8FAFC;
   --sub: #94A3B8;
   --cell-bg: #1E293B;
-  --cell-active: #3B82F6;
+  --cell-active: #2563EB;
   --cell-related: #1E3A8A;
   --cell-correct: #065F46;
 }
@@ -56,7 +56,7 @@ body {
 .topbar-title { font-size: 17px; font-weight: 800; color: #FFFFFF; display: flex; align-items: center; gap: 6px; }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
 .topbar-coins {
-  background: rgba(217, 119, 6, 0.2);
+  background: rgba(245, 158, 11, 0.15);
   border: 1px solid var(--gold);
   color: #FBBF24;
   border-radius: 20px;
@@ -68,7 +68,7 @@ body {
   background: none;
   border: none;
   color: #94A3B8;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
@@ -204,7 +204,7 @@ body {
   cursor: pointer;
 }
 
-/* ── Virtual Keyboard (모바일 최적화) ── */
+/* ── Touch Controls ── */
 .keyboard {
   padding: 10px 14px;
   background: #1E293B;
@@ -306,8 +306,8 @@ body {
   <!-- ── TOP BAR ── -->
   <div class="topbar">
     <div class="topbar-title">
-      <span>크로스워드</span>
-      <span style="font-size:12px;color:var(--sub);font-weight:600;">백제 역사&상식</span>
+      <span>🧩 크로스워드</span>
+      <span style="font-size:12px;color:var(--sub);font-weight:600;">상식&역사</span>
     </div>
     <div class="topbar-right">
       <div class="topbar-coins" id="cw-coins">0원</div>
@@ -315,13 +315,14 @@ body {
     </div>
   </div>
 
-  <!-- ── STAGE SELECTOR ── -->
+  <!-- ── STAGE SELECTOR (역사 + 흥미진진한 초등 상식) ── -->
   <div class="puzzle-selector" id="stage-tabs">
-    <div class="stage-tab active" onclick="loadPuzzle(0)">1. 한성백제의 시작</div>
-    <div class="stage-tab" onclick="loadPuzzle(1)">2. 웅진과 무령왕</div>
-    <div class="stage-tab" onclick="loadPuzzle(2)">3. 사비와 대향로</div>
-    <div class="stage-tab" onclick="loadPuzzle(3)">4. 익산과 서동요</div>
-    <div class="stage-tab" onclick="loadPuzzle(4)">5. 초등 역사 종합</div>
+    <div class="stage-tab active" onclick="loadPuzzle(0)">1. 한성과 생활과학</div>
+    <div class="stage-tab" onclick="loadPuzzle(1)">2. 웅진과 지구생물</div>
+    <div class="stage-tab" onclick="loadPuzzle(2)">3. 사비와 우주탐험</div>
+    <div class="stage-tab" onclick="loadPuzzle(3)">4. 익산과 스포츠상식</div>
+    <div class="stage-tab" onclick="loadPuzzle(4)">5. 위인과 문화예술</div>
+    <div class="stage-tab" onclick="loadPuzzle(5)">6. IT와 미래기술</div>
   </div>
 
   <!-- ── ACTIVE CLUE BANNER ── -->
@@ -330,8 +331,8 @@ body {
       <span class="clue-tag" id="clue-dir-tag">가로 01</span>
       <span style="font-size:12px;color:var(--sub);" id="clue-word-len">4글자</span>
     </div>
-    <div class="clue-title" id="clue-title">힌트 선택 중</div>
-    <div class="clue-desc" id="clue-desc">정답을 맞추면 1,000원 용돈이 적립됩니다.</div>
+    <div class="clue-title" id="clue-title">문제를 터치하여 시작하세요</div>
+    <div class="clue-desc" id="clue-desc">정답을 맞추면 총 용돈에 +1,000원이 적립됩니다!</div>
     <div class="clue-actions">
       <button class="hint-btn" onclick="showChosungHint()">초성 힌트 보기</button>
       <span style="font-size:13px;color:#38BDF8;font-weight:700;" id="clue-chosung"></span>
@@ -371,7 +372,7 @@ body {
     <div class="modal-title">십자말풀이 완료!</div>
     <div class="modal-desc" id="modal-stage-name">1단계 퍼즐을 완벽하게 풀었습니다!</div>
     <div class="modal-reward">
-      <div style="font-size:12px;color:var(--sub);">적립된 기념품 용돈</div>
+      <div style="font-size:12px;color:var(--sub);">통합 적립된 기념품 용돈</div>
       <div class="modal-reward-val">+1,000원</div>
     </div>
     <button class="modal-btn" onclick="nextStagePuzzle()">다음 십자말풀이 도전하기 →</button>
@@ -380,115 +381,167 @@ body {
 
 <script>
 // ══════════════════════════════════════
-// CROSSWORD PUZZLE DATA (초등 5학년 역사&상식)
+// CROSSWORD PUZZLE DATA (초등 5학년 상식 & 역사)
 // ══════════════════════════════════════
 const PUZZLES = [
-  // ── PUZZLE 1: 한성백제의 시작 ──
+  // ── PUZZLE 1: 한성과 생활과학 ──
   {
-    title: "1. 한성백제의 시작",
+    title: "1. 한성과 생활과학",
     size: 5,
     words: [
       { id: "A1", dir: "A", r: 0, c: 0, word: "풍납토성", num: 1, chosung: "ㅍㄴㅌㅅ",
         clue: "서울 한강변에 흙을 다져 쌓은 백제 초기의 거대한 평지 왕성" },
-      { id: "D1", dir: "D", r: 0, c: 0, word: "풍속", num: 1, chosung: "ㅍㅅ",
-        clue: "옛날부터 전해 내려오는 사회의 생활 습관이나 풍습" },
-      { id: "D2", dir: "D", r: 0, c: 2, word: "토기", num: 2, chosung: "ㅌㄱ",
-        clue: "흙을 빚어 가마에서 구워 만든 옛날 그릇 (세발토기 등)" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "풍력발전", num: 1, chosung: "ㅍㄹㅂㅈ",
+        clue: "바람의 힘으로 거대한 날개를 돌려 전기를 만들어내는 친환경 에너지 발전" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "토양", num: 2, chosung: "ㅌㅇ",
+        clue: "식물이 자라는 데 필요한 수분과 영양분을 품고 있는 겉 표면의 흙" },
       { id: "A2", dir: "A", r: 2, c: 1, word: "온조왕", num: 3, chosung: "ㅇㅈㅇ",
         clue: "고구려 주몽의 아들로 한강 유역에 백제를 건국한 첫 번째 왕" },
-      { id: "D3", dir: "D", r: 2, c: 1, word: "온도", num: 3, chosung: "ㅇㄷ",
-        clue: "물체나 공기가 따뜻하고 차가운 정도를 나타내는 수치" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "온실효과", num: 3, chosung: "ㅇㅅㅎㄱ",
+        clue: "이산화탄소 등의 가스가 지구를 감싸 지구 온도가 점점 올라가는 현상" },
       { id: "A3", dir: "A", r: 4, c: 0, word: "칠지도", num: 4, chosung: "ㅊㅈㄷ",
         clue: "근초고왕 때 백제가 일본에 보낸 7개의 날을 가진 특별한 칼" },
-      { id: "D4", dir: "D", r: 2, c: 3, word: "왕인", num: 5, chosung: "ㅇㅇ",
-        clue: "일본에 천자문과 논어를 전해준 백제의 뛰어난 학자" }
+      { id: "D4", dir: "D", r: 2, c: 3, word: "왕관", num: 5, chosung: "ㅇㄱ",
+        clue: "왕이 머리에 쓰는 화려한 금과 보석으로 장식된 모자" }
     ]
   },
-  // ── PUZZLE 2: 웅진과 무령왕 ──
+  // ── PUZZLE 2: 웅진과 지구생물 ──
   {
-    title: "2. 웅진과 무령왕",
+    title: "2. 웅진과 지구생물",
     size: 5,
     words: [
       { id: "A1", dir: "A", r: 0, c: 0, word: "무령왕릉", num: 1, chosung: "ㅁㄹㅇㄹ",
-        clue: "공주에 있으며 1,400년간 도굴되지 않은 채 발견된 백제 왕의 무덤" },
-      { id: "D1", dir: "D", r: 0, c: 0, word: "무지개", num: 1, chosung: "ㅁㅈㄱ",
-        clue: "비가 온 뒤 공기 중 물방울에 햇빛이 반사되어 생기는 7색 띠" },
-      { id: "D2", dir: "D", r: 0, c: 2, word: "왕비", num: 2, chosung: "ㅇㅂ",
-        clue: "임금의 정식 아내를 높여 부르는 말" },
+        clue: "공주에 위치하며 도굴되지 않은 채 발견된 백제 사마왕의 벽돌무덤" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "무척추", num: 1, chosung: "ㅁㅊㅊ",
+        clue: "등뼈(척추)가 없는 곤충, 지렁이, 문어 같은 동물들을 부르는 말" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "왕개미", num: 2, chosung: "ㅇㄱㅁ",
+        clue: "땅속에 집을 짓고 여왕을 중심으로 무리 생활을 하는 몸집이 큰 곤충" },
       { id: "A2", dir: "A", r: 2, c: 1, word: "진묘수", num: 3, chosung: "ㅈㅁㅅ",
-        clue: "무령왕릉 입구에서 무덤을 지키던 뿔 달린 상상 속의 돌짐승(석수)" },
-      { id: "D3", dir: "D", r: 2, c: 1, word: "진달래", num: 3, chosung: "ㅈㄷㄹ",
-        clue: "봄에 분홍색 꽃을 피우며 화전을 부쳐 먹기도 하는 우리나라 꽃" },
+        clue: "무령왕릉 입구에서 악귀를 쫓기 위해 무덤을 지키던 뿔 달린 돌짐승(석수)" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "진화론", num: 3, chosung: "ㅈㅎㄹ",
+        clue: "생물이 오랜 시간에 걸쳐 환경에 적응하며 변화했다는 다윈의 과학 이론" },
       { id: "A3", dir: "A", r: 4, c: 0, word: "공산성", num: 4, chosung: "ㄱㅅㅅ",
         clue: "공주 금강 절벽을 따라 지어진 웅진 도읍기 백제의 왕궁 산성" },
-      { id: "D4", dir: "D", r: 2, c: 3, word: "수도", num: 5, chosung: "ㅅㄷ",
-        clue: "한 나라의 중앙 정부가 있는 중심 도시 (한국은 서울, 백제 웅진은 공주)" }
+      { id: "D4", dir: "D", r: 2, c: 3, word: "수달", num: 5, chosung: "ㅅㄷ",
+        clue: "맑은 강가에 살며 물고기를 잡고 헤엄을 잘 치는 천연기념물 포유류" }
     ]
   },
-  // ── PUZZLE 3: 사비와 대향로 ──
+  // ── PUZZLE 3: 사비와 우주탐험 ──
   {
-    title: "3. 사비와 대향로",
+    title: "3. 사비와 우주탐험",
     size: 5,
     words: [
       { id: "A1", dir: "A", r: 0, c: 0, word: "금동대향로", num: 1, chosung: "ㄱㄷㄷㅎㄹ",
-        clue: "부여 능산리에서 출토된 봉황, 5악사, 용이 조각된 백제 최고의 국보" },
-      { id: "D1", dir: "D", r: 0, c: 0, word: "금메달", num: 1, chosung: "ㄱㅁㄷ",
-        clue: "올림픽이나 운동 경기에서 1등(우승)을 한 선수에게 수여하는 메달" },
-      { id: "D2", dir: "D", r: 0, c: 2, word: "대나무", num: 2, chosung: "ㄷㄴㅁ",
-        clue: "속이 비어 있고 마디가 있으며 사계절 내내 푸른 식물" },
+        clue: "부여 능산리에서 발견된 봉황과 5악사, 용이 조각된 백제 최고 걸작 국보" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "금성", num: 1, chosung: "ㄱㅅ",
+        clue: "태양계 행성 중 지구와 크기가 비슷하고 '샛별'이라 불리는 가장 밝은 행성" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "대기권", num: 2, chosung: "ㄷㄱㄱ",
+        clue: "지구를 둘러싸고 있는 공기의 층으로 우주방사선과 운석을 막아주는 보호막" },
       { id: "A2", dir: "A", r: 2, c: 1, word: "낙화암", num: 3, chosung: "ㄴㅎㅇ",
-        clue: "부여 부소산성 백마강변에 있으며 궁녀들의 슬픈 전설이 깃든 바위" },
-      { id: "D3", dir: "D", r: 2, c: 1, word: "낙타", num: 3, chosung: "ㄴㅌ",
-        clue: "등에 혹이 있고 물 없이도 사막을 오래 걸을 수 있는 동물" },
+        clue: "부여 부소산성 백마강변에 위치하며 삼천궁녀 전설이 깃든 바위 절벽" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "낙하산", num: 3, chosung: "ㄴㅎㅅ",
+        clue: "높은 곳에서 뛰어내릴 때 공기 저항을 이용해 안전하게 착륙하는 우산 모양 기구" },
       { id: "A3", dir: "A", r: 4, c: 0, word: "계백장군", num: 4, chosung: "ㄱㅂㅈㄱ",
         clue: "황산벌에서 5천 결사대를 이끌고 신라군에 맞서 싸운 백제의 영웅" },
-      { id: "D4", dir: "D", r: 2, c: 3, word: "암석", num: 5, chosung: "ㅇㅅ",
-        clue: "지구를 이루고 있는 단단한 돌덩어리와 바위" }
+      { id: "D4", dir: "D", r: 2, c: 3, word: "암흑물질", num: 5, chosung: "ㅇㅎㅁㅈ",
+        clue: "빛을 내지 않아 눈에 보이지 않지만 우주 대부분을 차지하는 신비한 물질" }
     ]
   },
-  // ── PUZZLE 4: 익산과 서동요 ──
+  // ── PUZZLE 4: 익산과 스포츠상식 ──
   {
-    title: "4. 익산과 서동요",
+    title: "4. 익산과 스포츠상식",
     size: 5,
     words: [
       { id: "A1", dir: "A", r: 0, c: 0, word: "미륵사지", num: 1, chosung: "ㅁㄹㅅㅈ",
         clue: "익산에 위치하며 우리나라 최대의 석탑이 서 있는 거대한 백제 절터" },
-      { id: "D1", dir: "D", r: 0, c: 0, word: "미술관", num: 1, chosung: "ㅁㅅㄱ",
-        clue: "그림, 조각, 공예품 등 예술 작품을 전시하고 감상하는 장소" },
-      { id: "D2", dir: "D", r: 0, c: 2, word: "사리함", num: 2, chosung: "ㅅㄹㅎ",
-        clue: "부처님의 유골이나 보석 같은 사리를 소중히 담아 보관하는 상자" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "미드필더", num: 1, chosung: "ㅁㄷㅍㄷ",
+        clue: "축구 경기에서 공격수와 수비수 사이에서 허리를 담당하는 포지션" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "사이클", num: 2, chosung: "ㅅㅇㅋ",
+        clue: "자전거를 타고 트랙이나 도로를 빠르게 달리는 올림픽 정식 종목" },
       { id: "A2", dir: "A", r: 2, c: 1, word: "서동요", num: 3, chosung: "ㅅㄷㅇ",
-        clue: "백제 무왕이 선화공주와 결혼하기 위해 지어 퍼뜨렸다는 옛 향가 노래" },
-      { id: "D3", dir: "D", r: 2, c: 1, word: "서울", num: 3, chosung: "ㅅㅇ",
-        clue: "대한민국의 수도이자 옛 한성백제의 도읍지" },
+        clue: "백제 무왕이 선화공주와 결혼하기 위해 지어 퍼뜨렸다는 옛 4구체 향가" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "서핑", num: 3, chosung: "ㅅㅍ",
+        clue: "보드를 타고 바다의 파도를 타며 균형을 잡는 수상 스포츠" },
       { id: "A3", dir: "A", r: 4, c: 0, word: "왕궁리", num: 4, chosung: "ㅇㄱㄹ",
         clue: "익산에 위치한 백제 무왕 시기의 왕궁 터와 5층석탑 유적지" },
-      { id: "D4", dir: "D", r: 2, c: 3, word: "요술", num: 5, chosung: "ㅇㅅ",
-        clue: "신비하고 기이한 재주나 마법" }
+      { id: "D4", dir: "D", r: 2, c: 3, word: "요트", num: 5, chosung: "ㅇㅌ",
+        clue: "바람을 돛에 받아서 물 위를 달리는 고급 해양 레저 보트" }
     ]
   },
-  // ── PUZZLE 5: 초등 역사 종합 ──
+  // ── PUZZLE 5: 위인과 문화예술 ──
   {
-    title: "5. 초등 역사 종합",
+    title: "5. 위인과 문화예술",
     size: 5,
     words: [
       { id: "A1", dir: "A", r: 0, c: 0, word: "세종대왕", num: 1, chosung: "ㅅㅈㄷㅇ",
         clue: "백성을 사랑하는 마음으로 훈민정음(한글)을 창제하신 조선의 임금" },
-      { id: "D1", dir: "D", r: 0, c: 0, word: "세계지도", num: 1, chosung: "ㅅㄱㅈㄷ",
-        clue: "지구 표면의 모든 대륙과 바다, 나라를 한눈에 볼 수 있게 그린 지도" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "세계문화", num: 1, chosung: "ㅅㄱㅁㅎ",
+        clue: "전 세계 여러 나라와 민족들이 오랜 세월 발전시켜 온 독특한 생활 양식" },
       { id: "D2", dir: "D", r: 0, c: 2, word: "대장경", num: 2, chosung: "ㄷㅈㄱ",
         clue: "합천 해인사에 보관된 고려 시대 8만 개의 나무 판에 새긴 불교 경전" },
       { id: "A2", dir: "A", r: 2, c: 1, word: "거북선", num: 3, chosung: "ㄱㅂㅅ",
         clue: "임진왜란 때 이순신 장군이 철판을 씌우고 용머리 포를 단 철갑 군함" },
-      { id: "D3", dir: "D", r: 2, c: 1, word: "거미줄", num: 3, chosung: "ㄱㅁㅈ",
-        clue: "거미가 먹이를 잡기 위해 끈적끈적한 실로 짠 방사형 그물" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "거문고", num: 3, chosung: "ㄱㅁㄱ",
+        clue: "술대로 6개의 줄을 뜯거나 퉁겨 소리를 내는 우리나라 전통 현악기" },
       { id: "A3", dir: "A", r: 4, c: 0, word: "첨성대", num: 4, chosung: "ㅊㅅㄷ",
         clue: "경주에 위치한 신라 선덕여왕 때 세운 동양에서 가장 오래된 천문대" },
       { id: "D4", dir: "D", r: 2, c: 3, word: "선인장", num: 5, chosung: "ㅅㅇㅈ",
         clue: "건조한 사막에서 수분을 뺏기지 않기 위해 잎이 가시로 변한 식물" }
     ]
+  },
+  // ── PUZZLE 6: IT와 미래기술 ──
+  {
+    title: "6. IT와 미래기술",
+    size: 5,
+    words: [
+      { id: "A1", dir: "A", r: 0, c: 0, word: "인공지능", num: 1, chosung: "ㅇㄱㅈㄴ",
+        clue: "컴퓨터가 사람처럼 생각하고 학습하여 문제를 해결하는 최첨단 AI 기술" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "인터넷", num: 1, chosung: "ㅇㅌㄴ",
+        clue: "전 세계 컴퓨터들이 하나로 연결되어 정보를 주고받는 거대한 통신망" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "지구본", num: 2, chosung: "ㅈㄱㅂ",
+        clue: "지구의 둥근 모양을 본떠서 대륙과 바다를 정확한 비율로 줄여 만든 모형" },
+      { id: "A2", dir: "A", r: 2, c: 1, word: "자율주행", num: 3, chosung: "ㅈㅇㅈㅎ",
+        clue: "운전자가 핸들을 잡지 않아도 센서와 카메라로 스스로 달리는 미래 자동차 기술" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "자석", num: 3, chosung: "ㅈㅅ",
+        clue: "N극과 S극이 있어 쇠붙이를 끌어당기는 성질을 가진 물체" },
+      { id: "A3", dir: "A", r: 4, c: 0, word: "블록체인", num: 4, chosung: "ㅂㄹㅊㅇ",
+        clue: "데이터를 블록에 담아 사슬처럼 연결하여 위조를 막는 안전한 보안 기술" },
+      { id: "D4", dir: "D", r: 2, c: 3, word: "행성", num: 5, chosung: "ㅎㅅ",
+        clue: "스스로 빛을 내지 못하고 태양 같은 별 주위를 도는 천체 (지구, 화성 등)" }
+    ]
   }
 ];
+
+// ══════════════════════════════════════
+// TOTAL WALLET SYSTEM (통합 지갑 연동)
+// ══════════════════════════════════════
+const MAX_COINS = 50000;
+
+function getGlobalState(){
+  try {
+    const raw = localStorage.getItem('baekje_master_state');
+    if(raw) return JSON.parse(raw);
+  } catch(e){}
+  // Fallback to single coins key if exists
+  const legacyCoins = parseInt(localStorage.getItem('baekje_coins') || '0');
+  return {
+    coins: legacyCoins,
+    history: [],
+    stages: {},
+    wrongNotes: []
+  };
+}
+
+function saveGlobalState(state){
+  localStorage.setItem('baekje_master_state', JSON.stringify(state));
+  localStorage.setItem('baekje_coins', state.coins.toString());
+}
+
+let appState = getGlobalState();
+
+function updateCoinsUI(){
+  document.getElementById('cw-coins').textContent = appState.coins.toLocaleString() + '원';
+}
 
 // ══════════════════════════════════════
 // GAME ENGINE
@@ -498,13 +551,6 @@ let gridState = [];
 let activeWord = null;
 let activeCell = { r: 0, c: 0 };
 let currentDir = 'A';
-
-const MAX_COINS = 50000;
-let userCoins = parseInt(localStorage.getItem('baekje_coins') || '0');
-
-function updateCoinsUI(){
-  document.getElementById('cw-coins').textContent = userCoins.toLocaleString() + '원';
-}
 
 function loadPuzzle(idx){
   curPuzzleIdx = idx;
@@ -702,8 +748,14 @@ function checkAllWords(){
 
 function onPuzzleComplete(){
   const reward = 1000;
-  userCoins = Math.min(userCoins + reward, MAX_COINS);
-  localStorage.setItem('baekje_coins', userCoins.toString());
+  appState.coins = Math.min(appState.coins + reward, MAX_COINS);
+  appState.history = appState.history || [];
+  appState.history.push({
+    desc: `십자말풀이 (${PUZZLES[curPuzzleIdx].title}) 완료`,
+    amount: reward,
+    date: new Date().toLocaleTimeString()
+  });
+  saveGlobalState(appState);
   updateCoinsUI();
 
   document.getElementById('modal-stage-name').textContent = `${PUZZLES[curPuzzleIdx].title} 완료!`;

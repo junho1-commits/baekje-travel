@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>초등 맞춤 두뇌 스도쿠 퍼즐</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #1E293B;
+  --accent: #6366F1;
+  --correct: #10B981;
+  --wrong: #EF4444;
+  --gold: #F59E0B;
+  --bg: #0F172A;
+  --card-bg: #1E293B;
+  --card-border: #334155;
+  --text: #F8FAFC;
+  --sub: #94A3B8;
+  --cell-bg: #1E293B;
+  --cell-fixed: #0B1120;
+  --cell-active: #4F46E5;
+  --cell-same: #312E81;
+  --cell-error: #7F1D1D;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.app-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #0F172A;
+  position: relative;
+  padding-bottom: 30px;
+}
+
+/* ── Top Bar ── */
+.topbar {
+  background: #1E293B;
+  border-bottom: 1px solid var(--card-border);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-title { font-size: 17px; font-weight: 800; color: #FFFFFF; display: flex; align-items: center; gap: 6px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-coins {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid var(--gold);
+  color: #FBBF24;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 800;
+}
+.back-btn {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ── Level Selector ── */
+.level-selector {
+  padding: 14px 16px 8px;
+  display: flex;
+  gap: 8px;
+}
+.level-tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border-radius: 12px;
+  background: #1E293B;
+  border: 1px solid var(--card-border);
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.level-tab.active {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(99,102,241,0.4);
+}
+
+/* ── Game Info Bar ── */
+.game-info {
+  padding: 8px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--sub);
+}
+.game-timer { font-weight: 700; color: #38BDF8; }
+
+/* ── Board Area ── */
+.board-wrap {
+  padding: 10px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sudoku-board {
+  display: grid;
+  background: #0B1120;
+  padding: 8px;
+  border-radius: 16px;
+  border: 2px solid var(--card-border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  gap: 3px;
+  user-select: none;
+}
+.s-cell {
+  width: 44px;
+  height: 44px;
+  background: var(--cell-bg);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #60A5FA;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.s-cell.fixed {
+  background: var(--cell-fixed);
+  color: #FFFFFF;
+  font-weight: 900;
+}
+.s-cell.active {
+  background: var(--cell-active) !important;
+  color: #FFFFFF !important;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(99,102,241,0.8);
+  z-index: 2;
+}
+.s-cell.same-val {
+  background: var(--cell-same);
+}
+.s-cell.error {
+  background: var(--cell-error) !important;
+  color: #FCA5A5 !important;
+}
+
+/* ── Number Keypad ── */
+.keypad-container {
+  padding: 14px 16px 20px;
+}
+.num-pad {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.n-btn {
+  flex: 1;
+  height: 52px;
+  background: #1E293B;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.1s;
+}
+.n-btn:active { background: var(--accent); }
+
+.tool-pad {
+  display: flex;
+  gap: 8px;
+}
+.tool-btn {
+  flex: 1;
+  padding: 12px;
+  background: #334155;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+.tool-btn.primary { background: var(--accent); border-color: var(--accent); }
+
+/* ── Guide Card ── */
+.guide-card {
+  margin: 10px 16px;
+  background: #1E293B;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--sub);
+  line-height: 1.6;
+}
+.guide-card strong { color: #F8FAFC; }
+
+/* ── Completion Modal ── */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.modal-card {
+  background: #1E293B;
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  padding: 26px 20px;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+}
+.modal-icon { font-size: 54px; margin-bottom: 10px; }
+.modal-title { font-size: 22px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px; }
+.modal-desc { font-size: 14px; color: var(--sub); margin-bottom: 18px; }
+.modal-reward {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+.modal-reward-val { font-size: 28px; font-weight: 900; color: #FBBF24; }
+.modal-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+
+  <!-- ── TOP BAR ── -->
+  <div class="topbar">
+    <div class="topbar-title">
+      <span>🔢 두뇌 스도쿠</span>
+      <span style="font-size:12px;color:var(--sub);font-weight:600;">초등 맞춤</span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-coins" id="sdk-coins">0원</div>
+      <a href="learn.html" class="back-btn">학습홈 ✕</a>
+    </div>
+  </div>
+
+  <!-- ── LEVEL SELECTOR ── -->
+  <div class="level-selector">
+    <div class="level-tab active" onclick="switchLevel(4)">4×4 미니 (쉬움)</div>
+    <div class="level-tab" onclick="switchLevel(6)">6×6 보통 (중급)</div>
+    <div class="level-tab" onclick="switchLevel(9)">9×9 정통 (도전)</div>
+  </div>
+
+  <div class="game-info">
+    <span id="level-desc">가로·세로·2×2 상자에 1~4를 겹치지 않게 채우세요!</span>
+    <span class="game-timer" id="game-timer">00:00</span>
+  </div>
+
+  <!-- ── SUDOKU BOARD ── -->
+  <div class="board-wrap">
+    <div class="sudoku-board" id="sudoku-board"></div>
+  </div>
+
+  <!-- ── KEYPAD & CONTROLS ── -->
+  <div class="keypad-container">
+    <div class="num-pad" id="num-pad"></div>
+    <div class="tool-pad">
+      <button class="tool-btn" onclick="eraseCell()">지우기 ⌫</button>
+      <button class="tool-btn" onclick="giveHint()">힌트 💡</button>
+      <button class="tool-btn primary" onclick="newGame()">새 게임 🔄</button>
+    </div>
+  </div>
+
+  <!-- ── GUIDE CARD ── -->
+  <div class="guide-card">
+    <strong>💡 스도쿠 규칙</strong>: 가로줄, 세로줄, 굵은 테두리 상자 안에 <strong>숫자가 중복되지 않도록</strong> 하나씩만 넣으면 완성됩니다! 완성 시 <strong>+1,000원 용돈</strong>이 총합 지갑에 적립됩니다.
+  </div>
+
+</div>
+
+<!-- ── COMPLETION MODAL ── -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">스도쿠 퍼즐 성공!</div>
+    <div class="modal-desc" id="modal-desc">멋진 두뇌 집중력으로 스도쿠를 완성했습니다!</div>
+    <div class="modal-reward">
+      <div style="font-size:12px;color:var(--sub);">총합 지갑 적립 완료</div>
+      <div class="modal-reward-val">+1,000원</div>
+    </div>
+    <button class="modal-btn" onclick="nextSudokuGame()">다음 스도쿠 풀기 →</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// TOTAL WALLET SYSTEM (통합 지갑 연동)
+// ══════════════════════════════════════
+const MAX_COINS = 50000;
+
+function getGlobalState(){
+  try {
+    const raw = localStorage.getItem('baekje_master_state');
+    if(raw) return JSON.parse(raw);
+  } catch(e){}
+  const legacyCoins = parseInt(localStorage.getItem('baekje_coins') || '0');
+  return {
+    coins: legacyCoins,
+    history: [],
+    stages: {},
+    wrongNotes: []
+  };
+}
+
+function saveGlobalState(state){
+  localStorage.setItem('baekje_master_state', JSON.stringify(state));
+  localStorage.setItem('baekje_coins', state.coins.toString());
+}
+
+let appState = getGlobalState();
+
+function updateCoinsUI(){
+  document.getElementById('sdk-coins').textContent = appState.coins.toLocaleString() + '원';
+}
+
+// ══════════════════════════════════════
+// SUDOKU PUZZLE PRESETS
+// ══════════════════════════════════════
+const PRESETS = {
+  4: [
+    {
+      init: [
+        [1, 0, 0, 4],
+        [0, 0, 1, 0],
+        [0, 1, 0, 0],
+        [4, 0, 0, 2]
+      ],
+      sol: [
+        [1, 2, 3, 4],
+        [3, 4, 1, 2],
+        [2, 1, 4, 3],
+        [4, 3, 2, 1]
+      ]
+    },
+    {
+      init: [
+        [0, 2, 4, 0],
+        [1, 0, 0, 3],
+        [4, 0, 0, 2],
+        [0, 1, 3, 0]
+      ],
+      sol: [
+        [3, 2, 4, 1],
+        [1, 4, 2, 3],
+        [4, 3, 1, 2],
+        [2, 1, 3, 4]
+      ]
+    }
+  ],
+  6: [
+    {
+      init: [
+        [1, 0, 0, 4, 0, 0],
+        [0, 0, 3, 0, 5, 0],
+        [0, 1, 0, 0, 0, 6],
+        [5, 0, 0, 0, 3, 0],
+        [0, 4, 0, 2, 0, 0],
+        [0, 0, 2, 0, 0, 5]
+      ],
+      sol: [
+        [1, 2, 5, 4, 6, 3],
+        [4, 6, 3, 1, 5, 2],
+        [2, 1, 4, 5, 8, 6],
+        [5, 8, 6, 2, 3, 4],
+        [3, 4, 1, 2, 8, 5],
+        [6, 3, 2, 6, 4, 5]
+      ]
+    }
+  ],
+  9: [
+    {
+      init: [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+      ],
+      sol: [
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 7, 6, 1, 4, 2, 3],
+        [4, 2, 6, 8, 5, 3, 7, 9, 1],
+        [7, 1, 3, 9, 2, 4, 8, 5, 6],
+        [9, 6, 1, 5, 3, 7, 2, 8, 4],
+        [2, 8, 7, 4, 1, 9, 6, 3, 5],
+        [3, 4, 5, 2, 8, 6, 1, 7, 9]
+      ]
+    }
+  ]
+};
+
+// ══════════════════════════════════════
+// GAME ENGINE
+// ══════════════════════════════════════
+let curSize = 4;
+let curPresetIdx = 0;
+let userGrid = [];
+let initGrid = [];
+let solGrid = [];
+let activeR = -1;
+let activeC = -1;
+let timerSeconds = 0;
+let timerInterval = null;
+
+function switchLevel(size){
+  curSize = size;
+  document.querySelectorAll('.level-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.textContent.includes(`${size}×${size}`));
+  });
+
+  const descs = {
+    4: "가로·세로·2×2 상자에 1~4를 겹치지 않게 채우세요!",
+    6: "가로·세로·2×3 상자에 1~6을 겹치지 않게 채우세요!",
+    9: "가로·세로·3×3 상자에 1~9를 겹치지 않게 채우세요!"
+  };
+  document.getElementById('level-desc').textContent = descs[size];
+
+  curPresetIdx = 0;
+  newGame();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  timerSeconds = 0;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    const min = String(Math.floor(timerSeconds/60)).padStart(2, '0');
+    const sec = String(timerSeconds%60).padStart(2, '0');
+    document.getElementById('game-timer').textContent = `${min}:${sec}`;
+  }, 1000);
+}
+
+function newGame(){
+  const presets = PRESETS[curSize];
+  const p = presets[curPresetIdx % presets.length];
+  initGrid = p.init.map(row => [...row]);
+  solGrid = p.sol.map(row => [...row]);
+  userGrid = p.init.map(row => [...row]);
+
+  activeR = -1;
+  activeC = -1;
+  renderBoard();
+  renderKeypad();
+  startTimer();
+}
+
+function renderBoard(){
+  const boardEl = document.getElementById('sudoku-board');
+  boardEl.style.gridTemplateColumns = `repeat(${curSize}, 1fr)`;
+  boardEl.innerHTML = '';
+
+  const cellWidth = curSize === 9 ? '38px' : (curSize === 6 ? '48px' : '64px');
+  const cellHeight = cellWidth;
+  const fontSize = curSize === 9 ? '18px' : (curSize === 6 ? '22px' : '28px');
+
+  for(let r=0; r<curSize; r++){
+    for(let c=0; c<curSize; c++){
+      const val = userGrid[r][c];
+      const isFixed = (initGrid[r][c] !== 0);
+
+      const cell = document.createElement('div');
+      cell.className = 's-cell' + (isFixed ? ' fixed' : '');
+      cell.style.width = cellWidth;
+      cell.style.height = cellHeight;
+      cell.style.fontSize = fontSize;
+      cell.textContent = val !== 0 ? val : '';
+      cell.dataset.r = r;
+      cell.dataset.c = c;
+
+      // Add border styling for 2x2, 2x3, 3x3 blocks
+      let blockR = (curSize === 4) ? 2 : ((curSize === 6) ? 2 : 3);
+      let blockC = (curSize === 4) ? 2 : ((curSize === 6) ? 3 : 3);
+      if((r + 1) % blockR === 0 && r !== curSize - 1) cell.style.borderBottom = '2px solid #64748B';
+      if((c + 1) % blockC === 0 && c !== curSize - 1) cell.style.borderRight = '2px solid #64748B';
+
+      cell.onclick = () => selectCell(r, c);
+      boardEl.appendChild(cell);
+    }
+  }
+}
+
+function renderKeypad(){
+  const pad = document.getElementById('num-pad');
+  pad.innerHTML = '';
+  for(let i=1; i<=curSize; i++){
+    const btn = document.createElement('button');
+    btn.className = 'n-btn';
+    btn.textContent = i;
+    btn.onclick = () => inputNum(i);
+    pad.appendChild(btn);
+  }
+}
+
+function selectCell(r, c){
+  activeR = r;
+  activeC = c;
+  const val = userGrid[r][c];
+
+  document.querySelectorAll('.s-cell').forEach(cell => {
+    cell.classList.remove('active', 'same-val', 'error');
+    const cr = parseInt(cell.dataset.r);
+    const cc = parseInt(cell.dataset.c);
+    const cVal = userGrid[cr][cc];
+
+    if(cr === r && cc === c){
+      cell.classList.add('active');
+    } else if(val !== 0 && cVal === val){
+      cell.classList.add('same-val');
+    }
+  });
+}
+
+function inputNum(num){
+  if(activeR === -1 || activeC === -1) return;
+  if(initGrid[activeR][activeC] !== 0) return; // Cannot edit fixed cell
+
+  userGrid[activeR][activeC] = num;
+  renderBoard();
+  selectCell(activeR, activeC);
+  checkWinCondition();
+}
+
+function eraseCell(){
+  if(activeR === -1 || activeC === -1) return;
+  if(initGrid[activeR][activeC] !== 0) return;
+  userGrid[activeR][activeC] = 0;
+  renderBoard();
+  selectCell(activeR, activeC);
+}
+
+function giveHint(){
+  if(activeR === -1 || activeC === -1) return;
+  if(initGrid[activeR][activeC] !== 0) return;
+  userGrid[activeR][activeC] = solGrid[activeR][activeC];
+  renderBoard();
+  selectCell(activeR, activeC);
+  checkWinCondition();
+}
+
+function checkWinCondition(){
+  let isComplete = true;
+  for(let r=0; r<curSize; r++){
+    for(let c=0; c<curSize; c++){
+      if(userGrid[r][c] !== solGrid[r][c]){
+        isComplete = false;
+        break;
+      }
+    }
+  }
+
+  if(isComplete){
+    clearInterval(timerInterval);
+    const reward = 1000;
+    appState.coins = Math.min(appState.coins + reward, MAX_COINS);
+    appState.history = appState.history || [];
+    appState.history.push({
+      desc: `두뇌 스도쿠 (${curSize}×${curSize}) 완성`,
+      amount: reward,
+      date: new Date().toLocaleTimeString()
+    });
+    saveGlobalState(appState);
+    updateCoinsUI();
+
+    document.getElementById('modal-desc').textContent = `${curSize}×${curSize} 스도쿠를 ${document.getElementById('game-timer').textContent} 만에 완성했습니다!`;
+    document.getElementById('modal-overlay').style.display = 'flex';
+  }
+}
+
+function nextSudokuGame(){
+  document.getElementById('modal-overlay').style.display = 'none';
+  curPresetIdx++;
+  newGame();
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+updateCoinsUI();
+switchLevel(4);
+</script>
+</body>
+</html>
