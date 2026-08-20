@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>백제 역사 & 상식 십자말풀이</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #1E293B;
+  --accent: #2563EB;
+  --correct: #059669;
+  --wrong: #DC2626;
+  --gold: #D97706;
+  --bg: #0F172A;
+  --card-bg: #1E293B;
+  --card-border: #334155;
+  --text: #F8FAFC;
+  --sub: #94A3B8;
+  --cell-bg: #1E293B;
+  --cell-active: #3B82F6;
+  --cell-related: #1E3A8A;
+  --cell-correct: #065F46;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.app-container {
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #0F172A;
+  position: relative;
+  padding-bottom: 30px;
+}
+
+/* ── Top Bar ── */
+.topbar {
+  background: #1E293B;
+  border-bottom: 1px solid var(--card-border);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-title { font-size: 17px; font-weight: 800; color: #FFFFFF; display: flex; align-items: center; gap: 6px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-coins {
+  background: rgba(217, 119, 6, 0.2);
+  border: 1px solid var(--gold);
+  color: #FBBF24;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 800;
+}
+.back-btn {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ── Puzzle Selector ── */
+.puzzle-selector {
+  padding: 14px 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.puzzle-selector::-webkit-scrollbar { display: none; }
+.stage-tab {
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: #1E293B;
+  border: 1px solid var(--card-border);
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.stage-tab.active {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+}
+
+/* ── Grid Board Area ── */
+.board-container {
+  padding: 10px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.grid {
+  display: grid;
+  gap: 6px;
+  background: #0B1120;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.cell {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  background: var(--cell-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+.cell.block {
+  background: transparent;
+  border-color: transparent;
+  pointer-events: none;
+}
+.cell.active {
+  background: var(--cell-active);
+  border-color: #60A5FA;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  transform: scale(1.05);
+  z-index: 2;
+}
+.cell.related {
+  background: var(--cell-related);
+  border-color: #3B82F6;
+}
+.cell.correct {
+  background: var(--cell-correct);
+  border-color: #10B981;
+  color: #A7F3D0;
+}
+.cell-num {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #94A3B8;
+}
+
+/* ── Active Clue Banner ── */
+.clue-banner {
+  margin: 10px 16px;
+  background: #1E293B;
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.clue-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.clue-title { font-size: 16px; font-weight: 800; color: #FFFFFF; margin-bottom: 4px; line-height: 1.4; }
+.clue-desc { font-size: 13px; color: #94A3B8; }
+.clue-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--card-border);
+}
+.hint-btn {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid var(--gold);
+  color: #FBBF24;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ── Virtual Keyboard (모바일 최적화) ── */
+.keyboard {
+  padding: 10px 14px;
+  background: #1E293B;
+  border-top: 1px solid var(--card-border);
+  margin-top: 10px;
+}
+.kb-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+.kb-btn-large {
+  flex: 1;
+  padding: 14px;
+  background: var(--accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+}
+.kb-btn-sec {
+  flex: 1;
+  padding: 14px;
+  background: #334155;
+  color: #FFFFFF;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ── Clue List Area ── */
+.clue-lists {
+  padding: 10px 16px 20px;
+}
+.clue-lists h4 { font-size: 15px; font-weight: 800; color: #94A3B8; margin: 14px 0 8px; }
+.clue-item {
+  background: #1E293B;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+.clue-item.active { border-color: var(--accent); background: #1E3A8A; }
+.clue-item.solved { opacity: 0.5; text-decoration: line-through; }
+.clue-item-num { font-weight: 800; color: #60A5FA; margin-right: 6px; }
+
+/* ── Completion Modal ── */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.modal-card {
+  background: #1E293B;
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  padding: 26px 20px;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+}
+.modal-icon { font-size: 54px; margin-bottom: 10px; }
+.modal-title { font-size: 22px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px; }
+.modal-desc { font-size: 14px; color: var(--sub); margin-bottom: 18px; }
+.modal-reward {
+  background: rgba(217, 119, 6, 0.15);
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+.modal-reward-val { font-size: 28px; font-weight: 900; color: #FBBF24; }
+.modal-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+
+  <!-- ── TOP BAR ── -->
+  <div class="topbar">
+    <div class="topbar-title">
+      <span>크로스워드</span>
+      <span style="font-size:12px;color:var(--sub);font-weight:600;">백제 역사&상식</span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-coins" id="cw-coins">0원</div>
+      <a href="learn.html" class="back-btn">학습홈 ✕</a>
+    </div>
+  </div>
+
+  <!-- ── STAGE SELECTOR ── -->
+  <div class="puzzle-selector" id="stage-tabs">
+    <div class="stage-tab active" onclick="loadPuzzle(0)">1. 한성백제의 시작</div>
+    <div class="stage-tab" onclick="loadPuzzle(1)">2. 웅진과 무령왕</div>
+    <div class="stage-tab" onclick="loadPuzzle(2)">3. 사비와 대향로</div>
+    <div class="stage-tab" onclick="loadPuzzle(3)">4. 익산과 서동요</div>
+    <div class="stage-tab" onclick="loadPuzzle(4)">5. 초등 역사 종합</div>
+  </div>
+
+  <!-- ── ACTIVE CLUE BANNER ── -->
+  <div class="clue-banner" id="clue-banner">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span class="clue-tag" id="clue-dir-tag">가로 01</span>
+      <span style="font-size:12px;color:var(--sub);" id="clue-word-len">4글자</span>
+    </div>
+    <div class="clue-title" id="clue-title">힌트 선택 중</div>
+    <div class="clue-desc" id="clue-desc">정답을 맞추면 1,000원 용돈이 적립됩니다.</div>
+    <div class="clue-actions">
+      <button class="hint-btn" onclick="showChosungHint()">초성 힌트 보기</button>
+      <span style="font-size:13px;color:#38BDF8;font-weight:700;" id="clue-chosung"></span>
+    </div>
+  </div>
+
+  <!-- ── GRID BOARD ── -->
+  <div class="board-container">
+    <div class="grid" id="grid-board"></div>
+  </div>
+
+  <!-- ── TOUCH CONTROLS ── -->
+  <div class="keyboard">
+    <div class="kb-row">
+      <button class="kb-btn-large" onclick="inputAnswerPrompt()">정답 입력하기 ✍️</button>
+    </div>
+    <div class="kb-row">
+      <button class="kb-btn-sec" onclick="toggleDirection()">가로 / 세로 전환 🔄</button>
+      <button class="kb-btn-sec" onclick="clearActiveWord()">글자 지우기 ⌫</button>
+    </div>
+  </div>
+
+  <!-- ── CLUE LISTS ── -->
+  <div class="clue-lists">
+    <h4>가로 문제</h4>
+    <div id="across-list"></div>
+    <h4>세로 문제</h4>
+    <div id="down-list"></div>
+  </div>
+
+</div>
+
+<!-- ── COMPLETION MODAL ── -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-icon">🏆</div>
+    <div class="modal-title">십자말풀이 완료!</div>
+    <div class="modal-desc" id="modal-stage-name">1단계 퍼즐을 완벽하게 풀었습니다!</div>
+    <div class="modal-reward">
+      <div style="font-size:12px;color:var(--sub);">적립된 기념품 용돈</div>
+      <div class="modal-reward-val">+1,000원</div>
+    </div>
+    <button class="modal-btn" onclick="nextStagePuzzle()">다음 십자말풀이 도전하기 →</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// CROSSWORD PUZZLE DATA (초등 5학년 역사&상식)
+// ══════════════════════════════════════
+const PUZZLES = [
+  // ── PUZZLE 1: 한성백제의 시작 ──
+  {
+    title: "1. 한성백제의 시작",
+    size: 5,
+    words: [
+      { id: "A1", dir: "A", r: 0, c: 0, word: "풍납토성", num: 1, chosung: "ㅍㄴㅌㅅ",
+        clue: "서울 한강변에 흙을 다져 쌓은 백제 초기의 거대한 평지 왕성" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "풍속", num: 1, chosung: "ㅍㅅ",
+        clue: "옛날부터 전해 내려오는 사회의 생활 습관이나 풍습" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "토기", num: 2, chosung: "ㅌㄱ",
+        clue: "흙을 빚어 가마에서 구워 만든 옛날 그릇 (세발토기 등)" },
+      { id: "A2", dir: "A", r: 2, c: 1, word: "온조왕", num: 3, chosung: "ㅇㅈㅇ",
+        clue: "고구려 주몽의 아들로 한강 유역에 백제를 건국한 첫 번째 왕" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "온도", num: 3, chosung: "ㅇㄷ",
+        clue: "물체나 공기가 따뜻하고 차가운 정도를 나타내는 수치" },
+      { id: "A3", dir: "A", r: 4, c: 0, word: "칠지도", num: 4, chosung: "ㅊㅈㄷ",
+        clue: "근초고왕 때 백제가 일본에 보낸 7개의 날을 가진 특별한 칼" },
+      { id: "D4", dir: "D", r: 2, c: 3, word: "왕인", num: 5, chosung: "ㅇㅇ",
+        clue: "일본에 천자문과 논어를 전해준 백제의 뛰어난 학자" }
+    ]
+  },
+  // ── PUZZLE 2: 웅진과 무령왕 ──
+  {
+    title: "2. 웅진과 무령왕",
+    size: 5,
+    words: [
+      { id: "A1", dir: "A", r: 0, c: 0, word: "무령왕릉", num: 1, chosung: "ㅁㄹㅇㄹ",
+        clue: "공주에 있으며 1,400년간 도굴되지 않은 채 발견된 백제 왕의 무덤" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "무지개", num: 1, chosung: "ㅁㅈㄱ",
+        clue: "비가 온 뒤 공기 중 물방울에 햇빛이 반사되어 생기는 7색 띠" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "왕비", num: 2, chosung: "ㅇㅂ",
+        clue: "임금의 정식 아내를 높여 부르는 말" },
+      { id: "A2", dir: "A", r: 2, c: 1, word: "진묘수", num: 3, chosung: "ㅈㅁㅅ",
+        clue: "무령왕릉 입구에서 무덤을 지키던 뿔 달린 상상 속의 돌짐승(석수)" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "진달래", num: 3, chosung: "ㅈㄷㄹ",
+        clue: "봄에 분홍색 꽃을 피우며 화전을 부쳐 먹기도 하는 우리나라 꽃" },
+      { id: "A3", dir: "A", r: 4, c: 0, word: "공산성", num: 4, chosung: "ㄱㅅㅅ",
+        clue: "공주 금강 절벽을 따라 지어진 웅진 도읍기 백제의 왕궁 산성" },
+      { id: "D4", dir: "D", r: 2, c: 3, word: "수도", num: 5, chosung: "ㅅㄷ",
+        clue: "한 나라의 중앙 정부가 있는 중심 도시 (한국은 서울, 백제 웅진은 공주)" }
+    ]
+  },
+  // ── PUZZLE 3: 사비와 대향로 ──
+  {
+    title: "3. 사비와 대향로",
+    size: 5,
+    words: [
+      { id: "A1", dir: "A", r: 0, c: 0, word: "금동대향로", num: 1, chosung: "ㄱㄷㄷㅎㄹ",
+        clue: "부여 능산리에서 출토된 봉황, 5악사, 용이 조각된 백제 최고의 국보" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "금메달", num: 1, chosung: "ㄱㅁㄷ",
+        clue: "올림픽이나 운동 경기에서 1등(우승)을 한 선수에게 수여하는 메달" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "대나무", num: 2, chosung: "ㄷㄴㅁ",
+        clue: "속이 비어 있고 마디가 있으며 사계절 내내 푸른 식물" },
+      { id: "A2", dir: "A", r: 2, c: 1, word: "낙화암", num: 3, chosung: "ㄴㅎㅇ",
+        clue: "부여 부소산성 백마강변에 있으며 궁녀들의 슬픈 전설이 깃든 바위" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "낙타", num: 3, chosung: "ㄴㅌ",
+        clue: "등에 혹이 있고 물 없이도 사막을 오래 걸을 수 있는 동물" },
+      { id: "A3", dir: "A", r: 4, c: 0, word: "계백장군", num: 4, chosung: "ㄱㅂㅈㄱ",
+        clue: "황산벌에서 5천 결사대를 이끌고 신라군에 맞서 싸운 백제의 영웅" },
+      { id: "D4", dir: "D", r: 2, c: 3, word: "암석", num: 5, chosung: "ㅇㅅ",
+        clue: "지구를 이루고 있는 단단한 돌덩어리와 바위" }
+    ]
+  },
+  // ── PUZZLE 4: 익산과 서동요 ──
+  {
+    title: "4. 익산과 서동요",
+    size: 5,
+    words: [
+      { id: "A1", dir: "A", r: 0, c: 0, word: "미륵사지", num: 1, chosung: "ㅁㄹㅅㅈ",
+        clue: "익산에 위치하며 우리나라 최대의 석탑이 서 있는 거대한 백제 절터" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "미술관", num: 1, chosung: "ㅁㅅㄱ",
+        clue: "그림, 조각, 공예품 등 예술 작품을 전시하고 감상하는 장소" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "사리함", num: 2, chosung: "ㅅㄹㅎ",
+        clue: "부처님의 유골이나 보석 같은 사리를 소중히 담아 보관하는 상자" },
+      { id: "A2", dir: "A", r: 2, c: 1, word: "서동요", num: 3, chosung: "ㅅㄷㅇ",
+        clue: "백제 무왕이 선화공주와 결혼하기 위해 지어 퍼뜨렸다는 옛 향가 노래" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "서울", num: 3, chosung: "ㅅㅇ",
+        clue: "대한민국의 수도이자 옛 한성백제의 도읍지" },
+      { id: "A3", dir: "A", r: 4, c: 0, word: "왕궁리", num: 4, chosung: "ㅇㄱㄹ",
+        clue: "익산에 위치한 백제 무왕 시기의 왕궁 터와 5층석탑 유적지" },
+      { id: "D4", dir: "D", r: 2, c: 3, word: "요술", num: 5, chosung: "ㅇㅅ",
+        clue: "신비하고 기이한 재주나 마법" }
+    ]
+  },
+  // ── PUZZLE 5: 초등 역사 종합 ──
+  {
+    title: "5. 초등 역사 종합",
+    size: 5,
+    words: [
+      { id: "A1", dir: "A", r: 0, c: 0, word: "세종대왕", num: 1, chosung: "ㅅㅈㄷㅇ",
+        clue: "백성을 사랑하는 마음으로 훈민정음(한글)을 창제하신 조선의 임금" },
+      { id: "D1", dir: "D", r: 0, c: 0, word: "세계지도", num: 1, chosung: "ㅅㄱㅈㄷ",
+        clue: "지구 표면의 모든 대륙과 바다, 나라를 한눈에 볼 수 있게 그린 지도" },
+      { id: "D2", dir: "D", r: 0, c: 2, word: "대장경", num: 2, chosung: "ㄷㅈㄱ",
+        clue: "합천 해인사에 보관된 고려 시대 8만 개의 나무 판에 새긴 불교 경전" },
+      { id: "A2", dir: "A", r: 2, c: 1, word: "거북선", num: 3, chosung: "ㄱㅂㅅ",
+        clue: "임진왜란 때 이순신 장군이 철판을 씌우고 용머리 포를 단 철갑 군함" },
+      { id: "D3", dir: "D", r: 2, c: 1, word: "거미줄", num: 3, chosung: "ㄱㅁㅈ",
+        clue: "거미가 먹이를 잡기 위해 끈적끈적한 실로 짠 방사형 그물" },
+      { id: "A3", dir: "A", r: 4, c: 0, word: "첨성대", num: 4, chosung: "ㅊㅅㄷ",
+        clue: "경주에 위치한 신라 선덕여왕 때 세운 동양에서 가장 오래된 천문대" },
+      { id: "D4", dir: "D", r: 2, c: 3, word: "선인장", num: 5, chosung: "ㅅㅇㅈ",
+        clue: "건조한 사막에서 수분을 뺏기지 않기 위해 잎이 가시로 변한 식물" }
+    ]
+  }
+];
+
+// ══════════════════════════════════════
+// GAME ENGINE
+// ══════════════════════════════════════
+let curPuzzleIdx = 0;
+let gridState = [];
+let activeWord = null;
+let activeCell = { r: 0, c: 0 };
+let currentDir = 'A';
+
+const MAX_COINS = 50000;
+let userCoins = parseInt(localStorage.getItem('baekje_coins') || '0');
+
+function updateCoinsUI(){
+  document.getElementById('cw-coins').textContent = userCoins.toLocaleString() + '원';
+}
+
+function loadPuzzle(idx){
+  curPuzzleIdx = idx;
+  const p = PUZZLES[idx];
+
+  document.querySelectorAll('.stage-tab').forEach((tab, i)=>{
+    tab.className = (i===idx) ? 'stage-tab active' : 'stage-tab';
+  });
+
+  gridState = Array(p.size).fill(null).map(() => Array(p.size).fill(''));
+
+  renderBoard();
+  renderClueLists();
+  selectWord(p.words[0]);
+}
+
+function renderBoard(){
+  const p = PUZZLES[curPuzzleIdx];
+  const gridEl = document.getElementById('grid-board');
+  gridEl.style.gridTemplateColumns = `repeat(${p.size}, 1fr)`;
+  gridEl.innerHTML = '';
+
+  const cellMap = {};
+  p.words.forEach(w => {
+    for(let i=0; i<w.word.length; i++){
+      const r = (w.dir === 'A') ? w.r : w.r + i;
+      const c = (w.dir === 'A') ? w.c + i : w.c;
+      const key = `${r}_${c}`;
+      cellMap[key] = cellMap[key] || { inWord: true, num: null };
+      if(i === 0) cellMap[key].num = w.num;
+    }
+  });
+
+  for(let r=0; r<p.size; r++){
+    for(let c=0; c<p.size; c++){
+      const key = `${r}_${c}`;
+      const cellEl = document.createElement('div');
+      
+      if(!cellMap[key]){
+        cellEl.className = 'cell block';
+      } else {
+        cellEl.className = 'cell';
+        cellEl.id = `cell_${r}_${c}`;
+        cellEl.dataset.r = r;
+        cellEl.dataset.c = c;
+        if(cellMap[key].num){
+          cellEl.innerHTML = `<span class="cell-num">${cellMap[key].num}</span>`;
+        }
+        cellEl.onclick = () => onCellClick(r, c);
+      }
+      gridEl.appendChild(cellEl);
+    }
+  }
+}
+
+function onCellClick(r, c){
+  const p = PUZZLES[curPuzzleIdx];
+  const candidateWords = p.words.filter(w => {
+    if(w.dir === 'A') return w.r === r && c >= w.c && c < w.c + w.word.length;
+    else return w.c === c && r >= w.r && r < w.r + w.word.length;
+  });
+
+  if(candidateWords.length === 0) return;
+
+  if(activeCell.r === r && activeCell.c === c && candidateWords.length > 1){
+    currentDir = (currentDir === 'A') ? 'D' : 'A';
+  }
+
+  let selected = candidateWords.find(w => w.dir === currentDir) || candidateWords[0];
+  currentDir = selected.dir;
+  activeCell = { r, c };
+  selectWord(selected);
+}
+
+function selectWord(w){
+  activeWord = w;
+  currentDir = w.dir;
+
+  document.getElementById('clue-dir-tag').textContent = (w.dir === 'A' ? '가로 ' : '세로 ') + (w.num < 10 ? '0' : '') + w.num;
+  document.getElementById('clue-word-len').textContent = `${w.word.length}글자`;
+  document.getElementById('clue-title').textContent = w.clue;
+  document.getElementById('clue-desc').textContent = `정답 단어: ${w.word.length}글자`;
+  document.getElementById('clue-chosung').textContent = '';
+
+  const p = PUZZLES[curPuzzleIdx];
+  for(let r=0; r<p.size; r++){
+    for(let c=0; c<p.size; c++){
+      const el = document.getElementById(`cell_${r}_${c}`);
+      if(!el) continue;
+      el.classList.remove('active', 'related');
+
+      const inActiveWord = (w.dir === 'A') 
+        ? (r === w.r && c >= w.c && c < w.c + w.word.length)
+        : (c === w.c && r >= w.r && r < w.r + w.word.length);
+
+      if(r === activeCell.r && c === activeCell.c){
+        el.classList.add('active');
+      } else if(inActiveWord){
+        el.classList.add('related');
+      }
+    }
+  }
+
+  document.querySelectorAll('.clue-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.id === w.id);
+  });
+}
+
+function showChosungHint(){
+  if(!activeWord) return;
+  document.getElementById('clue-chosung').textContent = `초성: ${activeWord.chosung}`;
+}
+
+function toggleDirection(){
+  if(!activeWord) return;
+  const p = PUZZLES[curPuzzleIdx];
+  const otherWords = p.words.filter(w => {
+    if(w.dir === 'A') return w.r === activeCell.r && activeCell.c >= w.c && activeCell.c < w.c + w.word.length;
+    else return w.c === activeCell.c && activeCell.r >= w.r && activeCell.r < w.r + w.word.length;
+  });
+  if(otherWords.length > 1){
+    const other = otherWords.find(w => w.id !== activeWord.id);
+    if(other) selectWord(other);
+  }
+}
+
+function inputAnswerPrompt(){
+  if(!activeWord) return;
+  const ans = prompt(`[${activeWord.dir==='A'?'가로':'세로'} ${activeWord.num}번: ${activeWord.word.length}글자]
+${activeWord.clue}
+
+정답 단어를 입력하세요:`);
+  if(ans){
+    const clean = ans.trim();
+    for(let i=0; i<Math.min(clean.length, activeWord.word.length); i++){
+      const r = (activeWord.dir === 'A') ? activeWord.r : activeWord.r + i;
+      const c = (activeWord.dir === 'A') ? activeWord.c + i : activeWord.c;
+      gridState[r][c] = clean[i];
+      updateCellDisplay(r, c);
+    }
+    checkAllWords();
+  }
+}
+
+function clearActiveWord(){
+  if(!activeWord) return;
+  for(let i=0; i<activeWord.word.length; i++){
+    const r = (activeWord.dir === 'A') ? activeWord.r : activeWord.r + i;
+    const c = (activeWord.dir === 'A') ? activeWord.c + i : activeWord.c;
+    gridState[r][c] = '';
+    updateCellDisplay(r, c);
+  }
+  checkAllWords();
+}
+
+function updateCellDisplay(r, c){
+  const el = document.getElementById(`cell_${r}_${c}`);
+  if(!el) return;
+  const numSpan = el.querySelector('.cell-num');
+  const numHtml = numSpan ? numSpan.outerHTML : '';
+  el.innerHTML = numHtml + gridState[r][c];
+}
+
+function checkAllWords(){
+  const p = PUZZLES[curPuzzleIdx];
+  let allCorrect = true;
+
+  p.words.forEach(w => {
+    let currentStr = '';
+    for(let i=0; i<w.word.length; i++){
+      const r = (w.dir === 'A') ? w.r : w.r + i;
+      const c = (w.dir === 'A') ? w.c + i : w.c;
+      currentStr += gridState[r][c] || '';
+    }
+    const isSolved = (currentStr === w.word);
+    
+    const itemEl = document.querySelector(`.clue-item[data-id="${w.id}"]`);
+    if(itemEl) itemEl.classList.toggle('solved', isSolved);
+
+    if(isSolved){
+      for(let i=0; i<w.word.length; i++){
+        const r = (w.dir === 'A') ? w.r : w.r + i;
+        const c = (w.dir === 'A') ? w.c + i : w.c;
+        const el = document.getElementById(`cell_${r}_${c}`);
+        if(el) el.classList.add('correct');
+      }
+    }
+    if(!isSolved) allCorrect = false;
+  });
+
+  if(allCorrect){
+    onPuzzleComplete();
+  }
+}
+
+function onPuzzleComplete(){
+  const reward = 1000;
+  userCoins = Math.min(userCoins + reward, MAX_COINS);
+  localStorage.setItem('baekje_coins', userCoins.toString());
+  updateCoinsUI();
+
+  document.getElementById('modal-stage-name').textContent = `${PUZZLES[curPuzzleIdx].title} 완료!`;
+  document.getElementById('modal-overlay').style.display = 'flex';
+}
+
+function nextStagePuzzle(){
+  document.getElementById('modal-overlay').style.display = 'none';
+  const nextIdx = (curPuzzleIdx + 1) % PUZZLES.length;
+  loadPuzzle(nextIdx);
+}
+
+function renderClueLists(){
+  const p = PUZZLES[curPuzzleIdx];
+  const aList = document.getElementById('across-list');
+  const dList = document.getElementById('down-list');
+  aList.innerHTML = '';
+  dList.innerHTML = '';
+
+  p.words.forEach(w => {
+    const item = document.createElement('div');
+    item.className = 'clue-item';
+    item.dataset.id = w.id;
+    item.innerHTML = `<span class="clue-item-num">[${w.dir==='A'?'가로':'세로'} ${w.num}번]</span> ${w.clue} (${w.word.length}글자)`;
+    item.onclick = () => {
+      activeCell = { r: w.r, c: w.c };
+      selectWord(w);
+    };
+    if(w.dir === 'A') aList.appendChild(item);
+    else dList.appendChild(item);
+  });
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+updateCoinsUI();
+loadPuzzle(0);
+</script>
+</body>
+</html>
