@@ -3,372 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>🚗 아빠와 아들의 백제 여행</title>
+<title>백제 문화유산 2박 3일 여행 일정표</title>
 <style>
-  :root {
-    --day1: #4A90D9;
-    --day2: #E8913A;
-    --day3: #5BB85D;
-    --bg: #F5F5F7;
-    --card: #FFFFFF;
-    --text: #1D1D1F;
-    --sub: #6E6E73;
-    --border: #E5E5EA;
-    --accent: #FF6B35;
-  }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #1E3A8A;
+  --day1: #2563EB;
+  --day2: #D97706;
+  --day3: #059669;
+  --accent: #4B5563;
+  --bg: #F3F4F6;
+  --card: #FFFFFF;
+  --text: #111827;
+  --sub: #4B5563;
+  --border: #E5E7EB;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 80px;
+}
 
-  body {
-    font-family: -apple-system, 'Pretendard', 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    padding-bottom: 80px;
-  }
+/* ── Header ── */
+.header {
+  background: #1E293B;
+  color: #FFFFFF;
+  padding: 24px 20px;
+  text-align: center;
+}
+.header-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.header-sub { font-size: 15px; color: #94A3B8; }
+.header-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+}
 
-  /* ── Header ── */
-  .header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    color: white;
-    padding: 28px 20px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: -20px;
-    left: 0; right: 0;
-    height: 40px;
-    background: var(--bg);
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  }
-  .header-title {
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 4px;
-  }
-  .header-sub {
-    font-size: 13px;
-    opacity: 0.75;
-    font-weight: 400;
-  }
-  .header-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.15);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 11px;
-    margin-top: 10px;
-    backdrop-filter: blur(10px);
-  }
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  padding: 12px 16px 0;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+  padding-bottom: 12px;
+}
+.tab {
+  flex: 1;
+  padding: 12px 6px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  color: var(--sub);
+}
+.tab.active { color: #FFFFFF; border-color: transparent; }
+.tab[data-day="1"].active { background: var(--day1); }
+.tab[data-day="2"].active { background: var(--day2); }
+.tab[data-day="3"].active { background: var(--day3); }
+.tab[data-day="cost"].active { background: var(--accent); }
 
-  /* ── Day Tabs ── */
-  .tabs {
-    display: flex;
-    padding: 8px 16px 0;
-    gap: 8px;
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 100;
-    padding-bottom: 8px;
-  }
-  .tab {
-    flex: 1;
-    padding: 12px 8px;
-    border-radius: 14px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    background: var(--card);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  }
-  .tab.active {
-    color: white;
-    transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-  .tab[data-day="1"].active { background: var(--day1); }
-  .tab[data-day="2"].active { background: var(--day2); }
-  .tab[data-day="3"].active { background: var(--day3); }
-  .tab[data-day="cost"].active { background: var(--accent); }
-  .tab-emoji { font-size: 18px; display: block; margin-bottom: 2px; }
-  .tab-label { font-size: 10px; opacity: 0.7; font-weight: 500; }
+/* ── Day Content ── */
+.day-content { display: none; padding: 12px 16px; }
+.day-content.active { display: block; }
+.day-header {
+  border-radius: 14px;
+  padding: 18px 20px;
+  color: #FFFFFF;
+  margin-bottom: 18px;
+}
+.day-header.day1 { background: var(--day1); }
+.day-header.day2 { background: var(--day2); }
+.day-header.day3 { background: var(--day3); }
+.day-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.day-summary { font-size: 14px; opacity: 0.95; }
 
-  /* ── Day Content ── */
-  .day-content { display: none; padding: 12px 16px; }
-  .day-content.active { display: block; animation: fadeIn 0.3s ease; }
+/* ── Timeline ── */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: #CBD5E1;
+}
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-dot {
+  position: absolute;
+  left: -28px;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 4px solid var(--day1);
+}
+.day2 .tl-dot { border-color: var(--day2); }
+.day3 .tl-dot { border-color: var(--day3); }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+.tl-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.tl-time { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.tl-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+.tl-desc { font-size: 15px; color: var(--sub); line-height: 1.6; }
+.tl-tip {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #F8FAFC;
+  border-left: 3px solid #3B82F6;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.5;
+}
 
-  /* ── Day Header ── */
-  .day-header {
-    border-radius: 16px;
-    padding: 18px;
-    color: white;
-    margin-bottom: 16px;
-  }
-  .day-header.day1 { background: linear-gradient(135deg, var(--day1), #3A7BD5); }
-  .day-header.day2 { background: linear-gradient(135deg, var(--day2), #D4792A); }
-  .day-header.day3 { background: linear-gradient(135deg, var(--day3), #4A9E4C); }
-  .day-header h2 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-  .day-header p { font-size: 12px; opacity: 0.85; line-height: 1.5; }
+/* ── Phone Button ── */
+.phone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: #065F46;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 10px;
+}
 
-  /* ── Timeline ── */
-  .timeline { position: relative; padding-left: 28px; }
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 10px;
-    top: 20px;
-    bottom: 20px;
-    width: 2px;
-    background: var(--border);
-  }
+/* ── Checklists ── */
+.check-section {
+  background: #FFFFFF;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+}
+.check-section h3 { font-size: 17px; font-weight: 800; margin-bottom: 12px; }
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.check-item:last-child { border-bottom: none; }
+.check-item input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.check-item.checked .check-text { text-decoration: line-through; color: #9CA3AF; }
 
-  .tl-item {
-    position: relative;
-    margin-bottom: 12px;
-  }
-  .tl-dot {
-    position: absolute;
-    left: -24px;
-    top: 18px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 3px solid var(--day1);
-    background: white;
-    z-index: 2;
-  }
-  .day2-content .tl-dot { border-color: var(--day2); }
-  .day3-content .tl-dot { border-color: var(--day3); }
-
-  .tl-dot.major {
-    width: 18px;
-    height: 18px;
-    left: -26px;
-    top: 16px;
-    background: var(--day1);
-    border: 3px solid white;
-    box-shadow: 0 0 0 2px var(--day1);
-  }
-  .day2-content .tl-dot.major {
-    background: var(--day2);
-    box-shadow: 0 0 0 2px var(--day2);
-  }
-  .day3-content .tl-dot.major {
-    background: var(--day3);
-    box-shadow: 0 0 0 2px var(--day3);
-  }
-
-  .tl-card {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  }
-  .tl-card.highlight {
-    border-left: 4px solid var(--accent);
-  }
-
-  .tl-time {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--sub);
-    margin-bottom: 4px;
-  }
-  .tl-title {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    line-height: 1.4;
-  }
-  .tl-desc {
-    font-size: 12.5px;
-    color: var(--sub);
-    line-height: 1.6;
-  }
-  .tl-desc ul {
-    padding-left: 16px;
-    margin-top: 4px;
-  }
-  .tl-desc li {
-    margin-bottom: 3px;
-  }
-
-  /* ── Tags ── */
-  .tag {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 700;
-    margin-right: 4px;
-    margin-top: 6px;
-  }
-  .tag-indoor { background: #E3F2FD; color: #1565C0; }
-  .tag-ride { background: #FFF3E0; color: #E65100; }
-  .tag-food { background: #FCE4EC; color: #C62828; }
-  .tag-history { background: #F3E5F5; color: #6A1B9A; }
-  .tag-photo { background: #E8F5E9; color: #2E7D32; }
-  .tag-free { background: #E0F7FA; color: #00695C; }
-  .tag-drive { background: #ECEFF1; color: #37474F; }
-
-  /* ── Phone Button ── */
-  .phone-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: #E8F5E9;
-    color: #2E7D32;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: none;
-    margin-top: 8px;
-    border: none;
-    cursor: pointer;
-  }
-  .phone-btn:active { opacity: 0.7; }
-
-  /* ── Warning Box ── */
-  .warn-box {
-    background: #FFF8E1;
-    border: 1px solid #FFE082;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: #F57F17;
-    margin-top: 8px;
-    line-height: 1.5;
-  }
-  .warn-box::before { content: '⚠️ '; }
-
-  /* ── Cost Section ── */
-  .cost-card {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  }
-  .cost-card h3 {
-    font-size: 14px;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .cost-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    font-size: 13px;
-    border-bottom: 1px dashed var(--border);
-  }
-  .cost-row:last-child { border: none; }
-  .cost-row .label { color: var(--sub); }
-  .cost-row .value { font-weight: 700; }
-  .cost-total {
-    display: flex;
-    justify-content: space-between;
-    padding: 14px 0 0;
-    font-size: 16px;
-    font-weight: 800;
-    border-top: 2px solid var(--text);
-    margin-top: 8px;
-  }
-  .cost-total .value { color: var(--accent); }
-
-  /* ── Checklist ── */
-  .check-section {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 16px;
-    margin-top: 16px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  }
-  .check-section h3 {
-    font-size: 15px;
-    font-weight: 800;
-    margin-bottom: 12px;
-  }
-  .check-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    line-height: 1.5;
-    cursor: pointer;
-  }
-  .check-item:last-child { border: none; }
-  .check-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
-    accent-color: var(--day3);
-    flex-shrink: 0;
-  }
-  .check-item.checked .check-text {
-    text-decoration: line-through;
-    color: var(--sub);
-  }
-
-  /* ── Move Card ── */
-  .move-card {
-    background: #F0F0F5;
-    border-radius: 10px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .move-icon { font-size: 20px; }
-  .move-info { font-size: 12px; color: var(--sub); line-height: 1.5; }
-  .move-info strong { color: var(--text); }
 </style>
 </head>
 <body>
 
 <!-- ═══ HEADER ═══ -->
 <div class="header">
-  <div class="header-title">🚗 아빠와 아들의 백제 여행</div>
+  <div class="header-title">아빠와 아들의 백제 문화유산 여행</div>
   <div class="header-sub">초5 맞춤 · 2박 3일 · 부산 출발</div>
-  <div class="header-badge">📅 금요일 14:00 출발 → 일요일 17:30 귀가</div>
+  <div class="header-badge">일정: 금요일 14:00 출발 → 일요일 17:30 귀가 (2박 3일)</div>
   <a href="learn.html" style="display:block;margin-top:12px;background:linear-gradient(135deg,#F4A900,#F39C12);color:#fff;text-decoration:none;padding:10px 14px;border-radius:12px;font-size:13px;font-weight:800;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.2);">
-    👑 백제 퀴즈 풀고 기념품 용돈 받기 ➡️
+    백제 역사 퀴즈 풀고 용돈 모으기
   </a>
 </div>
 
 <!-- ═══ TABS ═══ -->
 <div class="tabs">
   <div class="tab active" data-day="1" onclick="showDay(1)">
-    <span class="tab-emoji">🚗</span>1일차
+    1일차
     <div class="tab-label">금 · 점촌</div>
   </div>
   <div class="tab" data-day="2" onclick="showDay(2)">
-    <span class="tab-emoji">🏛️</span>2일차
+    2일차
     <div class="tab-label">토 · 백제</div>
   </div>
   <div class="tab" data-day="3" onclick="showDay(3)">
-    <span class="tab-emoji">🎬</span>3일차
+    3일차
     <div class="tab-label">일 · 익산</div>
   </div>
   <div class="tab" data-day="cost" onclick="showDay('cost')">
-    <span class="tab-emoji">💰</span>비용
+    비용
     <div class="tab-label">체크리스트</div>
   </div>
 </div>

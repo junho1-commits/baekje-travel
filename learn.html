@@ -3,160 +3,337 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>👑 백제 마스터 - 학습앱</title>
+<title>백제 역사 탐험 - 사전 학습</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#6C5CE7;--gold:#F4A900;--correct:#00B894;--wrong:#E17055;--bg:#F8F9FA;--card:#FFF;--text:#2D3436;--sub:#636E72;--border:#DFE6E9}
-body{font-family:-apple-system,'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
 
-/* ── Screens ── */
-.screen{display:none;min-height:100vh;padding-bottom:30px}
-.screen.active{display:block;animation:fadeIn .3s}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes coinDrop{0%{transform:translateY(-40px) scale(0);opacity:0}60%{transform:translateY(5px) scale(1.2);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes sparkle{0%,100%{opacity:1}50%{opacity:.4}}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #1E3A8A;
+  --primary-light: #3B82F6;
+  --accent: #D97706;
+  --correct: #059669;
+  --wrong: #DC2626;
+  --bg: #F3F4F6;
+  --card: #FFFFFF;
+  --text: #111827;
+  --sub: #4B5563;
+  --border: #E5E7EB;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 80px;
+}
 
-/* ── Header Bar ── */
-.topbar{background:linear-gradient(135deg,#6C5CE7,#A29BFE);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.topbar-title{font-size:15px;font-weight:800}
-.topbar-coins{background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px}
-.topbar-back{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:4px 8px}
+/* ── Top Bar ── */
+.topbar {
+  background: #1E293B;
+  color: #FFFFFF;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.topbar-title { font-size: 18px; font-weight: 700; }
+.topbar-coins {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.topbar-back {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
 
 /* ── Main Screen ── */
-.main-header{background:linear-gradient(135deg,#2D1B69 0%,#6C5CE7 50%,#A29BFE 100%);color:#fff;padding:30px 20px 40px;text-align:center;position:relative}
-.main-header::after{content:'';position:absolute;bottom:-20px;left:0;right:0;height:40px;background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0}
-.main-mascot{font-size:64px;margin-bottom:8px}
-.main-title{font-size:22px;font-weight:900}
-.main-sub{font-size:13px;opacity:.8;margin-top:4px}
+.main-header {
+  background: #1E293B;
+  color: #FFFFFF;
+  padding: 24px 20px 36px;
+  text-align: center;
+}
+.main-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+.main-sub { font-size: 15px; color: #94A3B8; }
 
 /* ── Wallet Card ── */
-.wallet{background:linear-gradient(135deg,#F4A900,#F39C12);border-radius:18px;margin:0 16px;padding:20px;color:#fff;text-align:center;position:relative;top:-10px;box-shadow:0 6px 20px rgba(244,169,0,.3)}
-.wallet-label{font-size:12px;opacity:.85}
-.wallet-amount{font-size:36px;font-weight:900;margin:4px 0}
-.wallet-max{font-size:11px;opacity:.7}
-.wallet-bar{background:rgba(255,255,255,.3);border-radius:10px;height:8px;margin-top:10px;overflow:hidden}
-.wallet-fill{background:#fff;height:100%;border-radius:10px;transition:width .5s}
+.wallet {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin: -16px 16px 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.wallet-label { font-size: 15px; color: var(--sub); font-weight: 600; }
+.wallet-amount { font-size: 34px; font-weight: 800; color: var(--accent); margin: 6px 0; }
+.wallet-max { font-size: 14px; color: #6B7280; }
+.wallet-bar {
+  background: #E5E7EB;
+  border-radius: 8px;
+  height: 10px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.wallet-fill {
+  background: var(--accent);
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.4s;
+}
+
+/* ── Quick Nav Buttons ── */
+.quick-nav { display: flex; gap: 10px; margin: 0 16px 20px; }
+.quick-nav-btn {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.quick-nav-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.quick-nav-desc { font-size: 14px; color: var(--sub); margin-top: 2px; }
 
 /* ── Stage Cards ── */
-.stages{padding:12px 16px}
-.stages h3{font-size:15px;font-weight:800;margin-bottom:12px;padding-left:4px}
-.stage-card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.05);display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .2s;position:relative;overflow:hidden}
-.stage-card:active{transform:scale(.97)}
-.stage-card.locked{opacity:.5;pointer-events:none}
-.stage-card.locked::after{content:'🔒';position:absolute;right:16px;font-size:20px}
-.stage-card.cleared{border:2px solid var(--correct)}
-.stage-icon{font-size:36px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:14px;flex-shrink:0}
-.stage-info{flex:1}
-.stage-name{font-size:14px;font-weight:700}
-.stage-desc{font-size:11px;color:var(--sub);margin-top:2px}
-.stage-progress{height:4px;background:var(--border);border-radius:4px;margin-top:8px;overflow:hidden}
-.stage-progress-fill{height:100%;border-radius:4px;background:var(--primary);transition:width .3s}
-.stage-score{font-size:11px;color:var(--sub);margin-top:4px}
-
-/* ── Bottom Nav ── */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid var(--border);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;padding:10px 0 8px;text-align:center;font-size:10px;color:var(--sub);cursor:pointer;border:none;background:none;font-weight:600}
-.nav-btn.active{color:var(--primary)}
-.nav-btn span{font-size:20px;display:block;margin-bottom:2px}
-body{padding-bottom:70px}
-
-/* ── Study Screen ── */
-.study-header{padding:20px 16px;text-align:center}
-.study-header h2{font-size:18px;font-weight:800}
-.study-header p{font-size:12px;color:var(--sub);margin-top:4px}
-.study-card{background:var(--card);border-radius:16px;margin:0 16px 12px;padding:18px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
-.study-card h4{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--primary)}
-.study-card p{font-size:13px;line-height:1.7;color:var(--sub)}
-.study-card .visual{font-size:48px;text-align:center;padding:16px 0;background:#F8F7FF;border-radius:12px;margin-bottom:12px}
-.study-start-btn{display:block;margin:16px;padding:16px;background:var(--primary);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;text-align:center}
-.study-start-btn:active{opacity:.8}
+.stages { padding: 0 16px; }
+.stages h3 { font-size: 18px; font-weight: 800; margin-bottom: 14px; }
+.stage-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  cursor: pointer;
+}
+.stage-card.cleared { border-left: 6px solid var(--correct); }
+.stage-name { font-size: 17px; font-weight: 800; color: var(--text); }
+.stage-desc { font-size: 14px; color: var(--sub); margin: 4px 0 10px; }
+.stage-progress { height: 6px; background: #E5E7EB; border-radius: 4px; overflow: hidden; }
+.stage-progress-fill { height: 100%; background: var(--primary-light); }
+.stage-score { font-size: 14px; color: #4B5563; margin-top: 8px; font-weight: 600; }
 
 /* ── Quiz Screen ── */
-.quiz-top{padding:16px;display:flex;align-items:center;gap:10px}
-.quiz-num{font-size:12px;color:var(--sub);font-weight:700}
-.quiz-bar{flex:1;height:6px;background:var(--border);border-radius:6px;overflow:hidden}
-.quiz-bar-fill{height:100%;background:var(--primary);border-radius:6px;transition:width .3s}
-.quiz-streak{font-size:12px;color:var(--gold);font-weight:700}
+.quiz-top {
+  padding: 14px 16px;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.quiz-num { font-size: 16px; font-weight: 700; color: var(--text); min-width: 60px; }
+.quiz-bar { flex: 1; height: 8px; background: #E5E7EB; border-radius: 6px; overflow: hidden; }
+.quiz-bar-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
+.quiz-streak { font-size: 14px; font-weight: 700; color: var(--accent); }
 
-.q-card{background:var(--card);border-radius:18px;margin:0 16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.q-visual{font-size:56px;text-align:center;padding:20px;background:linear-gradient(135deg,#F8F7FF,#EDE7F6);border-radius:14px;margin-bottom:16px;line-height:1.3}
-.q-visual.map{font-size:14px;line-height:1.8;padding:14px}
-.q-type{font-size:10px;color:var(--primary);font-weight:700;margin-bottom:6px;text-transform:uppercase}
-.q-text{font-size:15px;font-weight:700;line-height:1.6;margin-bottom:16px}
-.q-hint-btn{display:inline-block;padding:6px 14px;border-radius:8px;background:#FFF3E0;color:#E65100;font-size:11px;font-weight:700;border:none;cursor:pointer;margin-bottom:12px}
-.q-hint-box{background:#FFF8E1;border:1px solid #FFE082;border-radius:10px;padding:10px 14px;font-size:12px;color:#F57F17;margin-bottom:12px;display:none;line-height:1.5}
-.q-hint-box.show{display:block}
+.q-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  margin: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.q-type {
+  display: inline-block;
+  background: #EFF6FF;
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.q-text {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  color: var(--text);
+}
+.q-hint-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #FEF3C7;
+  color: #92400E;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.q-hint-box {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #92400E;
+  margin-bottom: 16px;
+  display: none;
+  line-height: 1.6;
+}
+.q-hint-box.show { display: block; }
 
 /* ── Options ── */
-.opts{display:flex;flex-direction:column;gap:8px}
-.opt{padding:14px 16px;border:2px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;background:#fff;text-align:left;display:flex;align-items:center;gap:10px}
-.opt:active{transform:scale(.98)}
-.opt-num{width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
-.opt.correct{border-color:var(--correct);background:#E8F8F5;animation:pulse .3s}
-.opt.correct .opt-num{background:var(--correct);color:#fff}
-.opt.wrong{border-color:var(--wrong);background:#FDEDEC;animation:shake .3s}
-.opt.wrong .opt-num{background:var(--wrong);color:#fff}
-.opt.disabled{pointer-events:none;opacity:.6}
-.opt.correct.disabled{opacity:1}
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt {
+  padding: 16px 18px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #FFFFFF;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+}
+.opt:active { background: #F3F4F6; }
+.opt-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.opt.correct { border-color: var(--correct); background: #ECFDF5; }
+.opt.correct .opt-num { background: var(--correct); color: #FFFFFF; }
+.opt.wrong { border-color: var(--wrong); background: #FEF2F2; }
+.opt.wrong .opt-num { background: var(--wrong); color: #FFFFFF; }
+.opt.disabled { pointer-events: none; }
 
 /* ── OX Options ── */
-.ox-opts{display:flex;gap:12px}
-.ox-btn{flex:1;padding:20px;border:2px solid var(--border);border-radius:14px;font-size:28px;font-weight:900;cursor:pointer;text-align:center;background:#fff;transition:all .2s}
-.ox-btn:active{transform:scale(.95)}
-.ox-btn.correct{border-color:var(--correct);background:#E8F8F5}
-.ox-btn.wrong{border-color:var(--wrong);background:#FDEDEC;animation:shake .3s}
+.ox-opts { display: flex; gap: 14px; }
+.ox-btn {
+  flex: 1;
+  padding: 24px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  font-size: 32px;
+  font-weight: 900;
+  cursor: pointer;
+  text-align: center;
+  background: #FFFFFF;
+}
+.ox-btn.correct { border-color: var(--correct); background: #ECFDF5; color: var(--correct); }
+.ox-btn.wrong { border-color: var(--wrong); background: #FEF2F2; color: var(--wrong); }
 
 /* ── Result Feedback ── */
-.q-result{margin-top:16px;padding:14px;border-radius:12px;font-size:13px;line-height:1.6;display:none}
-.q-result.show{display:block;animation:fadeIn .3s}
-.q-result.is-correct{background:#E8F8F5;border:1px solid #A3E4D7;color:#1E8449}
-.q-result.is-wrong{background:#FDEDEC;border:1px solid #F5B7B1;color:#C0392B}
-.q-result-title{font-weight:800;font-size:14px;margin-bottom:4px}
-.q-result .coin-anim{display:inline-block;animation:coinDrop .5s}
-.q-next-btn{display:block;margin:16px;padding:14px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;display:none}
-.q-next-btn.show{display:block}
+.q-result {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  display: none;
+}
+.q-result.show { display: block; }
+.q-result.is-correct { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+.q-result.is-wrong { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
+.q-result-title { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
 
-/* ── Stage Result ── */
-.result-screen{text-align:center;padding:30px 20px}
-.result-emoji{font-size:72px;margin-bottom:12px}
-.result-title{font-size:22px;font-weight:900}
-.result-sub{font-size:14px;color:var(--sub);margin-top:6px}
-.result-stats{display:flex;gap:12px;margin:20px 0;justify-content:center}
-.result-stat{background:var(--card);border-radius:14px;padding:16px 20px;box-shadow:0 2px 6px rgba(0,0,0,.05);min-width:90px}
-.result-stat .val{font-size:24px;font-weight:900;color:var(--primary)}
-.result-stat .lbl{font-size:11px;color:var(--sub);margin-top:2px}
-.result-coin{font-size:32px;font-weight:900;color:var(--gold);margin:16px 0}
-.result-btn{padding:14px 40px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin:8px}
+.q-next-btn {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 16px auto;
+  padding: 16px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+  display: none;
+}
+.q-next-btn.show { display: block; }
+
+/* ── Bottom Nav ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  display: flex;
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-btn {
+  flex: 1;
+  padding: 14px 0 12px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--sub);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-weight: 700;
+}
+.nav-btn.active { color: var(--primary); border-top: 3px solid var(--primary); background: #F8FAFC; }
 
 /* ── Wrong Notes ── */
-.wrong-header{padding:20px 16px;text-align:center}
-.wrong-header h2{font-size:18px;font-weight:800}
-.wrong-header p{font-size:12px;color:var(--sub);margin-top:4px}
-.wrong-card{background:var(--card);border-radius:14px;margin:0 16px 10px;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,.05);border-left:4px solid var(--wrong)}
-.wrong-card .wq{font-size:14px;font-weight:700;margin-bottom:6px}
-.wrong-card .wa{font-size:12px;color:var(--wrong);margin-bottom:4px}
-.wrong-card .wc{font-size:12px;color:var(--correct);margin-bottom:6px}
-.wrong-card .we{font-size:12px;color:var(--sub);line-height:1.5;background:#F8F9FA;padding:8px 10px;border-radius:8px}
-.wrong-card .wv{font-size:32px;text-align:center;padding:8px;margin-bottom:8px}
-.wrong-empty{text-align:center;padding:40px;color:var(--sub);font-size:14px}
-.wrong-filter{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.wrong-filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap}
-.wrong-filter-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.wrong-header { padding: 20px 16px 12px; text-align: center; }
+.wrong-header h2 { font-size: 20px; font-weight: 800; }
+.wrong-header p { font-size: 15px; color: var(--sub); margin-top: 4px; }
+.wrong-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  margin: 0 16px 14px;
+  padding: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border-left: 5px solid var(--wrong);
+}
+.wrong-card .wq { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
+.wrong-card .wa { font-size: 15px; color: var(--wrong); margin-bottom: 4px; }
+.wrong-card .wc { font-size: 15px; color: var(--correct); margin-bottom: 8px; font-weight: 700; }
+.wrong-card .we { font-size: 14px; color: var(--sub); line-height: 1.6; background: #F9FAFB; padding: 10px 12px; border-radius: 8px; }
+.wrong-empty { text-align: center; padding: 40px; color: var(--sub); font-size: 16px; }
+.wrong-filter { display: flex; gap: 8px; padding: 0 16px 14px; overflow-x: auto; }
+.wrong-filter-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: #FFFFFF;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.wrong-filter-btn.active { background: var(--primary); color: #FFFFFF; border-color: var(--primary); }
 
-/* ── Wallet Screen ── */
-.big-wallet{text-align:center;padding:30px 20px}
-.big-wallet-emoji{font-size:72px}
-.big-wallet-amount{font-size:48px;font-weight:900;color:var(--gold);margin:10px 0}
-.big-wallet-label{font-size:14px;color:var(--sub)}
-.big-wallet-bar{background:var(--border);border-radius:10px;height:12px;margin:16px 30px;overflow:hidden}
-.big-wallet-fill{background:linear-gradient(90deg,var(--gold),#F39C12);height:100%;border-radius:10px;transition:width .5s}
-.wallet-history{margin:0 16px}
-.wallet-row{display:flex;justify-content:space-between;padding:12px 16px;background:var(--card);border-radius:10px;margin-bottom:6px;font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.wallet-row .wr-label{color:var(--sub)}
-.wallet-row .wr-val{font-weight:700;color:var(--gold)}
-.show-btn{display:block;margin:20px auto;padding:14px 40px;background:linear-gradient(135deg,var(--gold),#F39C12);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(244,169,0,.3)}
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
 </style>
 </head>
 <body>
@@ -165,26 +342,26 @@ body{padding-bottom:70px}
 <div class="screen active" id="scr-main">
   <div class="main-header">
     <a href="index.html" style="display:inline-block;background:rgba(255,255,255,0.15);color:#fff;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px;backdrop-filter:blur(5px);">
-      🚗 여행 일정 보기
+      여행 일정표 보기
     </a>
     <div class="main-mascot">👑</div>
-    <div class="main-title">백제 마스터</div>
-    <div class="main-sub">퀴즈를 풀고 기념품 용돈을 모으자!</div>
+    <div class="main-title">백제 역사 탐험</div>
+    <div class="main-sub">백제 역사 학습 및 기념품 용돈 적립</div>
   </div>
   <div class="wallet" onclick="showScreen('scr-wallet')">
-    <div class="wallet-label">💰 내 기념품 용돈</div>
+    <div class="wallet-label">적립된 기념품 용돈</div>
     <div class="wallet-amount" id="main-coins">0원</div>
-    <div class="wallet-max">최대 50,000원</div>
+    <div class="wallet-max">목표 금액: 최대 50,000원</div>
     <div class="wallet-bar"><div class="wallet-fill" id="main-bar" style="width:0%"></div></div>
   </div>
 
-  <!-- 📝 오답노트 & 📸 사진퀴즈 바로가기 -->
+  <!-- 📝 오답 복습 & 📸 유물 사진 퀴즈 바로가기 -->
   <div style="display:flex;gap:8px;margin:8px 16px 14px;">
     <div id="main-wrong-banner" onclick="showScreen('scr-wrong')" style="flex:1;background:#FFF;border:2px solid #FFEAA7;border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,0.04);cursor:pointer;">
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:22px;">📝</span>
         <div>
-          <div style="font-size:13px;font-weight:800;color:#2D3436;">오답노트</div>
+          <div style="font-size:13px;font-weight:800;color:#2D3436;">오답 복습</div>
           <div style="font-size:10px;color:#636E72;">틀린 문제 복습</div>
         </div>
       </div>
@@ -195,7 +372,7 @@ body{padding-bottom:70px}
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:22px;">📸</span>
         <div>
-          <div style="font-size:13px;font-weight:800;color:#2D3436;">사진 퀴즈</div>
+          <div style="font-size:13px;font-weight:800;color:#2D3436;">유물 사진 퀴즈</div>
           <div style="font-size:10px;color:#2E7D32;">유물&찰칵 맞추기</div>
         </div>
       </div>
@@ -204,7 +381,7 @@ body{padding-bottom:70px}
   </div>
 
   <div class="stages">
-    <h3>📚 학습 스테이지</h3>
+    <h3>학습 단계 선택</h3>
     <div id="stage-list"></div>
   </div>
 </div>
@@ -221,7 +398,7 @@ body{padding-bottom:70px}
     <p id="study-desc"></p>
   </div>
   <div id="study-cards"></div>
-  <button class="study-start-btn" onclick="startQuiz()">🎮 퀴즈 시작! (용돈 벌기)</button>
+  <button class="study-start-btn" onclick="startQuiz()">퀴즈 풀기 시작</button>
 </div>
 
 <!-- ═══════ QUIZ SCREEN ═══════ -->
@@ -253,7 +430,7 @@ body{padding-bottom:70px}
     </div>
     <div class="result-coin" id="res-coin">+0원</div>
     <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;margin:16px auto 0;">
-      <button class="result-btn" style="margin:0;background:var(--wrong);" id="res-wrong-btn" onclick="showScreen('scr-wrong')">📝 오답노트 확인하기</button>
+      <button class="result-btn" style="margin:0;background:var(--wrong);" id="res-wrong-btn" onclick="showScreen('scr-wrong')">📝 오답 복습 확인하기</button>
       <button class="result-btn" style="margin:0;background:var(--correct);" onclick="retryStage()">🔄 이 단계 다시 풀기</button>
       <button class="result-btn" style="margin:0;" onclick="showScreen('scr-main')">🏠 홈으로 돌아가기</button>
     </div>
@@ -264,11 +441,11 @@ body{padding-bottom:70px}
 <div class="screen" id="scr-wrong">
   <div class="topbar">
     <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
-    <div class="topbar-title">📝 오답노트</div>
+    <div class="topbar-title">📝 오답 복습</div>
     <div class="topbar-coins" id="wrong-coins">💰 0원</div>
   </div>
   <div class="wrong-header">
-    <h2>📝 오답노트</h2>
+    <h2>📝 오답 복습</h2>
     <p>틀린 문제를 다시 공부하자!</p>
   </div>
   <div class="wrong-filter" id="wrong-filter"></div>
@@ -279,7 +456,7 @@ body{padding-bottom:70px}
 <div class="screen" id="scr-wallet">
   <div class="topbar">
     <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
-    <div class="topbar-title">💰 용돈 지갑</div>
+    <div class="topbar-title">💰 용돈 정산</div>
     <div></div>
   </div>
   <div class="big-wallet">
@@ -287,17 +464,17 @@ body{padding-bottom:70px}
     <div class="big-wallet-label">내 기념품 용돈</div>
     <div class="big-wallet-amount" id="wlt-amount">0원</div>
     <div class="big-wallet-bar"><div class="big-wallet-fill" id="wlt-bar" style="width:0%"></div></div>
-    <div style="font-size:12px;color:var(--sub)">최대 50,000원까지 모을 수 있어요</div>
+    <div style="font-size:12px;color:var(--sub)">목표 금액: 최대 50,000원까지 모을 수 있어요</div>
   </div>
   <div class="wallet-history" id="wlt-history"></div>
-  <button class="show-btn" onclick="showToParent()">👨 아빠에게 보여주기</button>
+  <button class="show-btn" onclick="showToParent()">부모님께 용돈 확인 요청</button>
 </div>
 
 <!-- ═══════ SHOW TO PARENT ═══════ -->
 <div class="screen" id="scr-show" style="background:linear-gradient(135deg,#2D1B69,#6C5CE7);display:none;justify-content:center;align-items:center;text-align:center;color:#fff;min-height:100vh" onclick="showScreen('scr-wallet')">
   <div style="padding:40px 20px">
     <div style="font-size:80px;margin-bottom:20px">👑</div>
-    <div style="font-size:18px;opacity:.8">백제 마스터 학습 완료!</div>
+    <div style="font-size:18px;opacity:.8">백제 역사 탐험 학습 완료!</div>
     <div style="font-size:56px;font-weight:900;margin:20px 0;color:var(--gold)" id="show-amount">0원</div>
     <div style="font-size:16px;opacity:.9">기념품 용돈으로 사용할 수 있어요</div>
     <div style="font-size:13px;opacity:.5;margin-top:30px">(화면을 터치하면 돌아갑니다)</div>
@@ -308,7 +485,7 @@ body{padding-bottom:70px}
 <div class="screen" id="scr-photo">
   <div class="topbar">
     <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
-    <div class="topbar-title">📸 백제 사진 퀴즈</div>
+    <div class="topbar-title">📸 백제 유물 사진 퀴즈</div>
     <div class="topbar-coins" id="photo-coins">💰 0원</div>
   </div>
   
@@ -323,7 +500,7 @@ body{padding-bottom:70px}
       </button>
     </div>
 
-    <!-- 모드 1: 유물 사진 퀴즈 -->
+    <!-- 모드 1: 유물 유물 사진 퀴즈 -->
     <div id="photo-mode-1">
       <div id="photo-quiz-card" class="q-card" style="margin:0;"></div>
       <button class="q-next-btn" id="photo-next" style="margin:14px 0 0;" onclick="nextPhotoQuestion()">다음 사진 문제 →</button>
@@ -333,7 +510,7 @@ body{padding-bottom:70px}
     <div id="photo-mode-2" style="display:none;">
       <div class="q-card" style="margin:0;text-align:center;">
         <div style="font-size:40px;margin-bottom:8px;">📸</div>
-        <h3 style="font-size:16px;font-weight:800;margin-bottom:6px;">내가 찍은 백제 사진 퀴즈!</h3>
+        <h3 style="font-size:16px;font-weight:800;margin-bottom:6px;">내가 찍은 백제 유물 사진 퀴즈!</h3>
         <p style="font-size:12px;color:var(--sub);line-height:1.5;margin-bottom:16px;">
           여행지(박물관, 왕릉, 석탑)에서 직접 찍은 사진이나 갤러리 사진을 불러와서 어떤 유물인지 맞춰보세요! (정답 시 <strong>+500원</strong> 보너스)
         </p>
@@ -356,10 +533,10 @@ body{padding-bottom:70px}
 
 <!-- ═══════ BOTTOM NAV ═══════ -->
 <div class="bottom-nav" id="bottom-nav">
-  <div class="nav-btn active" onclick="showScreen('scr-main')"><span>🏠</span>홈</div>
-  <div class="nav-btn" onclick="showScreen('scr-photo')"><span>📸</span>사진퀴즈</div>
-  <div class="nav-btn" onclick="showScreen('scr-wrong')"><span>📝</span>오답노트</div>
-  <div class="nav-btn" onclick="showScreen('scr-wallet')"><span>💰</span>용돈</div>
+  <div class="nav-btn active" onclick="showScreen('scr-main')">학습 홈</div>
+  <div class="nav-btn" onclick="showScreen('scr-photo')">사진 퀴즈</div>
+  <div class="nav-btn" onclick="showScreen('scr-wrong')">오답 복습</div>
+  <div class="nav-btn" onclick="showScreen('scr-wallet')">용돈 정산</div>
 </div>
 
 <script>
@@ -587,7 +764,7 @@ function updateCoinsAll(){
 // MAIN SCREEN
 // ══════════════════════════════════════
 function renderMain(){
-  // 오답노트 배너 뱃지 업데이트
+  // 오답 복습 배너 뱃지 업데이트
   const wCount = (state.wrongNotes || []).length;
   const badgeEl = document.getElementById('main-wrong-badge');
   const countEl = document.getElementById('main-wrong-count');
@@ -687,7 +864,7 @@ function renderQuestion(){
 
   html+=`<div class="q-type">${q.type==='ox'?'O/X 퀴즈':'객관식 퀴즈'}</div>`;
   html+=`<div class="q-text" style="font-size:16px;font-weight:800;line-height:1.5;margin-bottom:14px;">${q.q}</div>`;
-  if(q.h){html+=`<button class="q-hint-btn" onclick="this.nextElementSibling.classList.toggle('show')">💡 힌트 보기</button><div class="q-hint-box">💡 ${q.h}</div>`;}
+  if(q.h){html+=`<button class="q-hint-btn" onclick="this.nextElementSibling.classList.toggle('show')">힌트 확인</button><div class="q-hint-box">💡 ${q.h}</div>`;}
 
   if(q.type==='ox'){
     html+=`<div class="ox-opts"><div class="ox-btn" onclick="checkOX(this,'O')">⭕</div><div class="ox-btn" onclick="checkOX(this,'X')">❌</div></div>`;
@@ -796,7 +973,7 @@ function showStageResult(){
   const title=correct===qs.length?'완벽한 만점!':correct>=qs.length*0.8?'스테이지 클리어!':'다시 도전해보자!';
   document.getElementById('res-emoji').textContent=emoji;
   document.getElementById('res-title').textContent=title;
-  document.getElementById('res-sub').textContent=bonus>0?`🎁 클리어 보너스 +${bonus.toLocaleString()}원!`:'오답노트에서 틀린 문제를 복습해보자!';
+  document.getElementById('res-sub').textContent=bonus>0?`🎁 클리어 보너스 +${bonus.toLocaleString()}원!`:'오답 복습에서 틀린 문제를 복습해보자!';
   document.getElementById('res-correct').textContent=correct;
   document.getElementById('res-wrong').textContent=wrong;
   document.getElementById('res-streak').textContent=maxStreak;
@@ -872,7 +1049,7 @@ function renderWrong(){
 }
 
 function clearAllWrong(){
-  if(confirm('오답노트를 모두 비우시겠습니까?')){
+  if(confirm('오답 복습를 모두 비우시겠습니까?')){
     state.wrongNotes = [];
     saveState();
     renderWrong();
@@ -960,7 +1137,7 @@ function showToParent(){
 }
 
 // ══════════════════════════════════════
-// PHOTO QUIZ DATA & LOGIC (고화질 실물 사진 퀴즈)
+// PHOTO QUIZ DATA & LOGIC (고화질 실물 유물 사진 퀴즈)
 // ══════════════════════════════════════
 const PHOTO_QUESTIONS = [
   {
@@ -1081,7 +1258,7 @@ function renderPhotoQuestion(){
       <div style="position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,0.6);color:#fff;padding:3px 8px;border-radius:8px;font-size:10px;backdrop-filter:blur(4px);">🔍 탭하여 확대</div>
     </div>
 
-    <div class="q-type" style="color:var(--primary);font-size:11px;font-weight:800;margin-bottom:4px;">🏛️ 백제 국보·유적 실물 사진 퀴즈</div>
+    <div class="q-type" style="color:var(--primary);font-size:11px;font-weight:800;margin-bottom:4px;">🏛️ 백제 국보·유적 실물 유물 사진 퀴즈</div>
     <div class="q-text" style="font-size:16px;font-weight:800;line-height:1.5;margin-bottom:14px;">${item.q}</div>
     <div class="opts">`;
 
@@ -1121,7 +1298,7 @@ function checkPhotoChoice(el, idx){
     });
     resDiv.innerHTML = `<div class="q-result-title">😢 아쉬워요! 정답은 [${item.o[item.a]}]입니다.</div>${item.e}`;
     resDiv.className = 'q-result show is-wrong';
-    // 오답노트에 추가
+    // 오답 복습에 추가
     if(!state.wrongNotes.find(w=>w.q===item.q)){
       state.wrongNotes.push({s:5,idx:photoIdx,q:item.q,v:'📸',a:item.o[item.a],ua:item.o[idx],e:item.e});
       saveState();
@@ -1130,7 +1307,7 @@ function checkPhotoChoice(el, idx){
 
   const nextBtn = document.getElementById('photo-next');
   if(photoIdx + 1 >= PHOTO_QUESTIONS.length){
-    nextBtn.textContent = '🏁 사진 퀴즈 결과 확인하기 🎉';
+    nextBtn.textContent = '🏁 유물 사진 퀴즈 결과 확인하기 🎉';
   } else {
     nextBtn.textContent = '다음 사진 문제 (' + (photoIdx + 2) + '/' + PHOTO_QUESTIONS.length + ') →';
   }
@@ -1163,7 +1340,7 @@ function showPhotoQuizResult(){
   let html = `
     <div style="text-align:center;padding:24px 10px;">
       <div style="font-size:64px;margin-bottom:12px;">${isPerfect ? '🏆' : '🎉'}</div>
-      <h2 style="font-size:22px;font-weight:900;margin-bottom:6px;">${isPerfect ? '사진 퀴즈 만점 완벽 클리어!' : '사진 퀴즈 완료!'}</h2>
+      <h2 style="font-size:22px;font-weight:900;margin-bottom:6px;">${isPerfect ? '유물 사진 퀴즈 만점 완벽 클리어!' : '유물 사진 퀴즈 완료!'}</h2>
       <p style="font-size:13px;color:var(--sub);margin-bottom:20px;">
         10문제 중 <strong>${photoCorrectCount}문제</strong>를 맞췄습니다!
       </p>
@@ -1176,10 +1353,10 @@ function showPhotoQuizResult(){
 
       <div style="display:flex;flex-direction:column;gap:8px;">
         <button onclick="restartPhotoQuiz()" style="padding:14px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;">
-          🔄 사진 퀴즈 처음부터 다시 풀기
+          🔄 유물 사진 퀴즈 처음부터 다시 풀기
         </button>
         <button onclick="showScreen('scr-wrong')" style="padding:14px;background:#fff;color:var(--text);border:2px solid var(--border);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;">
-          📝 오답노트에서 복습하기
+          📝 오답 복습에서 복습하기
         </button>
         <button onclick="showScreen('scr-main')" style="padding:14px;background:none;color:var(--sub);border:none;font-size:14px;font-weight:600;cursor:pointer;">
           🏠 홈으로 돌아가기
