@@ -77,13 +77,13 @@ body {
 
 /* ── Level Selector ── */
 .level-selector {
-  padding: 14px 16px 8px;
+  padding: 14px 16px 6px;
   display: flex;
   gap: 8px;
 }
 .level-tab {
   flex: 1;
-  padding: 10px;
+  padding: 10px 6px;
   text-align: center;
   border-radius: 12px;
   background: #1E293B;
@@ -101,20 +101,54 @@ body {
   box-shadow: 0 2px 8px rgba(99,102,241,0.4);
 }
 
+/* ── Puzzle Number Selector (1~5번) ── */
+.puzzle-num-selector {
+  padding: 6px 16px 10px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+.pnum-btn {
+  flex: 1;
+  max-width: 80px;
+  padding: 6px 0;
+  background: #1E293B;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--sub);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+}
+.pnum-btn.active {
+  background: #3B82F6;
+  color: #FFFFFF;
+  border-color: #60A5FA;
+}
+
 /* ── Game Info Bar ── */
 .game-info {
-  padding: 8px 18px;
+  padding: 4px 18px 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
   color: var(--sub);
 }
+.game-reward-badge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #FBBF24;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 12px;
+}
 .game-timer { font-weight: 700; color: #38BDF8; }
 
 /* ── Board Area ── */
 .board-wrap {
-  padding: 10px 16px;
+  padding: 6px 16px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -165,7 +199,7 @@ body {
 
 /* ── Number Keypad ── */
 .keypad-container {
-  padding: 14px 16px 20px;
+  padding: 12px 16px 20px;
 }
 .num-pad {
   display: flex;
@@ -175,7 +209,7 @@ body {
 }
 .n-btn {
   flex: 1;
-  height: 52px;
+  height: 50px;
   background: #1E293B;
   border: 1px solid var(--card-border);
   border-radius: 12px;
@@ -208,7 +242,7 @@ body {
 
 /* ── Guide Card ── */
 .guide-card {
-  margin: 10px 16px;
+  margin: 8px 16px;
   background: #1E293B;
   border: 1px solid var(--card-border);
   border-radius: 14px;
@@ -281,13 +315,23 @@ body {
 
   <!-- ── LEVEL SELECTOR ── -->
   <div class="level-selector">
-    <div class="level-tab active" onclick="switchLevel(4)">4×4 미니 (쉬움)</div>
-    <div class="level-tab" onclick="switchLevel(6)">6×6 보통 (중급)</div>
-    <div class="level-tab" onclick="switchLevel(9)">9×9 정통 (도전)</div>
+    <div class="level-tab active" onclick="switchLevel(4)">4×4 미니<br/><span style="font-size:11px;opacity:.8;">+500원</span></div>
+    <div class="level-tab" onclick="switchLevel(6)">6×6 보통<br/><span style="font-size:11px;opacity:.8;">+1,000원</span></div>
+    <div class="level-tab" onclick="switchLevel(9)">9×9 도전<br/><span style="font-size:11px;opacity:.8;">+2,000원</span></div>
+  </div>
+
+  <!-- ── PUZZLE NUMBERS (1~5) ── -->
+  <div class="puzzle-num-selector" id="pnum-selector">
+    <button class="pnum-btn active" onclick="selectPuzzleIdx(0)">1번</button>
+    <button class="pnum-btn" onclick="selectPuzzleIdx(1)">2번</button>
+    <button class="pnum-btn" onclick="selectPuzzleIdx(2)">3번</button>
+    <button class="pnum-btn" onclick="selectPuzzleIdx(3)">4번</button>
+    <button class="pnum-btn" onclick="selectPuzzleIdx(4)">5번</button>
   </div>
 
   <div class="game-info">
-    <span id="level-desc">가로·세로·2×2 상자에 1~4를 겹치지 않게 채우세요!</span>
+    <span class="game-reward-badge" id="level-reward-badge">+500원 보너스</span>
+    <span id="level-desc">가로·세로·2×2 상자에 1~4 채우기</span>
     <span class="game-timer" id="game-timer">00:00</span>
   </div>
 
@@ -302,13 +346,13 @@ body {
     <div class="tool-pad">
       <button class="tool-btn" onclick="eraseCell()">지우기 ⌫</button>
       <button class="tool-btn" onclick="giveHint()">힌트 💡</button>
-      <button class="tool-btn primary" onclick="newGame()">새 게임 🔄</button>
+      <button class="tool-btn primary" onclick="newGame()">다시 풀기 🔄</button>
     </div>
   </div>
 
   <!-- ── GUIDE CARD ── -->
   <div class="guide-card">
-    <strong>💡 스도쿠 규칙</strong>: 가로줄, 세로줄, 굵은 테두리 상자 안에 <strong>숫자가 중복되지 않도록</strong> 하나씩만 넣으면 완성됩니다! 완성 시 <strong>+1,000원 용돈</strong>이 총합 지갑에 적립됩니다.
+    <strong>💡 스도쿠 규칙</strong>: 가로줄, 세로줄, 굵은 상자 안에 <strong>숫자가 중복되지 않도록</strong> 채워보세요! 완료 시 <strong>통합 지갑에 용돈(최대 5만원 한도)</strong>이 적립됩니다.
   </div>
 
 </div>
@@ -320,8 +364,8 @@ body {
     <div class="modal-title">스도쿠 퍼즐 성공!</div>
     <div class="modal-desc" id="modal-desc">멋진 두뇌 집중력으로 스도쿠를 완성했습니다!</div>
     <div class="modal-reward">
-      <div style="font-size:12px;color:var(--sub);">총합 지갑 적립 완료</div>
-      <div class="modal-reward-val">+1,000원</div>
+      <div style="font-size:12px;color:var(--sub);">총합 지갑 적립 완료 (최대 5만원 한도)</div>
+      <div class="modal-reward-val" id="modal-reward-val">+500원</div>
     </div>
     <button class="modal-btn" onclick="nextSudokuGame()">다음 스도쿠 풀기 →</button>
   </div>
@@ -329,7 +373,1824 @@ body {
 
 <script>
 // ══════════════════════════════════════
-// TOTAL WALLET SYSTEM (통합 지갑 연동)
+// DATA PRESETS & REWARDS (난이도별 5개씩 총 15개)
+// ══════════════════════════════════════
+const PRESETS = {
+  4: [
+  {
+    "sol": [
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        3,
+        4,
+        1,
+        2
+      ],
+      [
+        2,
+        1,
+        4,
+        3
+      ],
+      [
+        4,
+        3,
+        2,
+        1
+      ]
+    ],
+    "init": [
+      [
+        1,
+        0,
+        0,
+        4
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        2
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        3,
+        2,
+        4,
+        1
+      ],
+      [
+        1,
+        4,
+        2,
+        3
+      ],
+      [
+        4,
+        3,
+        1,
+        2
+      ],
+      [
+        2,
+        1,
+        3,
+        4
+      ]
+    ],
+    "init": [
+      [
+        0,
+        2,
+        4,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        3
+      ],
+      [
+        4,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        1,
+        3,
+        0
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        4,
+        1,
+        2,
+        3
+      ],
+      [
+        2,
+        3,
+        4,
+        1
+      ],
+      [
+        3,
+        4,
+        1,
+        2
+      ],
+      [
+        1,
+        2,
+        3,
+        4
+      ]
+    ],
+    "init": [
+      [
+        4,
+        0,
+        0,
+        3
+      ],
+      [
+        0,
+        3,
+        4,
+        0
+      ],
+      [
+        0,
+        4,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        4
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        2,
+        4,
+        1,
+        3
+      ],
+      [
+        1,
+        3,
+        4,
+        2
+      ],
+      [
+        4,
+        2,
+        3,
+        1
+      ],
+      [
+        3,
+        1,
+        2,
+        4
+      ]
+    ],
+    "init": [
+      [
+        2,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        2
+      ],
+      [
+        4,
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        4
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        3,
+        1,
+        4,
+        2
+      ],
+      [
+        4,
+        2,
+        1,
+        3
+      ],
+      [
+        1,
+        3,
+        2,
+        4
+      ],
+      [
+        2,
+        4,
+        3,
+        1
+      ]
+    ],
+    "init": [
+      [
+        0,
+        1,
+        4,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        3
+      ],
+      [
+        1,
+        0,
+        0,
+        4
+      ],
+      [
+        0,
+        4,
+        3,
+        0
+      ]
+    ]
+  }
+],
+  6: [
+  {
+    "sol": [
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      [
+        4,
+        5,
+        6,
+        1,
+        2,
+        3
+      ],
+      [
+        2,
+        3,
+        1,
+        5,
+        6,
+        4
+      ],
+      [
+        5,
+        6,
+        4,
+        2,
+        3,
+        1
+      ],
+      [
+        3,
+        1,
+        2,
+        6,
+        4,
+        5
+      ],
+      [
+        6,
+        4,
+        5,
+        3,
+        1,
+        2
+      ]
+    ],
+    "init": [
+      [
+        1,
+        0,
+        0,
+        4,
+        0,
+        6
+      ],
+      [
+        0,
+        5,
+        6,
+        0,
+        2,
+        0
+      ],
+      [
+        2,
+        0,
+        0,
+        5,
+        0,
+        4
+      ],
+      [
+        5,
+        0,
+        4,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        6,
+        4,
+        0
+      ],
+      [
+        6,
+        0,
+        5,
+        0,
+        0,
+        2
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      [
+        3,
+        2,
+        1,
+        6,
+        5,
+        4
+      ],
+      [
+        5,
+        4,
+        6,
+        2,
+        1,
+        3
+      ],
+      [
+        2,
+        1,
+        3,
+        5,
+        4,
+        6
+      ],
+      [
+        4,
+        6,
+        5,
+        1,
+        3,
+        2
+      ],
+      [
+        1,
+        3,
+        2,
+        4,
+        6,
+        5
+      ]
+    ],
+    "init": [
+      [
+        6,
+        0,
+        4,
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        6,
+        0,
+        4
+      ],
+      [
+        5,
+        0,
+        6,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        5,
+        0,
+        6
+      ],
+      [
+        4,
+        0,
+        5,
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        4,
+        0,
+        5
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        2,
+        4,
+        6,
+        1,
+        3,
+        5
+      ],
+      [
+        1,
+        3,
+        5,
+        2,
+        4,
+        6
+      ],
+      [
+        4,
+        6,
+        2,
+        3,
+        5,
+        1
+      ],
+      [
+        3,
+        5,
+        1,
+        4,
+        6,
+        2
+      ],
+      [
+        6,
+        2,
+        4,
+        5,
+        1,
+        3
+      ],
+      [
+        5,
+        1,
+        3,
+        6,
+        2,
+        4
+      ]
+    ],
+    "init": [
+      [
+        2,
+        0,
+        0,
+        1,
+        0,
+        5
+      ],
+      [
+        0,
+        3,
+        5,
+        0,
+        4,
+        0
+      ],
+      [
+        4,
+        0,
+        2,
+        3,
+        0,
+        1
+      ],
+      [
+        3,
+        0,
+        1,
+        4,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        5,
+        1,
+        0
+      ],
+      [
+        5,
+        0,
+        3,
+        0,
+        0,
+        4
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        5,
+        3,
+        1,
+        6,
+        2,
+        4
+      ],
+      [
+        2,
+        6,
+        4,
+        5,
+        3,
+        1
+      ],
+      [
+        1,
+        5,
+        3,
+        4,
+        6,
+        2
+      ],
+      [
+        4,
+        2,
+        6,
+        1,
+        5,
+        3
+      ],
+      [
+        3,
+        1,
+        5,
+        2,
+        4,
+        6
+      ],
+      [
+        6,
+        4,
+        2,
+        3,
+        1,
+        5
+      ]
+    ],
+    "init": [
+      [
+        5,
+        3,
+        0,
+        0,
+        2,
+        4
+      ],
+      [
+        0,
+        0,
+        4,
+        5,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        3,
+        4,
+        0,
+        2
+      ],
+      [
+        4,
+        0,
+        6,
+        1,
+        0,
+        3
+      ],
+      [
+        0,
+        0,
+        5,
+        2,
+        0,
+        0
+      ],
+      [
+        6,
+        4,
+        0,
+        0,
+        1,
+        5
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        4,
+        1,
+        2,
+        3,
+        6,
+        5
+      ],
+      [
+        3,
+        6,
+        5,
+        4,
+        1,
+        2
+      ],
+      [
+        1,
+        2,
+        4,
+        6,
+        5,
+        3
+      ],
+      [
+        6,
+        5,
+        3,
+        1,
+        2,
+        4
+      ],
+      [
+        2,
+        4,
+        1,
+        5,
+        3,
+        6
+      ],
+      [
+        5,
+        3,
+        6,
+        2,
+        4,
+        1
+      ]
+    ],
+    "init": [
+      [
+        4,
+        0,
+        2,
+        0,
+        6,
+        0
+      ],
+      [
+        0,
+        6,
+        0,
+        4,
+        0,
+        2
+      ],
+      [
+        1,
+        0,
+        4,
+        6,
+        0,
+        3
+      ],
+      [
+        6,
+        0,
+        3,
+        1,
+        0,
+        4
+      ],
+      [
+        2,
+        0,
+        0,
+        5,
+        0,
+        6
+      ],
+      [
+        0,
+        3,
+        6,
+        0,
+        4,
+        0
+      ]
+    ]
+  }
+],
+  9: [
+  {
+    "sol": [
+      [
+        5,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        1,
+        2
+      ],
+      [
+        6,
+        7,
+        2,
+        1,
+        9,
+        5,
+        3,
+        4,
+        8
+      ],
+      [
+        1,
+        9,
+        8,
+        3,
+        4,
+        2,
+        5,
+        6,
+        7
+      ],
+      [
+        8,
+        5,
+        9,
+        7,
+        6,
+        1,
+        4,
+        2,
+        3
+      ],
+      [
+        4,
+        2,
+        6,
+        8,
+        5,
+        3,
+        7,
+        9,
+        1
+      ],
+      [
+        7,
+        1,
+        3,
+        9,
+        2,
+        4,
+        8,
+        5,
+        6
+      ],
+      [
+        9,
+        6,
+        1,
+        5,
+        3,
+        7,
+        2,
+        8,
+        4
+      ],
+      [
+        2,
+        8,
+        7,
+        4,
+        1,
+        9,
+        6,
+        3,
+        5
+      ],
+      [
+        3,
+        4,
+        5,
+        2,
+        8,
+        6,
+        1,
+        7,
+        9
+      ]
+    ],
+    "init": [
+      [
+        5,
+        3,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        6,
+        0,
+        0,
+        1,
+        9,
+        5,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        9,
+        8,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      [
+        8,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        4,
+        0,
+        0,
+        8,
+        0,
+        3,
+        0,
+        0,
+        1
+      ],
+      [
+        7,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        6
+      ],
+      [
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        2,
+        8,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        4,
+        1,
+        9,
+        0,
+        0,
+        5
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        7,
+        9
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        1,
+        2,
+        3
+      ],
+      [
+        7,
+        8,
+        9,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      [
+        2,
+        1,
+        4,
+        3,
+        6,
+        5,
+        8,
+        9,
+        7
+      ],
+      [
+        3,
+        6,
+        5,
+        8,
+        9,
+        7,
+        2,
+        1,
+        4
+      ],
+      [
+        8,
+        9,
+        7,
+        2,
+        1,
+        4,
+        3,
+        6,
+        5
+      ],
+      [
+        5,
+        3,
+        1,
+        6,
+        4,
+        2,
+        9,
+        7,
+        8
+      ],
+      [
+        6,
+        4,
+        2,
+        9,
+        7,
+        8,
+        5,
+        3,
+        1
+      ],
+      [
+        9,
+        7,
+        8,
+        5,
+        3,
+        1,
+        6,
+        4,
+        2
+      ]
+    ],
+    "init": [
+      [
+        1,
+        0,
+        3,
+        0,
+        5,
+        0,
+        7,
+        0,
+        9
+      ],
+      [
+        0,
+        5,
+        0,
+        7,
+        0,
+        9,
+        0,
+        2,
+        0
+      ],
+      [
+        7,
+        0,
+        9,
+        0,
+        2,
+        0,
+        4,
+        0,
+        6
+      ],
+      [
+        0,
+        1,
+        0,
+        3,
+        0,
+        5,
+        0,
+        9,
+        0
+      ],
+      [
+        3,
+        0,
+        5,
+        0,
+        9,
+        0,
+        2,
+        0,
+        4
+      ],
+      [
+        0,
+        9,
+        0,
+        2,
+        0,
+        4,
+        0,
+        6,
+        0
+      ],
+      [
+        5,
+        0,
+        1,
+        0,
+        4,
+        0,
+        9,
+        0,
+        8
+      ],
+      [
+        0,
+        4,
+        0,
+        9,
+        0,
+        8,
+        0,
+        3,
+        0
+      ],
+      [
+        9,
+        0,
+        8,
+        0,
+        3,
+        0,
+        6,
+        0,
+        2
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        4,
+        3,
+        5,
+        2,
+        6,
+        9,
+        7,
+        8,
+        1
+      ],
+      [
+        6,
+        8,
+        2,
+        5,
+        7,
+        1,
+        4,
+        9,
+        3
+      ],
+      [
+        1,
+        9,
+        7,
+        8,
+        3,
+        4,
+        5,
+        6,
+        2
+      ],
+      [
+        8,
+        2,
+        6,
+        1,
+        9,
+        5,
+        3,
+        4,
+        7
+      ],
+      [
+        3,
+        7,
+        4,
+        6,
+        8,
+        2,
+        9,
+        1,
+        5
+      ],
+      [
+        9,
+        5,
+        1,
+        7,
+        4,
+        3,
+        6,
+        2,
+        8
+      ],
+      [
+        5,
+        1,
+        9,
+        3,
+        2,
+        6,
+        8,
+        7,
+        4
+      ],
+      [
+        2,
+        4,
+        8,
+        9,
+        5,
+        7,
+        1,
+        3,
+        6
+      ],
+      [
+        7,
+        6,
+        3,
+        4,
+        1,
+        8,
+        2,
+        5,
+        9
+      ]
+    ],
+    "init": [
+      [
+        0,
+        0,
+        0,
+        2,
+        6,
+        0,
+        7,
+        0,
+        1
+      ],
+      [
+        6,
+        8,
+        0,
+        0,
+        7,
+        0,
+        0,
+        9,
+        0
+      ],
+      [
+        1,
+        9,
+        0,
+        0,
+        0,
+        4,
+        5,
+        0,
+        0
+      ],
+      [
+        8,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        4,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        6,
+        0,
+        2,
+        9,
+        0,
+        0
+      ],
+      [
+        0,
+        5,
+        0,
+        0,
+        0,
+        3,
+        0,
+        2,
+        8
+      ],
+      [
+        0,
+        0,
+        9,
+        3,
+        0,
+        0,
+        0,
+        7,
+        4
+      ],
+      [
+        0,
+        4,
+        0,
+        0,
+        5,
+        0,
+        0,
+        3,
+        6
+      ],
+      [
+        7,
+        0,
+        3,
+        0,
+        1,
+        8,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        2,
+        7,
+        6,
+        3,
+        1,
+        4,
+        9,
+        5,
+        8
+      ],
+      [
+        8,
+        5,
+        4,
+        9,
+        6,
+        2,
+        7,
+        1,
+        3
+      ],
+      [
+        9,
+        1,
+        3,
+        8,
+        7,
+        5,
+        2,
+        6,
+        4
+      ],
+      [
+        4,
+        6,
+        8,
+        1,
+        2,
+        7,
+        3,
+        9,
+        5
+      ],
+      [
+        5,
+        9,
+        7,
+        4,
+        3,
+        8,
+        6,
+        2,
+        1
+      ],
+      [
+        1,
+        3,
+        2,
+        5,
+        9,
+        6,
+        4,
+        8,
+        7
+      ],
+      [
+        3,
+        2,
+        5,
+        7,
+        8,
+        9,
+        1,
+        4,
+        6
+      ],
+      [
+        6,
+        4,
+        1,
+        2,
+        5,
+        3,
+        8,
+        7,
+        9
+      ],
+      [
+        7,
+        8,
+        9,
+        6,
+        4,
+        1,
+        5,
+        3,
+        2
+      ]
+    ],
+    "init": [
+      [
+        2,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        8,
+        0,
+        4,
+        0,
+        6,
+        2,
+        0,
+        0,
+        3
+      ],
+      [
+        0,
+        1,
+        3,
+        8,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        3,
+        9,
+        0
+      ],
+      [
+        5,
+        0,
+        7,
+        0,
+        0,
+        0,
+        6,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        2,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        0,
+        9,
+        1,
+        4,
+        0
+      ],
+      [
+        6,
+        0,
+        1,
+        2,
+        5,
+        0,
+        8,
+        0,
+        9
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        2
+      ]
+    ]
+  },
+  {
+    "sol": [
+      [
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      [
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        9,
+        8,
+        7
+      ],
+      [
+        3,
+        2,
+        1,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4
+      ],
+      [
+        8,
+        7,
+        9,
+        5,
+        4,
+        6,
+        2,
+        1,
+        3
+      ],
+      [
+        5,
+        4,
+        6,
+        2,
+        1,
+        3,
+        8,
+        7,
+        9
+      ],
+      [
+        2,
+        1,
+        3,
+        8,
+        7,
+        9,
+        5,
+        4,
+        6
+      ],
+      [
+        7,
+        9,
+        8,
+        4,
+        6,
+        5,
+        1,
+        3,
+        2
+      ],
+      [
+        4,
+        6,
+        5,
+        1,
+        3,
+        2,
+        7,
+        9,
+        8
+      ],
+      [
+        1,
+        3,
+        2,
+        7,
+        9,
+        8,
+        4,
+        6,
+        5
+      ]
+    ],
+    "init": [
+      [
+        9,
+        0,
+        7,
+        0,
+        5,
+        0,
+        3,
+        0,
+        1
+      ],
+      [
+        0,
+        5,
+        0,
+        3,
+        0,
+        1,
+        0,
+        8,
+        0
+      ],
+      [
+        3,
+        0,
+        1,
+        0,
+        8,
+        0,
+        6,
+        0,
+        4
+      ],
+      [
+        0,
+        7,
+        0,
+        5,
+        0,
+        6,
+        0,
+        1,
+        0
+      ],
+      [
+        5,
+        0,
+        6,
+        0,
+        1,
+        0,
+        8,
+        0,
+        9
+      ],
+      [
+        0,
+        1,
+        0,
+        8,
+        0,
+        9,
+        0,
+        4,
+        0
+      ],
+      [
+        7,
+        0,
+        8,
+        0,
+        6,
+        0,
+        1,
+        0,
+        2
+      ],
+      [
+        0,
+        6,
+        0,
+        1,
+        0,
+        2,
+        0,
+        9,
+        0
+      ],
+      [
+        1,
+        0,
+        2,
+        0,
+        9,
+        0,
+        4,
+        0,
+        5
+      ]
+    ]
+  }
+]
+};
+const REWARDS = {
+  4: 500,
+  6: 1000,
+  9: 2000
+};
+
+// ══════════════════════════════════════
+// TOTAL WALLET SYSTEM (50,000원 한도 총합 지갑)
 // ══════════════════════════════════════
 const MAX_COINS = 50000;
 
@@ -340,7 +2201,7 @@ function getGlobalState(){
   } catch(e){}
   const legacyCoins = parseInt(localStorage.getItem('baekje_coins') || '0');
   return {
-    coins: legacyCoins,
+    coins: Math.min(legacyCoins, MAX_COINS),
     history: [],
     stages: {},
     wrongNotes: []
@@ -348,7 +2209,9 @@ function getGlobalState(){
 }
 
 function saveGlobalState(state){
+  state.coins = Math.min(state.coins, MAX_COINS);
   localStorage.setItem('baekje_master_state', JSON.stringify(state));
+  localStorage.setItem('baekje_master', JSON.stringify(state));
   localStorage.setItem('baekje_coins', state.coins.toString());
 }
 
@@ -357,88 +2220,6 @@ let appState = getGlobalState();
 function updateCoinsUI(){
   document.getElementById('sdk-coins').textContent = appState.coins.toLocaleString() + '원';
 }
-
-// ══════════════════════════════════════
-// SUDOKU PUZZLE PRESETS
-// ══════════════════════════════════════
-const PRESETS = {
-  4: [
-    {
-      init: [
-        [1, 0, 0, 4],
-        [0, 0, 1, 0],
-        [0, 1, 0, 0],
-        [4, 0, 0, 2]
-      ],
-      sol: [
-        [1, 2, 3, 4],
-        [3, 4, 1, 2],
-        [2, 1, 4, 3],
-        [4, 3, 2, 1]
-      ]
-    },
-    {
-      init: [
-        [0, 2, 4, 0],
-        [1, 0, 0, 3],
-        [4, 0, 0, 2],
-        [0, 1, 3, 0]
-      ],
-      sol: [
-        [3, 2, 4, 1],
-        [1, 4, 2, 3],
-        [4, 3, 1, 2],
-        [2, 1, 3, 4]
-      ]
-    }
-  ],
-  6: [
-    {
-      init: [
-        [1, 0, 0, 4, 0, 0],
-        [0, 0, 3, 0, 5, 0],
-        [0, 1, 0, 0, 0, 6],
-        [5, 0, 0, 0, 3, 0],
-        [0, 4, 0, 2, 0, 0],
-        [0, 0, 2, 0, 0, 5]
-      ],
-      sol: [
-        [1, 2, 5, 4, 6, 3],
-        [4, 6, 3, 1, 5, 2],
-        [2, 1, 4, 5, 8, 6],
-        [5, 8, 6, 2, 3, 4],
-        [3, 4, 1, 2, 8, 5],
-        [6, 3, 2, 6, 4, 5]
-      ]
-    }
-  ],
-  9: [
-    {
-      init: [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9]
-      ],
-      sol: [
-        [5, 3, 4, 6, 7, 8, 9, 1, 2],
-        [6, 7, 2, 1, 9, 5, 3, 4, 8],
-        [1, 9, 8, 3, 4, 2, 5, 6, 7],
-        [8, 5, 9, 7, 6, 1, 4, 2, 3],
-        [4, 2, 6, 8, 5, 3, 7, 9, 1],
-        [7, 1, 3, 9, 2, 4, 8, 5, 6],
-        [9, 6, 1, 5, 3, 7, 2, 8, 4],
-        [2, 8, 7, 4, 1, 9, 6, 3, 5],
-        [3, 4, 5, 2, 8, 6, 1, 7, 9]
-      ]
-    }
-  ]
-};
 
 // ══════════════════════════════════════
 // GAME ENGINE
@@ -456,18 +2237,32 @@ let timerInterval = null;
 function switchLevel(size){
   curSize = size;
   document.querySelectorAll('.level-tab').forEach(tab => {
-    tab.classList.toggle('active', tab.textContent.includes(`${size}×${size}`));
+    tab.classList.toggle('active', tab.textContent.includes(size + '×' + size));
   });
 
   const descs = {
-    4: "가로·세로·2×2 상자에 1~4를 겹치지 않게 채우세요!",
-    6: "가로·세로·2×3 상자에 1~6을 겹치지 않게 채우세요!",
-    9: "가로·세로·3×3 상자에 1~9를 겹치지 않게 채우세요!"
+    4: "가로·세로·2×2 상자에 1~4 채우기",
+    6: "가로·세로·2×3 상자에 1~6 채우기",
+    9: "가로·세로·3×3 상자에 1~9 채우기"
   };
   document.getElementById('level-desc').textContent = descs[size];
+  document.getElementById('level-reward-badge').textContent = '+' + REWARDS[size].toLocaleString() + '원 보너스';
 
   curPresetIdx = 0;
+  updatePnumButtons();
   newGame();
+}
+
+function selectPuzzleIdx(idx){
+  curPresetIdx = idx;
+  updatePnumButtons();
+  newGame();
+}
+
+function updatePnumButtons(){
+  document.querySelectorAll('.pnum-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === curPresetIdx);
+  });
 }
 
 function startTimer(){
@@ -477,7 +2272,7 @@ function startTimer(){
     timerSeconds++;
     const min = String(Math.floor(timerSeconds/60)).padStart(2, '0');
     const sec = String(timerSeconds%60).padStart(2, '0');
-    document.getElementById('game-timer').textContent = `${min}:${sec}`;
+    document.getElementById('game-timer').textContent = min + ':' + sec;
   }, 1000);
 }
 
@@ -497,7 +2292,7 @@ function newGame(){
 
 function renderBoard(){
   const boardEl = document.getElementById('sudoku-board');
-  boardEl.style.gridTemplateColumns = `repeat(${curSize}, 1fr)`;
+  boardEl.style.gridTemplateColumns = 'repeat(' + curSize + ', 1fr)';
   boardEl.innerHTML = '';
 
   const cellWidth = curSize === 9 ? '38px' : (curSize === 6 ? '48px' : '64px');
@@ -518,7 +2313,6 @@ function renderBoard(){
       cell.dataset.r = r;
       cell.dataset.c = c;
 
-      // Add border styling for 2x2, 2x3, 3x3 blocks
       let blockR = (curSize === 4) ? 2 : ((curSize === 6) ? 2 : 3);
       let blockC = (curSize === 4) ? 2 : ((curSize === 6) ? 3 : 3);
       if((r + 1) % blockR === 0 && r !== curSize - 1) cell.style.borderBottom = '2px solid #64748B';
@@ -563,7 +2357,7 @@ function selectCell(r, c){
 
 function inputNum(num){
   if(activeR === -1 || activeC === -1) return;
-  if(initGrid[activeR][activeC] !== 0) return; // Cannot edit fixed cell
+  if(initGrid[activeR][activeC] !== 0) return;
 
   userGrid[activeR][activeC] = num;
   renderBoard();
@@ -601,25 +2395,27 @@ function checkWinCondition(){
 
   if(isComplete){
     clearInterval(timerInterval);
-    const reward = 1000;
+    const reward = REWARDS[curSize];
     appState.coins = Math.min(appState.coins + reward, MAX_COINS);
     appState.history = appState.history || [];
     appState.history.push({
-      desc: `두뇌 스도쿠 (${curSize}×${curSize}) 완성`,
+      desc: '두뇌 스도쿠 ' + curSize + '×' + curSize + ' (' + (curPresetIdx+1) + '번) 완성',
       amount: reward,
       date: new Date().toLocaleTimeString()
     });
     saveGlobalState(appState);
     updateCoinsUI();
 
-    document.getElementById('modal-desc').textContent = `${curSize}×${curSize} 스도쿠를 ${document.getElementById('game-timer').textContent} 만에 완성했습니다!`;
+    document.getElementById('modal-reward-val').textContent = '+' + reward.toLocaleString() + '원';
+    document.getElementById('modal-desc').textContent = curSize + '×' + curSize + ' 스도쿠 (' + (curPresetIdx+1) + '번)를 ' + document.getElementById('game-timer').textContent + ' 만에 완성했습니다!';
     document.getElementById('modal-overlay').style.display = 'flex';
   }
 }
 
 function nextSudokuGame(){
   document.getElementById('modal-overlay').style.display = 'none';
-  curPresetIdx++;
+  curPresetIdx = (curPresetIdx + 1) % PRESETS[curSize].length;
+  updatePnumButtons();
   newGame();
 }
 
