@@ -8,16 +8,16 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --primary: #1E3A8A;
-  --primary-light: #3B82F6;
+  --primary: #1E293B;
+  --primary-light: #2563EB;
   --accent: #D97706;
   --correct: #059669;
   --wrong: #DC2626;
-  --bg: #F3F4F6;
+  --bg: #F1F5F9;
   --card: #FFFFFF;
-  --text: #111827;
-  --sub: #4B5563;
-  --border: #E5E7EB;
+  --text: #0F172A;
+  --sub: #475569;
+  --border: #E2E8F0;
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
@@ -26,6 +26,16 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* 📱 모바일 전용 중앙 앱 컨테이너 (PC에서도 완벽한 앱 뷰) */
+.app-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #FFFFFF;
+  box-shadow: 0 0 25px rgba(0,0,0,0.08);
+  position: relative;
   padding-bottom: 80px;
 }
 
@@ -40,21 +50,20 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-.topbar-title { font-size: 18px; font-weight: 700; }
+.topbar-title { font-size: 17px; font-weight: 700; }
 .topbar-coins {
   background: rgba(255,255,255,0.15);
   border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 15px;
+  padding: 4px 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 .topbar-back {
   background: none;
   border: none;
   color: #FFFFFF;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
   padding: 4px 8px;
   line-height: 1;
@@ -67,8 +76,8 @@ body {
   padding: 24px 20px 36px;
   text-align: center;
 }
-.main-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
-.main-sub { font-size: 15px; color: #94A3B8; }
+.main-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+.main-sub { font-size: 14px; color: #94A3B8; }
 
 /* ── Wallet Card ── */
 .wallet {
@@ -80,14 +89,14 @@ body {
   text-align: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-.wallet-label { font-size: 15px; color: var(--sub); font-weight: 600; }
-.wallet-amount { font-size: 34px; font-weight: 800; color: var(--accent); margin: 6px 0; }
-.wallet-max { font-size: 14px; color: #6B7280; }
+.wallet-label { font-size: 14px; color: var(--sub); font-weight: 600; }
+.wallet-amount { font-size: 32px; font-weight: 800; color: var(--accent); margin: 6px 0; }
+.wallet-max { font-size: 13px; color: #64748B; }
 .wallet-bar {
-  background: #E5E7EB;
+  background: #E2E8F0;
   border-radius: 8px;
-  height: 10px;
-  margin-top: 12px;
+  height: 8px;
+  margin-top: 10px;
   overflow: hidden;
 }
 .wallet-fill {
@@ -98,7 +107,7 @@ body {
 }
 
 /* ── Quick Nav Buttons ── */
-.quick-nav { display: flex; gap: 10px; margin: 0 16px 20px; }
+.quick-nav { display: flex; gap: 10px; margin: 0 16px 16px; }
 .quick-nav-btn {
   flex: 1;
   background: #FFFFFF;
@@ -109,27 +118,74 @@ body {
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
-.quick-nav-title { font-size: 16px; font-weight: 700; color: var(--text); }
-.quick-nav-desc { font-size: 14px; color: var(--sub); margin-top: 2px; }
+.quick-nav-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.quick-nav-desc { font-size: 13px; color: var(--sub); margin-top: 2px; }
 
 /* ── Stage Cards ── */
 .stages { padding: 0 16px; }
-.stages h3 { font-size: 18px; font-weight: 800; margin-bottom: 14px; }
+.stages h3 { font-size: 17px; font-weight: 800; margin-bottom: 12px; }
 .stage-card {
   background: #FFFFFF;
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px;
+  border-radius: 14px;
+  padding: 16px 18px;
   margin-bottom: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   cursor: pointer;
 }
-.stage-card.cleared { border-left: 6px solid var(--correct); }
-.stage-name { font-size: 17px; font-weight: 800; color: var(--text); }
-.stage-desc { font-size: 14px; color: var(--sub); margin: 4px 0 10px; }
-.stage-progress { height: 6px; background: #E5E7EB; border-radius: 4px; overflow: hidden; }
+.stage-card.cleared { border-left: 5px solid var(--correct); }
+.stage-name { font-size: 16px; font-weight: 800; color: var(--text); }
+.stage-desc { font-size: 13px; color: var(--sub); margin: 4px 0 10px; }
+.stage-progress { height: 6px; background: #E2E8F0; border-radius: 4px; overflow: hidden; }
 .stage-progress-fill { height: 100%; background: var(--primary-light); }
-.stage-score { font-size: 14px; color: #4B5563; margin-top: 8px; font-weight: 600; }
+.stage-score { font-size: 13px; color: #475569; margin-top: 6px; font-weight: 600; }
+
+/* ── 📖 Study Screen (사전 학습 화면 스타일 복원 및 완성) ── */
+.study-header {
+  padding: 24px 20px 16px;
+  text-align: center;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border);
+}
+.study-header h2 { font-size: 20px; font-weight: 800; color: var(--text); }
+.study-header p { font-size: 14px; color: var(--sub); margin-top: 4px; }
+.study-cards { padding: 16px; }
+.study-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.study-card h4 {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--primary-light);
+  border-bottom: 2px solid #EFF6FF;
+  padding-bottom: 6px;
+}
+.study-card p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #334155;
+}
+.study-start-btn {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 10px auto 30px;
+  padding: 16px;
+  background: var(--primary-light);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+}
 
 /* ── Quiz Screen ── */
 .quiz-top {
@@ -140,55 +196,56 @@ body {
   align-items: center;
   gap: 12px;
 }
-.quiz-num { font-size: 16px; font-weight: 700; color: var(--text); min-width: 60px; }
-.quiz-bar { flex: 1; height: 8px; background: #E5E7EB; border-radius: 6px; overflow: hidden; }
-.quiz-bar-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
+.quiz-num { font-size: 15px; font-weight: 700; color: var(--text); min-width: 60px; }
+.quiz-bar { flex: 1; height: 8px; background: #E2E8F0; border-radius: 6px; overflow: hidden; }
+.quiz-bar-fill { height: 100%; background: var(--primary-light); transition: width 0.3s; }
 .quiz-streak { font-size: 14px; font-weight: 700; color: var(--accent); }
 
 .q-card {
   background: #FFFFFF;
   border-radius: 16px;
   margin: 16px;
-  padding: 20px;
+  padding: 18px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border: 1px solid var(--border);
 }
 .q-type {
   display: inline-block;
   background: #EFF6FF;
-  color: var(--primary);
+  color: var(--primary-light);
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   margin-bottom: 10px;
 }
 .q-text {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   line-height: 1.6;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   color: var(--text);
 }
 .q-hint-btn {
   display: inline-block;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
   background: #FEF3C7;
   color: #92400E;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   border: none;
   cursor: pointer;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 .q-hint-box {
   background: #FFFBEB;
   border: 1px solid #FDE68A;
   border-radius: 10px;
-  padding: 14px 16px;
-  font-size: 15px;
+  padding: 12px 14px;
+  font-size: 14px;
   color: #92400E;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   display: none;
   line-height: 1.6;
 }
@@ -197,10 +254,10 @@ body {
 /* ── Options ── */
 .opts { display: flex; flex-direction: column; gap: 10px; }
 .opt {
-  padding: 16px 18px;
+  padding: 14px 16px;
   border: 2px solid var(--border);
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   background: #FFFFFF;
@@ -208,18 +265,18 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 54px;
+  min-height: 52px;
 }
-.opt:active { background: #F3F4F6; }
+.opt:active { background: #F8FAFC; }
 .opt-num {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: #F3F4F6;
+  background: #F1F5F9;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   flex-shrink: 0;
 }
@@ -233,10 +290,10 @@ body {
 .ox-opts { display: flex; gap: 14px; }
 .ox-btn {
   flex: 1;
-  padding: 24px;
+  padding: 20px;
   border: 2px solid var(--border);
   border-radius: 14px;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 900;
   cursor: pointer;
   text-align: center;
@@ -247,28 +304,28 @@ body {
 
 /* ── Result Feedback ── */
 .q-result {
-  margin-top: 18px;
+  margin-top: 16px;
   padding: 16px;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.6;
   display: none;
 }
 .q-result.show { display: block; }
 .q-result.is-correct { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
 .q-result.is-wrong { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
-.q-result-title { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
+.q-result-title { font-weight: 800; font-size: 15px; margin-bottom: 4px; }
 
 .q-next-btn {
   display: block;
   width: calc(100% - 32px);
   margin: 16px auto;
   padding: 16px;
-  background: var(--primary);
+  background: var(--primary-light);
   color: #FFFFFF;
   border: none;
   border-radius: 14px;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 800;
   cursor: pointer;
   text-align: center;
@@ -280,8 +337,10 @@ body {
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
   background: #FFFFFF;
   display: flex;
   border-top: 1px solid var(--border);
@@ -292,44 +351,14 @@ body {
   flex: 1;
   padding: 14px 0 12px;
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--sub);
   cursor: pointer;
   border: none;
   background: none;
   font-weight: 700;
 }
-.nav-btn.active { color: var(--primary); border-top: 3px solid var(--primary); background: #F8FAFC; }
-
-/* ── Wrong Notes ── */
-.wrong-header { padding: 20px 16px 12px; text-align: center; }
-.wrong-header h2 { font-size: 20px; font-weight: 800; }
-.wrong-header p { font-size: 15px; color: var(--sub); margin-top: 4px; }
-.wrong-card {
-  background: #FFFFFF;
-  border-radius: 14px;
-  margin: 0 16px 14px;
-  padding: 18px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  border-left: 5px solid var(--wrong);
-}
-.wrong-card .wq { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
-.wrong-card .wa { font-size: 15px; color: var(--wrong); margin-bottom: 4px; }
-.wrong-card .wc { font-size: 15px; color: var(--correct); margin-bottom: 8px; font-weight: 700; }
-.wrong-card .we { font-size: 14px; color: var(--sub); line-height: 1.6; background: #F9FAFB; padding: 10px 12px; border-radius: 8px; }
-.wrong-empty { text-align: center; padding: 40px; color: var(--sub); font-size: 16px; }
-.wrong-filter { display: flex; gap: 8px; padding: 0 16px 14px; overflow-x: auto; }
-.wrong-filter-btn {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 700;
-  border: 1px solid var(--border);
-  background: #FFFFFF;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.wrong-filter-btn.active { background: var(--primary); color: #FFFFFF; border-color: var(--primary); }
+.nav-btn.active { color: var(--primary-light); border-top: 3px solid var(--primary-light); background: #F8FAFC; }
 
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: block; }
@@ -337,6 +366,7 @@ body {
 </style>
 </head>
 <body>
+<div class="app-container">
 
 <!-- ═══════ MAIN SCREEN ═══════ -->
 <div class="screen active" id="scr-main">
@@ -544,33 +574,33 @@ body {
 // DATA: STAGES
 // ══════════════════════════════════════
 const STAGES=[
-{id:1,name:"백제의 시작",icon:"⚔️",color:"#6C5CE7",desc:"건국부터 한성백제까지",
+{id:1,name:"백제의 시작",color:"#2563EB",desc:"건국부터 한성백제까지",
 study:[
-{title:"백제는 어떻게 시작되었을까?",visual:"👑⚔️🏰",text:"백제는 기원전 18년, 고구려를 세운 주몽의 셋째 아들 <b>온조</b>가 형 비류와 함께 남쪽으로 내려와 세운 나라야. 온조는 지금의 서울 근처인 <b>위례성(한성)</b>에 도읍을 정했어. 이것이 '한성백제'의 시작이야!"},
-{title:"백제의 전성기 - 근초고왕",visual:"🗡️📜🇯🇵",text:"4세기 <b>근초고왕</b> 때 백제는 가장 강했어. 고구려의 평양성을 공격하여 고국원왕을 전사시키고, 일본에 <b>칠지도(七支刀)</b>라는 일곱 개의 가지가 달린 특별한 칼을 보냈어. 역사서 <b>서기</b>도 이때 편찬했어."},
-{title:"한성의 몰락",visual:"💀🏚️😢",text:"475년, 고구려 <b>장수왕</b>이 3만 대군으로 백제의 수도 한성을 공격했어. <b>개로왕</b>은 전사하고, 한성은 함락되었지. 이후 백제는 남쪽의 <b>웅진(공주)</b>으로 수도를 옮기게 돼."}
+{title:"백제는 어떻게 시작되었을까요?",text:"백제는 기원전 18년, 고구려를 세운 주몽의 아들 <b>온조</b>가 형 비류와 함께 남쪽으로 내려와 세운 나라입니다. 온조는 지금의 서울 한강 유역인 <b>하남 위례성(한성)</b>에 도읍을 정했습니다. 이것이 바로 500년간 이어진 '한성백제'의 시작입니다."},
+{title:"백제의 황금기 - 4세기 근초고왕",text:"4세기 <b>근초고왕</b> 때 백제는 가장 강력한 전성기를 누렸습니다. 마한을 통합하고 고구려 평양성을 공격했으며, 일본(왜)에 <b>칠지도(七支刀)</b>를 하사하며 활발한 해상 교역을 펼쳤습니다. 역사서 <b>서기</b>도 이때 편찬되었습니다."},
+{title:"고구려의 남진과 한성 함락",text:"475년 고구려 <b>장수왕</b>이 3만 대군으로 한성을 기습 공격하여 <b>개로왕</b>이 전사하고 도읍이 함락되었습니다. 이후 백제는 국가를 수습하기 위해 남쪽의 <b>웅진(공주)</b>으로 도읍을 옮기게 됩니다."}
 ]},
-{id:2,name:"공주 웅진백제",icon:"🏛️",color:"#E8913A",desc:"무령왕과 공주의 비밀",
+{id:2,name:"공주 웅진백제",color:"#D97706",desc:"무령왕과 웅진의 중흥",
 study:[
-{title:"웅진으로 천도하다",visual:"🏰🔄🗺️",text:"475년 한성이 함락된 후, <b>문주왕</b>이 백제의 수도를 <b>웅진(지금의 공주)</b>으로 옮겼어. 금강이 감싸고 있어 천연 방어벽 역할을 했고, <b>공산성</b>은 왕궁을 지키는 산성이었어."},
-{title:"위대한 무령왕",visual:"👑✨🪙",text:"<b>무령왕</b>(재위 501~523년)은 백제를 다시 강하게 만든 왕이야. 중국, 일본과 활발히 교류하며 백제의 위상을 높였어. 그의 무덤인 <b>무령왕릉</b>은 1971년에 발견되었는데, <b>도굴되지 않은</b> 완벽한 상태여서 엄청난 보물이 쏟아져 나왔어!"},
-{title:"무령왕릉의 보물들",visual:"🪙👑📜",text:"무령왕릉에서는 <b>금제관식</b>(금으로 만든 왕관 장식), <b>왕과 왕비의 팔찌</b>, 청동 거울, 그리고 왕의 이름과 사망 날짜가 적힌 <b>지석(묘지석)</b>이 발견되었어. 지석 덕분에 무덤의 주인이 누구인지 정확히 알 수 있었어. 이건 매우 드문 경우야!"}
+{title:"웅진(공주)으로의 천도",text:"475년 한성이 함락된 후, <b>문주왕</b>은 천연 요새인 금강과 <b>공산성</b>이 감싸고 있는 <b>웅진(공주)</b>으로 수도를 옮겨 방어를 굳건히 하였습니다."},
+{title:"다시 강한 나라가 되다 - 무령왕",text:"<b>무령왕</b>(재위 501~523)은 전국 22담로에 왕족을 파견하여 왕권을 안정시키고, 중국 남조 양나라 및 일본과 활발히 교류하며 백제를 '다시 강한 나라(갱위강국)'로 일으켜 세웠습니다."},
+{title:"무령왕릉과 국보 유물들",text:"1971년 발굴된 <b>무령왕릉</b>은 1,400년간 도굴되지 않은 온전한 상태로 발견되었습니다. <b>금제관식, 진묘수 석수, 사마왕 지석</b> 등 4,600여 점의 찬란한 백제 국보가 출토되었습니다."}
 ]},
-{id:3,name:"부여 사비백제",icon:"🏯",color:"#00B894",desc:"사비 천도부터 백제의 마지막",
+{id:3,name:"부여 사비백제",color:"#059669",desc:"사비 천도와 찬란한 문화",
 study:[
-{title:"성왕의 사비 천도",visual:"👑🏯📋",text:"538년, <b>성왕</b>은 더 넓고 평탄한 곳으로 수도를 옮기기로 해. 바로 <b>사비(지금의 부여)</b>야. 나라 이름도 <b>'남부여'</b>로 바꾸고, 행정구역을 5부 5방으로 정리했어. 일본에 불교도 전해줬어."},
-{title:"백제의 아름다운 문화유산",visual:"🏛️🔥🪷",text:"<b>정림사지 5층석탑</b>은 백제의 대표적인 석탑이야. <b>백제금동대향로</b>는 부여 능산리에서 발견된 국보로, 용이 향로를 받들고 있고 꼭대기에는 봉황이 앉아 있어. 백제인들의 뛰어난 예술 감각을 보여주는 걸작이야!"},
-{title:"백제의 마지막",visual:"⚔️😢🔥",text:"<b>의자왕</b>은 백제의 마지막 왕이야. 660년, 신라 김유신과 당나라 소정방이 이끄는 <b>나당연합군</b>이 백제를 공격했어. <b>계백</b> 장군은 5천 결사대로 <b>황산벌</b>에서 싸웠지만 패하고, 사비성이 함락되며 백제는 678년의 역사를 마감했어."}
+{title:"성왕의 사비(부여) 천도",text:"538년 <b>성왕</b>은 넓은 평야와 백마강 수운이 발달한 <b>사비(부여)</b>로 수도를 옮기고, 국호를 <b>남부여</b>로 바꾸어 중흥을 도모하였습니다."},
+{title:"백제 문화의 정수 - 대향로와 정림사탑",text:"사비 시기에는 목조건물의 조형미를 돌로 승화시킨 <b>정림사지 5층석탑</b>과 동아시아 금속공예의 최고 걸작인 <b>백제금동대향로</b> 등 세계적인 문화유산이 탄생하였습니다."},
+{title:"황산벌 전투와 백제의 마지막",text:"660년 나당연합군의 공격에 맞서 <b>계백 장군</b>은 5천 결사대를 이끌고 <b>황산벌</b>에서 결사 항전하였으나, 수적 열세를 극복하지 못하고 백제는 678년의 역사를 마감하였습니다."}
 ]},
-{id:4,name:"익산과 무왕",icon:"🗼",color:"#E17055",desc:"서동요와 미륵사지",
+{id:4,name:"익산과 무왕",color:"#EA580C",desc:"서동 설화와 미륵사지",
 study:[
-{title:"무왕과 서동요",visual:"🎵💕👸",text:"<b>무왕</b>(재위 600~641년)은 어릴 때 이름이 <b>서동</b>이었어. 신라 <b>선화공주</b>를 사랑하여 '서동요'라는 노래를 퍼뜨려 공주와 결혼했다는 전설이 있어. 서동요는 우리나라에서 가장 오래된 향가 중 하나야!"},
-{title:"미륵사지와 거대한 석탑",visual:"🗼🪨🔍",text:"무왕은 익산에 <b>미륵사</b>라는 거대한 절을 지었어. <b>미륵사지 석탑</b>은 우리나라에서 <b>가장 크고 가장 오래된 석탑</b>이야. 2009년 해체 복원 중에 석탑 안에서 금제 사리봉영기 등 <b>사리장엄구</b>가 발견되어 큰 화제가 되었어!"},
-{title:"왕궁리 유적과 익산 쌍릉",visual:"🏰👑⚱️",text:"익산에는 무왕이 살았을 것으로 추정되는 <b>왕궁리 유적</b>이 있어. 또한 <b>익산 쌍릉</b>은 무왕과 왕비의 무덤으로 알려져 있어. 최근 발굴 조사에서 무왕의 것으로 추정되는 뼈가 발견되기도 했어."}
+{title:"무왕과 서동요 설화",text:"<b>무왕</b>(재위 600~641)은 어릴 적 서동이라 불렸으며 신라 선화공주와의 사랑을 담은 향가 '서동요'의 주인공입니다. 무왕은 왕권을 강화하기 위해 익산에 신도시를 경영하였습니다."},
+{title:"국내 최대 석탑 - 익산 미륵사지",text:"무왕이 세운 <b>미륵사</b>는 3탑 3금당의 동양 최대 사찰입니다. <b>미륵사지 석탑</b>은 우리나라에서 가장 오래되고 거대한 석탑이며, 2009년 내부에서 <b>금제사리봉영기</b>가 출토되었습니다."},
+{title:"왕궁리 유적과 익산 쌍릉",text:"익산에는 무왕이 거처하던 <b>왕궁리 유적</b>과 왕실 공방터가 있으며, <b>익산 쌍릉(대왕묘)</b>은 무왕의 무덤으로 확인되어 백제 왕실의 위상을 증명하고 있습니다."}
 ]},
-{id:5,name:"최종 보스: 백제 종합",icon:"🏆",color:"#F4A900",desc:"지금까지 배운 모든 것!",
+{id:5,name:"백제 역사 종합",color:"#CA8A04",desc:"백제 678년 총정리",
 study:[
-{title:"백제 역사 총정리",visual:"👑⚔️🏛️🗼",text:"백제는 기원전 18년 온조왕이 세우고, 660년 의자왕 때 멸망할 때까지 <b>약 678년</b> 동안 이어졌어. 수도를 <b>한성(서울) → 웅진(공주) → 사비(부여)</b>로 옮기며 어려운 상황에서도 아름다운 문화를 꽃피웠어. 일본, 중국과 활발하게 교류하며 <b>동아시아 문화 교류</b>의 중심이었어!"}
+{title:"백제 678년의 위대한 발자취",text:"백제는 기원전 18년 온조왕의 한성 건국 이래 웅진, 사비를 거쳐 익산에 이르기까지 찬란한 문화를 꽃피웠습니다. '검이불루 화이불치(검소하지만 누추하지 않고 화려하지만 사치스럽지 않다)'의 아름다움은 오늘날 유네스코 세계유산으로 빛나고 있습니다."}
 ]}
 ];
 
@@ -3037,5 +3067,6 @@ function checkUserPhoto(btn, selectedName){
 // ══════════════════════════════════════
 renderMain();
 </script>
+</div>
 </body>
 </html>

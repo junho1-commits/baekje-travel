@@ -26,6 +26,15 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #FFFFFF;
+  box-shadow: 0 0 25px rgba(0,0,0,0.08);
+  position: relative;
   padding-bottom: 80px;
 }
 
@@ -185,6 +194,7 @@ body {
 </style>
 </head>
 <body>
+<div class="app-container">
 
 <!-- ═══ HEADER ═══ -->
 <div class="header">
@@ -631,5 +641,6 @@ function loadChecks() {
 
 loadChecks();
 </script>
+</div>
 </body>
 </html>
