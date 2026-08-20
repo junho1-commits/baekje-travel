@@ -399,14 +399,11 @@ body {
     </div>
 
     <div onclick="showScreen('scr-photo')" style="flex:1;background:#FFF;border:2px solid #D5E8D4;border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,0.04);cursor:pointer;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:22px;">📸</span>
-        <div>
-          <div style="font-size:13px;font-weight:800;color:#2D3436;">유물 사진 퀴즈</div>
-          <div style="font-size:10px;color:#2E7D32;">유물&찰칵 맞추기</div>
-        </div>
+      <div>
+        <div style="font-size:14px;font-weight:800;color:#2D3436;">유물 사진 퀴즈</div>
+        <div style="font-size:12px;color:#2E7D32;margin-top:2px;">국보 10선 실물 맞추기</div>
       </div>
-      <span style="background:#E8F8F5;color:#00B894;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:800;">NEW</span>
+      <span style="background:#E8F8F5;color:#00B894;padding:4px 8px;border-radius:8px;font-size:12px;font-weight:800;">10선</span>
     </div>
   </div>
 
@@ -515,49 +512,13 @@ body {
 <div class="screen" id="scr-photo">
   <div class="topbar">
     <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
-    <div class="topbar-title">📸 백제 유물 사진 퀴즈</div>
-    <div class="topbar-coins" id="photo-coins">💰 0원</div>
+    <div class="topbar-title">백제 유물 사진 퀴즈</div>
+    <div class="topbar-coins" id="photo-coins">0원</div>
   </div>
   
   <div style="padding:16px;">
-    <!-- 모드 선택 탭 -->
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button id="p-tab-1" onclick="switchPhotoMode(1)" style="flex:1;padding:12px;border-radius:12px;font-size:13px;font-weight:800;border:none;background:var(--primary);color:#fff;cursor:pointer;">
-        🏛️ 유물 사진 맞추기 (10선)
-      </button>
-      <button id="p-tab-2" onclick="switchPhotoMode(2)" style="flex:1;padding:12px;border-radius:12px;font-size:13px;font-weight:800;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer;">
-        📷 현장 사진 찰칵 퀴즈
-      </button>
-    </div>
-
-    <!-- 모드 1: 유물 유물 사진 퀴즈 -->
-    <div id="photo-mode-1">
-      <div id="photo-quiz-card" class="q-card" style="margin:0;"></div>
-      <button class="q-next-btn" id="photo-next" style="margin:14px 0 0;" onclick="nextPhotoQuestion()">다음 사진 문제 →</button>
-    </div>
-
-    <!-- 모드 2: 현장 사진 업로드 퀴즈 -->
-    <div id="photo-mode-2" style="display:none;">
-      <div class="q-card" style="margin:0;text-align:center;">
-        <div style="font-size:40px;margin-bottom:8px;">📸</div>
-        <h3 style="font-size:16px;font-weight:800;margin-bottom:6px;">내가 찍은 백제 유물 사진 퀴즈!</h3>
-        <p style="font-size:12px;color:var(--sub);line-height:1.5;margin-bottom:16px;">
-          여행지(박물관, 왕릉, 석탑)에서 직접 찍은 사진이나 갤러리 사진을 불러와서 어떤 유물인지 맞춰보세요! (정답 시 <strong>+500원</strong> 보너스)
-        </p>
-
-        <label style="display:inline-block;padding:12px 24px;background:var(--gold);color:#fff;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 8px rgba(244,169,0,0.3);">
-          📁 내 폰에서 사진 불러오기
-          <input type="file" accept="image/*" id="user-photo-input" onchange="handleUserPhoto(event)" style="display:none;">
-        </label>
-
-        <div id="user-photo-preview" style="margin-top:16px;display:none;">
-          <img id="preview-img" style="max-width:100%;max-height:220px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);object-fit:cover;">
-          <div style="margin-top:14px;font-size:14px;font-weight:800;">이 사진은 어떤 백제 유물/유적일까요?</div>
-          <div id="user-photo-opts" style="display:flex;flex-direction:column;gap:8px;margin-top:12px;"></div>
-          <div id="user-photo-result" style="margin-top:14px;font-size:13px;font-weight:700;display:none;"></div>
-        </div>
-      </div>
-    </div>
+    <div id="photo-quiz-card" class="q-card" style="margin:0;"></div>
+    <button class="q-next-btn" id="photo-next" style="margin:14px 0 0;" onclick="nextPhotoQuestion()">다음 사진 문제 →</button>
   </div>
 </div>
 
@@ -2837,19 +2798,6 @@ const PHOTO_QUESTIONS = [
 
 let photoIdx = 0;
 let photoAnswered = false;
-
-function switchPhotoMode(mode){
-  document.getElementById('photo-mode-1').style.display = (mode===1)?'block':'none';
-  document.getElementById('photo-mode-2').style.display = (mode===2)?'block':'none';
-  document.getElementById('p-tab-1').style.background = (mode===1)?'var(--primary)':'#fff';
-  document.getElementById('p-tab-1').style.color = (mode===1)?'#fff':'var(--text)';
-  document.getElementById('p-tab-1').style.border = (mode===1)?'none':'1px solid var(--border)';
-  document.getElementById('p-tab-2').style.background = (mode===2)?'var(--primary)':'#fff';
-  document.getElementById('p-tab-2').style.color = (mode===2)?'#fff':'var(--text)';
-  document.getElementById('p-tab-2').style.border = (mode===2)?'none':'1px solid var(--border)';
-  if(mode===1) renderPhotoQuestion();
-}
-
 let photoCorrectCount = 0;
 let photoEarnedThisRound = 0;
 
@@ -3002,64 +2950,6 @@ function openPhotoModal(imgUrl, title){
     <div style="color:#aaa;font-size:12px;margin-top:14px;">화면을 터치하면 닫힙니다 ✕</div>
   `;
   modal.style.display = 'flex';
-}
-
-// ── 모드 2: 폰 사진 업로드 퀴즈 ──
-const BAEKJE_RELICS = [
-  '백제금동대향로 (부여 능산리)',
-  '무령왕릉 금제관식 (공주)',
-  '진묘수 석수 (공주 무령왕릉)',
-  '정림사지 5층석탑 (부여)',
-  '익산 미륵사지 석탑 (익산)',
-  '공주 공산성 성벽 (공주)',
-  '부소산성 낙화암 (부여)',
-  '칠지도 (백제-일본)',
-  '서산 마애삼존불상 (백제의 미소)',
-  '익산 왕궁리 5층석탑 (익산)'
-];
-
-function handleUserPhoto(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt){
-    document.getElementById('preview-img').src = evt.target.result;
-    document.getElementById('user-photo-preview').style.display = 'block';
-
-    // 4개 랜덤 보기 생성
-    const shuffled = [...BAEKJE_RELICS].sort(()=>0.5-Math.random());
-    const opts = shuffled.slice(0, 4);
-    const optsDiv = document.getElementById('user-photo-opts');
-    optsDiv.innerHTML = '';
-    
-    opts.forEach((item, idx)=>{
-      const btn = document.createElement('button');
-      btn.style.cssText = 'padding:12px 14px;border:2px solid var(--border);border-radius:12px;background:#fff;font-size:13px;font-weight:700;text-align:left;cursor:pointer;';
-      btn.textContent = `${idx+1}. ${item}`;
-      btn.onclick = function(){ checkUserPhoto(btn, item); };
-      optsDiv.appendChild(btn);
-    });
-
-    document.getElementById('user-photo-result').style.display = 'none';
-  };
-  reader.readAsDataURL(file);
-}
-
-function checkUserPhoto(btn, selectedName){
-  const res = document.getElementById('user-photo-result');
-  btn.style.background = '#E8F8F5';
-  btn.style.borderColor = 'var(--correct)';
-  
-  state.coins = Math.min(state.coins + 500, MAX_COINS);
-  saveState();
-  updateCoinsAll();
-
-  res.innerHTML = `
-    <div style="background:#E8F8F5;border:1px solid #A3E4D7;color:#1E8449;padding:12px;border-radius:10px;">
-      🎉 <strong>"${selectedName}"</strong> 현장 탐방 퀴즈 완료!<br/>
-      현장 탐방 특별 보너스 <strong>+500원</strong>이 적립되었습니다! 👏
-    </div>`;
-  res.style.display = 'block';
 }
 
 // ══════════════════════════════════════
