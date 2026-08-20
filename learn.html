@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>👑 백제 마스터 - 학습앱</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#6C5CE7;--gold:#F4A900;--correct:#00B894;--wrong:#E17055;--bg:#F8F9FA;--card:#FFF;--text:#2D3436;--sub:#636E72;--border:#DFE6E9}
+body{font-family:-apple-system,'Pretendard','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+
+/* ── Screens ── */
+.screen{display:none;min-height:100vh;padding-bottom:30px}
+.screen.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes coinDrop{0%{transform:translateY(-40px) scale(0);opacity:0}60%{transform:translateY(5px) scale(1.2);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes sparkle{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── Header Bar ── */
+.topbar{background:linear-gradient(135deg,#6C5CE7,#A29BFE);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topbar-title{font-size:15px;font-weight:800}
+.topbar-coins{background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px}
+.topbar-back{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:4px 8px}
+
+/* ── Main Screen ── */
+.main-header{background:linear-gradient(135deg,#2D1B69 0%,#6C5CE7 50%,#A29BFE 100%);color:#fff;padding:30px 20px 40px;text-align:center;position:relative}
+.main-header::after{content:'';position:absolute;bottom:-20px;left:0;right:0;height:40px;background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0}
+.main-mascot{font-size:64px;margin-bottom:8px}
+.main-title{font-size:22px;font-weight:900}
+.main-sub{font-size:13px;opacity:.8;margin-top:4px}
+
+/* ── Wallet Card ── */
+.wallet{background:linear-gradient(135deg,#F4A900,#F39C12);border-radius:18px;margin:0 16px;padding:20px;color:#fff;text-align:center;position:relative;top:-10px;box-shadow:0 6px 20px rgba(244,169,0,.3)}
+.wallet-label{font-size:12px;opacity:.85}
+.wallet-amount{font-size:36px;font-weight:900;margin:4px 0}
+.wallet-max{font-size:11px;opacity:.7}
+.wallet-bar{background:rgba(255,255,255,.3);border-radius:10px;height:8px;margin-top:10px;overflow:hidden}
+.wallet-fill{background:#fff;height:100%;border-radius:10px;transition:width .5s}
+
+/* ── Stage Cards ── */
+.stages{padding:12px 16px}
+.stages h3{font-size:15px;font-weight:800;margin-bottom:12px;padding-left:4px}
+.stage-card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.05);display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .2s;position:relative;overflow:hidden}
+.stage-card:active{transform:scale(.97)}
+.stage-card.locked{opacity:.5;pointer-events:none}
+.stage-card.locked::after{content:'🔒';position:absolute;right:16px;font-size:20px}
+.stage-card.cleared{border:2px solid var(--correct)}
+.stage-icon{font-size:36px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:14px;flex-shrink:0}
+.stage-info{flex:1}
+.stage-name{font-size:14px;font-weight:700}
+.stage-desc{font-size:11px;color:var(--sub);margin-top:2px}
+.stage-progress{height:4px;background:var(--border);border-radius:4px;margin-top:8px;overflow:hidden}
+.stage-progress-fill{height:100%;border-radius:4px;background:var(--primary);transition:width .3s}
+.stage-score{font-size:11px;color:var(--sub);margin-top:4px}
+
+/* ── Bottom Nav ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid var(--border);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:10px 0 8px;text-align:center;font-size:10px;color:var(--sub);cursor:pointer;border:none;background:none;font-weight:600}
+.nav-btn.active{color:var(--primary)}
+.nav-btn span{font-size:20px;display:block;margin-bottom:2px}
+body{padding-bottom:70px}
+
+/* ── Study Screen ── */
+.study-header{padding:20px 16px;text-align:center}
+.study-header h2{font-size:18px;font-weight:800}
+.study-header p{font-size:12px;color:var(--sub);margin-top:4px}
+.study-card{background:var(--card);border-radius:16px;margin:0 16px 12px;padding:18px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.study-card h4{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--primary)}
+.study-card p{font-size:13px;line-height:1.7;color:var(--sub)}
+.study-card .visual{font-size:48px;text-align:center;padding:16px 0;background:#F8F7FF;border-radius:12px;margin-bottom:12px}
+.study-start-btn{display:block;margin:16px;padding:16px;background:var(--primary);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;text-align:center}
+.study-start-btn:active{opacity:.8}
+
+/* ── Quiz Screen ── */
+.quiz-top{padding:16px;display:flex;align-items:center;gap:10px}
+.quiz-num{font-size:12px;color:var(--sub);font-weight:700}
+.quiz-bar{flex:1;height:6px;background:var(--border);border-radius:6px;overflow:hidden}
+.quiz-bar-fill{height:100%;background:var(--primary);border-radius:6px;transition:width .3s}
+.quiz-streak{font-size:12px;color:var(--gold);font-weight:700}
+
+.q-card{background:var(--card);border-radius:18px;margin:0 16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.q-visual{font-size:56px;text-align:center;padding:20px;background:linear-gradient(135deg,#F8F7FF,#EDE7F6);border-radius:14px;margin-bottom:16px;line-height:1.3}
+.q-visual.map{font-size:14px;line-height:1.8;padding:14px}
+.q-type{font-size:10px;color:var(--primary);font-weight:700;margin-bottom:6px;text-transform:uppercase}
+.q-text{font-size:15px;font-weight:700;line-height:1.6;margin-bottom:16px}
+.q-hint-btn{display:inline-block;padding:6px 14px;border-radius:8px;background:#FFF3E0;color:#E65100;font-size:11px;font-weight:700;border:none;cursor:pointer;margin-bottom:12px}
+.q-hint-box{background:#FFF8E1;border:1px solid #FFE082;border-radius:10px;padding:10px 14px;font-size:12px;color:#F57F17;margin-bottom:12px;display:none;line-height:1.5}
+.q-hint-box.show{display:block}
+
+/* ── Options ── */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:14px 16px;border:2px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;background:#fff;text-align:left;display:flex;align-items:center;gap:10px}
+.opt:active{transform:scale(.98)}
+.opt-num{width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.opt.correct{border-color:var(--correct);background:#E8F8F5;animation:pulse .3s}
+.opt.correct .opt-num{background:var(--correct);color:#fff}
+.opt.wrong{border-color:var(--wrong);background:#FDEDEC;animation:shake .3s}
+.opt.wrong .opt-num{background:var(--wrong);color:#fff}
+.opt.disabled{pointer-events:none;opacity:.6}
+.opt.correct.disabled{opacity:1}
+
+/* ── OX Options ── */
+.ox-opts{display:flex;gap:12px}
+.ox-btn{flex:1;padding:20px;border:2px solid var(--border);border-radius:14px;font-size:28px;font-weight:900;cursor:pointer;text-align:center;background:#fff;transition:all .2s}
+.ox-btn:active{transform:scale(.95)}
+.ox-btn.correct{border-color:var(--correct);background:#E8F8F5}
+.ox-btn.wrong{border-color:var(--wrong);background:#FDEDEC;animation:shake .3s}
+
+/* ── Result Feedback ── */
+.q-result{margin-top:16px;padding:14px;border-radius:12px;font-size:13px;line-height:1.6;display:none}
+.q-result.show{display:block;animation:fadeIn .3s}
+.q-result.is-correct{background:#E8F8F5;border:1px solid #A3E4D7;color:#1E8449}
+.q-result.is-wrong{background:#FDEDEC;border:1px solid #F5B7B1;color:#C0392B}
+.q-result-title{font-weight:800;font-size:14px;margin-bottom:4px}
+.q-result .coin-anim{display:inline-block;animation:coinDrop .5s}
+.q-next-btn{display:block;margin:16px;padding:14px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;display:none}
+.q-next-btn.show{display:block}
+
+/* ── Stage Result ── */
+.result-screen{text-align:center;padding:30px 20px}
+.result-emoji{font-size:72px;margin-bottom:12px}
+.result-title{font-size:22px;font-weight:900}
+.result-sub{font-size:14px;color:var(--sub);margin-top:6px}
+.result-stats{display:flex;gap:12px;margin:20px 0;justify-content:center}
+.result-stat{background:var(--card);border-radius:14px;padding:16px 20px;box-shadow:0 2px 6px rgba(0,0,0,.05);min-width:90px}
+.result-stat .val{font-size:24px;font-weight:900;color:var(--primary)}
+.result-stat .lbl{font-size:11px;color:var(--sub);margin-top:2px}
+.result-coin{font-size:32px;font-weight:900;color:var(--gold);margin:16px 0}
+.result-btn{padding:14px 40px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin:8px}
+
+/* ── Wrong Notes ── */
+.wrong-header{padding:20px 16px;text-align:center}
+.wrong-header h2{font-size:18px;font-weight:800}
+.wrong-header p{font-size:12px;color:var(--sub);margin-top:4px}
+.wrong-card{background:var(--card);border-radius:14px;margin:0 16px 10px;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,.05);border-left:4px solid var(--wrong)}
+.wrong-card .wq{font-size:14px;font-weight:700;margin-bottom:6px}
+.wrong-card .wa{font-size:12px;color:var(--wrong);margin-bottom:4px}
+.wrong-card .wc{font-size:12px;color:var(--correct);margin-bottom:6px}
+.wrong-card .we{font-size:12px;color:var(--sub);line-height:1.5;background:#F8F9FA;padding:8px 10px;border-radius:8px}
+.wrong-card .wv{font-size:32px;text-align:center;padding:8px;margin-bottom:8px}
+.wrong-empty{text-align:center;padding:40px;color:var(--sub);font-size:14px}
+.wrong-filter{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.wrong-filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid var(--border);background:#fff;cursor:pointer;white-space:nowrap}
+.wrong-filter-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ── Wallet Screen ── */
+.big-wallet{text-align:center;padding:30px 20px}
+.big-wallet-emoji{font-size:72px}
+.big-wallet-amount{font-size:48px;font-weight:900;color:var(--gold);margin:10px 0}
+.big-wallet-label{font-size:14px;color:var(--sub)}
+.big-wallet-bar{background:var(--border);border-radius:10px;height:12px;margin:16px 30px;overflow:hidden}
+.big-wallet-fill{background:linear-gradient(90deg,var(--gold),#F39C12);height:100%;border-radius:10px;transition:width .5s}
+.wallet-history{margin:0 16px}
+.wallet-row{display:flex;justify-content:space-between;padding:12px 16px;background:var(--card);border-radius:10px;margin-bottom:6px;font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.wallet-row .wr-label{color:var(--sub)}
+.wallet-row .wr-val{font-weight:700;color:var(--gold)}
+.show-btn{display:block;margin:20px auto;padding:14px 40px;background:linear-gradient(135deg,var(--gold),#F39C12);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(244,169,0,.3)}
+</style>
+</head>
+<body>
+
+<!-- ═══════ MAIN SCREEN ═══════ -->
+<div class="screen active" id="scr-main">
+  <div class="main-header">
+    <a href="index.html" style="display:inline-block;background:rgba(255,255,255,0.15);color:#fff;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px;backdrop-filter:blur(5px);">
+      🚗 여행 일정 보기
+    </a>
+    <div class="main-mascot">👑</div>
+    <div class="main-title">백제 마스터</div>
+    <div class="main-sub">퀴즈를 풀고 기념품 용돈을 모으자!</div>
+  </div>
+  <div class="wallet" onclick="showScreen('scr-wallet')">
+    <div class="wallet-label">💰 내 기념품 용돈</div>
+    <div class="wallet-amount" id="main-coins">0원</div>
+    <div class="wallet-max">최대 50,000원</div>
+    <div class="wallet-bar"><div class="wallet-fill" id="main-bar" style="width:0%"></div></div>
+  </div>
+
+  <!-- 📝 오답노트 & 📸 사진퀴즈 바로가기 -->
+  <div style="display:flex;gap:8px;margin:8px 16px 14px;">
+    <div id="main-wrong-banner" onclick="showScreen('scr-wrong')" style="flex:1;background:#FFF;border:2px solid #FFEAA7;border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,0.04);cursor:pointer;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:22px;">📝</span>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:#2D3436;">오답노트</div>
+          <div style="font-size:10px;color:#636E72;">틀린 문제 복습</div>
+        </div>
+      </div>
+      <span style="background:#FDEDEC;color:#E17055;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:800;" id="main-wrong-badge">0개</span>
+    </div>
+
+    <div onclick="showScreen('scr-photo')" style="flex:1;background:#FFF;border:2px solid #D5E8D4;border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,0.04);cursor:pointer;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:22px;">📸</span>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:#2D3436;">사진 퀴즈</div>
+          <div style="font-size:10px;color:#2E7D32;">유물&찰칵 맞추기</div>
+        </div>
+      </div>
+      <span style="background:#E8F8F5;color:#00B894;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:800;">NEW</span>
+    </div>
+  </div>
+
+  <div class="stages">
+    <h3>📚 학습 스테이지</h3>
+    <div id="stage-list"></div>
+  </div>
+</div>
+
+<!-- ═══════ STUDY SCREEN ═══════ -->
+<div class="screen" id="scr-study">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
+    <div class="topbar-title" id="study-title"></div>
+    <div class="topbar-coins" id="study-coins">💰 0원</div>
+  </div>
+  <div class="study-header">
+    <h2 id="study-h2"></h2>
+    <p id="study-desc"></p>
+  </div>
+  <div id="study-cards"></div>
+  <button class="study-start-btn" onclick="startQuiz()">🎮 퀴즈 시작! (용돈 벌기)</button>
+</div>
+
+<!-- ═══════ QUIZ SCREEN ═══════ -->
+<div class="screen" id="scr-quiz">
+  <div class="topbar">
+    <button class="topbar-back" onclick="quitQuiz()">✕</button>
+    <div class="topbar-title" id="quiz-title"></div>
+    <div class="topbar-coins" id="quiz-coins">💰 0원</div>
+  </div>
+  <div class="quiz-top">
+    <div class="quiz-num" id="quiz-num">1/25</div>
+    <div class="quiz-bar"><div class="quiz-bar-fill" id="quiz-bar" style="width:0%"></div></div>
+    <div class="quiz-streak" id="quiz-streak"></div>
+  </div>
+  <div class="q-card" id="quiz-card"></div>
+  <button class="q-next-btn" id="q-next" onclick="nextQuestion()">다음 문제 →</button>
+</div>
+
+<!-- ═══════ STAGE RESULT ═══════ -->
+<div class="screen" id="scr-result">
+  <div class="result-screen">
+    <div class="result-emoji" id="res-emoji">🎉</div>
+    <div class="result-title" id="res-title">스테이지 클리어!</div>
+    <div class="result-sub" id="res-sub"></div>
+    <div class="result-stats">
+      <div class="result-stat"><div class="val" id="res-correct">0</div><div class="lbl">정답</div></div>
+      <div class="result-stat"><div class="val" id="res-wrong">0</div><div class="lbl">오답</div></div>
+      <div class="result-stat"><div class="val" id="res-streak">0</div><div class="lbl">최고연속</div></div>
+    </div>
+    <div class="result-coin" id="res-coin">+0원</div>
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:280px;margin:16px auto 0;">
+      <button class="result-btn" style="margin:0;background:var(--wrong);" id="res-wrong-btn" onclick="showScreen('scr-wrong')">📝 오답노트 확인하기</button>
+      <button class="result-btn" style="margin:0;background:var(--correct);" onclick="retryStage()">🔄 이 단계 다시 풀기</button>
+      <button class="result-btn" style="margin:0;" onclick="showScreen('scr-main')">🏠 홈으로 돌아가기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ WRONG NOTES ═══════ -->
+<div class="screen" id="scr-wrong">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
+    <div class="topbar-title">📝 오답노트</div>
+    <div class="topbar-coins" id="wrong-coins">💰 0원</div>
+  </div>
+  <div class="wrong-header">
+    <h2>📝 오답노트</h2>
+    <p>틀린 문제를 다시 공부하자!</p>
+  </div>
+  <div class="wrong-filter" id="wrong-filter"></div>
+  <div id="wrong-list"></div>
+</div>
+
+<!-- ═══════ WALLET SCREEN ═══════ -->
+<div class="screen" id="scr-wallet">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
+    <div class="topbar-title">💰 용돈 지갑</div>
+    <div></div>
+  </div>
+  <div class="big-wallet">
+    <div class="big-wallet-emoji">💰</div>
+    <div class="big-wallet-label">내 기념품 용돈</div>
+    <div class="big-wallet-amount" id="wlt-amount">0원</div>
+    <div class="big-wallet-bar"><div class="big-wallet-fill" id="wlt-bar" style="width:0%"></div></div>
+    <div style="font-size:12px;color:var(--sub)">최대 50,000원까지 모을 수 있어요</div>
+  </div>
+  <div class="wallet-history" id="wlt-history"></div>
+  <button class="show-btn" onclick="showToParent()">👨 아빠에게 보여주기</button>
+</div>
+
+<!-- ═══════ SHOW TO PARENT ═══════ -->
+<div class="screen" id="scr-show" style="background:linear-gradient(135deg,#2D1B69,#6C5CE7);display:none;justify-content:center;align-items:center;text-align:center;color:#fff;min-height:100vh" onclick="showScreen('scr-wallet')">
+  <div style="padding:40px 20px">
+    <div style="font-size:80px;margin-bottom:20px">👑</div>
+    <div style="font-size:18px;opacity:.8">백제 마스터 학습 완료!</div>
+    <div style="font-size:56px;font-weight:900;margin:20px 0;color:var(--gold)" id="show-amount">0원</div>
+    <div style="font-size:16px;opacity:.9">기념품 용돈으로 사용할 수 있어요</div>
+    <div style="font-size:13px;opacity:.5;margin-top:30px">(화면을 터치하면 돌아갑니다)</div>
+  </div>
+</div>
+
+<!-- ═══════ PHOTO QUIZ SCREEN ═══════ -->
+<div class="screen" id="scr-photo">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
+    <div class="topbar-title">📸 백제 사진 퀴즈</div>
+    <div class="topbar-coins" id="photo-coins">💰 0원</div>
+  </div>
+  
+  <div style="padding:16px;">
+    <!-- 모드 선택 탭 -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button id="p-tab-1" onclick="switchPhotoMode(1)" style="flex:1;padding:12px;border-radius:12px;font-size:13px;font-weight:800;border:none;background:var(--primary);color:#fff;cursor:pointer;">
+        🏛️ 유물 사진 맞추기 (10선)
+      </button>
+      <button id="p-tab-2" onclick="switchPhotoMode(2)" style="flex:1;padding:12px;border-radius:12px;font-size:13px;font-weight:800;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer;">
+        📷 현장 사진 찰칵 퀴즈
+      </button>
+    </div>
+
+    <!-- 모드 1: 유물 사진 퀴즈 -->
+    <div id="photo-mode-1">
+      <div id="photo-quiz-card" class="q-card" style="margin:0;"></div>
+      <button class="q-next-btn" id="photo-next" style="margin:14px 0 0;" onclick="nextPhotoQuestion()">다음 사진 문제 →</button>
+    </div>
+
+    <!-- 모드 2: 현장 사진 업로드 퀴즈 -->
+    <div id="photo-mode-2" style="display:none;">
+      <div class="q-card" style="margin:0;text-align:center;">
+        <div style="font-size:40px;margin-bottom:8px;">📸</div>
+        <h3 style="font-size:16px;font-weight:800;margin-bottom:6px;">내가 찍은 백제 사진 퀴즈!</h3>
+        <p style="font-size:12px;color:var(--sub);line-height:1.5;margin-bottom:16px;">
+          여행지(박물관, 왕릉, 석탑)에서 직접 찍은 사진이나 갤러리 사진을 불러와서 어떤 유물인지 맞춰보세요! (정답 시 <strong>+500원</strong> 보너스)
+        </p>
+
+        <label style="display:inline-block;padding:12px 24px;background:var(--gold);color:#fff;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 8px rgba(244,169,0,0.3);">
+          📁 내 폰에서 사진 불러오기
+          <input type="file" accept="image/*" id="user-photo-input" onchange="handleUserPhoto(event)" style="display:none;">
+        </label>
+
+        <div id="user-photo-preview" style="margin-top:16px;display:none;">
+          <img id="preview-img" style="max-width:100%;max-height:220px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);object-fit:cover;">
+          <div style="margin-top:14px;font-size:14px;font-weight:800;">이 사진은 어떤 백제 유물/유적일까요?</div>
+          <div id="user-photo-opts" style="display:flex;flex-direction:column;gap:8px;margin-top:12px;"></div>
+          <div id="user-photo-result" style="margin-top:14px;font-size:13px;font-weight:700;display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ BOTTOM NAV ═══════ -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="nav-btn active" onclick="showScreen('scr-main')"><span>🏠</span>홈</div>
+  <div class="nav-btn" onclick="showScreen('scr-photo')"><span>📸</span>사진퀴즈</div>
+  <div class="nav-btn" onclick="showScreen('scr-wrong')"><span>📝</span>오답노트</div>
+  <div class="nav-btn" onclick="showScreen('scr-wallet')"><span>💰</span>용돈</div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// DATA: STAGES
+// ══════════════════════════════════════
+const STAGES=[
+{id:1,name:"백제의 시작",icon:"⚔️",color:"#6C5CE7",desc:"건국부터 한성백제까지",
+study:[
+{title:"백제는 어떻게 시작되었을까?",visual:"👑⚔️🏰",text:"백제는 기원전 18년, 고구려를 세운 주몽의 셋째 아들 <b>온조</b>가 형 비류와 함께 남쪽으로 내려와 세운 나라야. 온조는 지금의 서울 근처인 <b>위례성(한성)</b>에 도읍을 정했어. 이것이 '한성백제'의 시작이야!"},
+{title:"백제의 전성기 - 근초고왕",visual:"🗡️📜🇯🇵",text:"4세기 <b>근초고왕</b> 때 백제는 가장 강했어. 고구려의 평양성을 공격하여 고국원왕을 전사시키고, 일본에 <b>칠지도(七支刀)</b>라는 일곱 개의 가지가 달린 특별한 칼을 보냈어. 역사서 <b>서기</b>도 이때 편찬했어."},
+{title:"한성의 몰락",visual:"💀🏚️😢",text:"475년, 고구려 <b>장수왕</b>이 3만 대군으로 백제의 수도 한성을 공격했어. <b>개로왕</b>은 전사하고, 한성은 함락되었지. 이후 백제는 남쪽의 <b>웅진(공주)</b>으로 수도를 옮기게 돼."}
+]},
+{id:2,name:"공주 웅진백제",icon:"🏛️",color:"#E8913A",desc:"무령왕과 공주의 비밀",
+study:[
+{title:"웅진으로 천도하다",visual:"🏰🔄🗺️",text:"475년 한성이 함락된 후, <b>문주왕</b>이 백제의 수도를 <b>웅진(지금의 공주)</b>으로 옮겼어. 금강이 감싸고 있어 천연 방어벽 역할을 했고, <b>공산성</b>은 왕궁을 지키는 산성이었어."},
+{title:"위대한 무령왕",visual:"👑✨🪙",text:"<b>무령왕</b>(재위 501~523년)은 백제를 다시 강하게 만든 왕이야. 중국, 일본과 활발히 교류하며 백제의 위상을 높였어. 그의 무덤인 <b>무령왕릉</b>은 1971년에 발견되었는데, <b>도굴되지 않은</b> 완벽한 상태여서 엄청난 보물이 쏟아져 나왔어!"},
+{title:"무령왕릉의 보물들",visual:"🪙👑📜",text:"무령왕릉에서는 <b>금제관식</b>(금으로 만든 왕관 장식), <b>왕과 왕비의 팔찌</b>, 청동 거울, 그리고 왕의 이름과 사망 날짜가 적힌 <b>지석(묘지석)</b>이 발견되었어. 지석 덕분에 무덤의 주인이 누구인지 정확히 알 수 있었어. 이건 매우 드문 경우야!"}
+]},
+{id:3,name:"부여 사비백제",icon:"🏯",color:"#00B894",desc:"사비 천도부터 백제의 마지막",
+study:[
+{title:"성왕의 사비 천도",visual:"👑🏯📋",text:"538년, <b>성왕</b>은 더 넓고 평탄한 곳으로 수도를 옮기기로 해. 바로 <b>사비(지금의 부여)</b>야. 나라 이름도 <b>'남부여'</b>로 바꾸고, 행정구역을 5부 5방으로 정리했어. 일본에 불교도 전해줬어."},
+{title:"백제의 아름다운 문화유산",visual:"🏛️🔥🪷",text:"<b>정림사지 5층석탑</b>은 백제의 대표적인 석탑이야. <b>백제금동대향로</b>는 부여 능산리에서 발견된 국보로, 용이 향로를 받들고 있고 꼭대기에는 봉황이 앉아 있어. 백제인들의 뛰어난 예술 감각을 보여주는 걸작이야!"},
+{title:"백제의 마지막",visual:"⚔️😢🔥",text:"<b>의자왕</b>은 백제의 마지막 왕이야. 660년, 신라 김유신과 당나라 소정방이 이끄는 <b>나당연합군</b>이 백제를 공격했어. <b>계백</b> 장군은 5천 결사대로 <b>황산벌</b>에서 싸웠지만 패하고, 사비성이 함락되며 백제는 678년의 역사를 마감했어."}
+]},
+{id:4,name:"익산과 무왕",icon:"🗼",color:"#E17055",desc:"서동요와 미륵사지",
+study:[
+{title:"무왕과 서동요",visual:"🎵💕👸",text:"<b>무왕</b>(재위 600~641년)은 어릴 때 이름이 <b>서동</b>이었어. 신라 <b>선화공주</b>를 사랑하여 '서동요'라는 노래를 퍼뜨려 공주와 결혼했다는 전설이 있어. 서동요는 우리나라에서 가장 오래된 향가 중 하나야!"},
+{title:"미륵사지와 거대한 석탑",visual:"🗼🪨🔍",text:"무왕은 익산에 <b>미륵사</b>라는 거대한 절을 지었어. <b>미륵사지 석탑</b>은 우리나라에서 <b>가장 크고 가장 오래된 석탑</b>이야. 2009년 해체 복원 중에 석탑 안에서 금제 사리봉영기 등 <b>사리장엄구</b>가 발견되어 큰 화제가 되었어!"},
+{title:"왕궁리 유적과 익산 쌍릉",visual:"🏰👑⚱️",text:"익산에는 무왕이 살았을 것으로 추정되는 <b>왕궁리 유적</b>이 있어. 또한 <b>익산 쌍릉</b>은 무왕과 왕비의 무덤으로 알려져 있어. 최근 발굴 조사에서 무왕의 것으로 추정되는 뼈가 발견되기도 했어."}
+]},
+{id:5,name:"최종 보스: 백제 종합",icon:"🏆",color:"#F4A900",desc:"지금까지 배운 모든 것!",
+study:[
+{title:"백제 역사 총정리",visual:"👑⚔️🏛️🗼",text:"백제는 기원전 18년 온조왕이 세우고, 660년 의자왕 때 멸망할 때까지 <b>약 678년</b> 동안 이어졌어. 수도를 <b>한성(서울) → 웅진(공주) → 사비(부여)</b>로 옮기며 어려운 상황에서도 아름다운 문화를 꽃피웠어. 일본, 중국과 활발하게 교류하며 <b>동아시아 문화 교류</b>의 중심이었어!"}
+]}
+];
+
+// ══════════════════════════════════════
+// DATA: QUESTIONS (125 total)
+// ══════════════════════════════════════
+const QUESTIONS=[
+// ── STAGE 1: 백제의 시작 (25문제) ──
+{s:1,type:'choice',q:'백제를 세운 왕은 누구일까?',v:'👑❓',o:['온조왕','비류왕','근초고왕','주몽'],a:0,h:'고구려 주몽의 아들이야.',e:'백제는 고구려 주몽의 셋째 아들인 온조왕이 기원전 18년에 세웠어.'},
+{s:1,type:'ox',q:'백제를 세운 온조는 고구려 주몽의 아들이다.',v:'👑➡️⚔️',a:'O',h:'',e:'맞아! 온조는 고구려를 세운 주몽의 셋째 아들이야.'},
+{s:1,type:'choice',q:'백제의 첫 번째 수도는 어디일까?',v:'🏰🗺️',o:['웅진(공주)','사비(부여)','위례성(한성)','평양'],a:2,h:'지금의 서울 근처야.',e:'백제의 첫 수도는 위례성(한성)이야. 지금의 서울 송파구·강동구 근처로 추정돼.'},
+{s:1,type:'choice',q:'백제가 세워진 해는 언제일까?',v:'📅❓',o:['기원전 37년','기원전 18년','기원전 57년','기원후 18년'],a:1,h:'고구려(BC 37년)보다 늦고, 기원전이야.',e:'백제는 기원전 18년에 세워졌어. 참고로 고구려는 BC 37년, 신라는 BC 57년이야.'},
+{s:1,type:'ox',q:'백제는 삼국 중 가장 먼저 세워졌다.',v:'🥇❓',a:'X',h:'삼국의 건국 순서를 생각해봐.',e:'아니야! 삼국의 건국 순서는 신라(BC 57) → 고구려(BC 37) → 백제(BC 18)야.'},
+{s:1,type:'choice',q:'온조왕과 함께 남쪽으로 내려온 형의 이름은?',v:'👬⬇️',o:['유리','비류','대소','해모수'],a:1,h:'온조의 형이야. ㅂ으로 시작해.',e:'비류는 온조의 형으로, 미추홀(인천)에 자리를 잡았지만 실패하고 온조에게 합류했다고 해.'},
+{s:1,type:'choice',q:'백제의 전성기를 이끈 왕으로 고구려 고국원왕을 전사시킨 왕은?',v:'⚔️👑💪',o:['개로왕','근초고왕','무령왕','의자왕'],a:1,h:'4세기 백제의 가장 강한 왕이야. ㄱ으로 시작해.',e:'근초고왕은 4세기 백제의 전성기를 이끌었어. 평양성을 공격하여 고구려 고국원왕을 전사시켰어.'},
+{s:1,type:'choice',q:'근초고왕이 일본에 보낸 특별한 칼의 이름은?',v:'🗡️✨🇯🇵',o:['환두대도','칠지도','용봉환두대도','금동대검'],a:1,h:'일곱 개의 가지가 달린 칼이야.',e:'칠지도(七支刀)는 일곱 개의 가지가 달린 특별한 칼로, 백제와 일본의 교류를 보여주는 중요한 유물이야.'},
+{s:1,type:'ox',q:'칠지도에는 가지가 5개 달려있다.',v:'🗡️🔢',a:'X',h:'이름에 숫자가 들어있어.',e:'아니야! 칠지도(七支刀)는 이름처럼 가지가 7개 달려있어.'},
+{s:1,type:'choice',q:'근초고왕 때 편찬된 백제의 역사책 이름은?',v:'📚✍️',o:['삼국사기','서기','삼국유사','동명왕편'],a:1,h:'기록한다는 뜻의 한자 두 글자야.',e:'서기(書記)는 근초고왕 때 고흥이 편찬한 백제의 역사서야. 현재는 전해지지 않아.'},
+{s:1,type:'choice',q:'475년 백제의 수도 한성을 함락시킨 고구려의 왕은?',v:'💀🏚️',o:['광개토대왕','장수왕','을지문덕','고국원왕'],a:1,h:'이름에 "오래 살다"라는 뜻이 있어.',e:'장수왕은 고구려의 왕으로 3만 대군을 이끌고 백제 한성을 함락시켰어.'},
+{s:1,type:'choice',q:'한성이 함락될 때 전사한 백제의 왕은?',v:'😢👑⚔️',o:['무령왕','개로왕','성왕','온조왕'],a:1,h:'ㄱ으로 시작하는 왕이야.',e:'개로왕은 475년 고구려 장수왕의 공격으로 한성이 함락될 때 전사했어.'},
+{s:1,type:'ox',q:'한성백제 시기는 약 500년 동안 이어졌다.',v:'📅🏰',a:'O',h:'BC 18년부터 475년까지 계산해봐.',e:'맞아! 기원전 18년 건국부터 475년 한성 함락까지 약 493년, 거의 500년이야.'},
+{s:1,type:'choice',q:'한성이 함락된 후 백제가 수도를 옮긴 곳은?',v:'🔄🏰',o:['사비(부여)','위례성','웅진(공주)','익산'],a:2,h:'지금의 공주야.',e:'475년 한성 함락 후 문주왕이 수도를 웅진(지금의 공주)으로 옮겼어.'},
+{s:1,type:'choice',q:'백제의 수도 이동 순서로 올바른 것은?',v:'🗺️➡️➡️',o:['한성→사비→웅진','웅진→한성→사비','한성→웅진→사비','사비→웅진→한성'],a:2,h:'서울→공주→부여 순서야.',e:'백제의 수도는 한성(서울) → 웅진(공주) → 사비(부여) 순서로 옮겼어.'},
+{s:1,type:'choice',q:'삼국시대에 한반도 남서쪽에 위치한 나라는?',v:'🗺️↙️',o:['신라','가야','고구려','백제'],a:3,h:'한반도의 왼쪽 아래에 있었어.',e:'백제는 한반도의 남서쪽(왼쪽 아래)에 위치했어. 신라는 남동쪽, 고구려는 북쪽이야.'},
+{s:1,type:'ox',q:'백제, 신라, 고구려를 합쳐 삼국이라고 부른다.',v:'🏰🏰🏰',a:'O',h:'',e:'맞아! 한국 고대사의 세 나라를 삼국이라 부르고, 이 시대를 삼국시대라 해.'},
+{s:1,type:'choice',q:'온조왕이 수도를 정한 위례성은 지금의 어디 근처일까?',v:'🏙️❓',o:['부산','대전','서울','전주'],a:2,h:'대한민국의 수도와 같은 곳이야.',e:'위례성(한성)은 지금의 서울 송파구·강동구 근처로 추정돼. 풍납토성, 몽촌토성이 유적이야.'},
+{s:1,type:'choice',q:'백제와 같은 시대에 존재했던 나라가 아닌 것은?',v:'❓🏰',o:['신라','고구려','가야','조선'],a:3,h:'조선은 훨씬 나중의 나라야.',e:'조선은 1392년에 세워진 나라로, 삼국시대보다 훨씬 나중이야!'},
+{s:1,type:'choice',q:'백제는 총 몇 년 동안 이어졌을까?',v:'📅↔️📅',o:['약 200년','약 500년','약 678년','약 1000년'],a:2,h:'BC 18년 ~ AD 660년까지 계산해봐.',e:'백제는 기원전 18년부터 660년까지 약 678년간 이어졌어.'},
+{s:1,type:'ox',q:'풍납토성은 한성백제의 왕궁이 있었던 곳이다.',v:'🏰🔍',a:'O',h:'서울 송파구에 있는 유적이야.',e:'맞아! 풍납토성은 서울 송파구에 있으며, 한성백제의 왕성으로 추정돼.'},
+{s:1,type:'choice',q:'다음 중 백제의 왕이 아닌 사람은?',v:'👑❌',o:['온조왕','근초고왕','광개토대왕','무령왕'],a:2,h:'광개토대왕은 다른 나라의 왕이야.',e:'광개토대왕은 고구려의 왕이야! 온조왕, 근초고왕, 무령왕은 모두 백제의 왕이야.'},
+{s:1,type:'choice',q:'온조왕의 아버지인 주몽이 세운 나라는?',v:'👨➡️🏰',o:['신라','백제','고구려','가야'],a:2,h:'한반도 북쪽의 강한 나라야.',e:'주몽은 고구려를 세운 왕이야. 아들 온조가 남쪽으로 내려와 백제를 세웠어.'},
+{s:1,type:'choice',q:'백제 한성 시기의 유적인 몽촌토성에서 열렸던 국제 행사는?',v:'🏟️🌍',o:['월드컵','아시안게임','올림픽','세계박람회'],a:2,h:'1988년 서울에서 열린 큰 스포츠 행사야.',e:'몽촌토성 옆에는 올림픽공원이 있어. 1988년 서울올림픽 때 이 지역이 정비되면서 몽촌토성도 발굴되었어.'},
+{s:1,type:'ox',q:'근초고왕은 백제가 가장 넓은 영토를 가졌던 시기의 왕이다.',v:'🗺️📏',a:'O',h:'',e:'맞아! 근초고왕 때 백제는 전성기를 맞아 마한 전체를 통합하고 가장 넓은 영토를 차지했어.'},
+
+// ── STAGE 2: 공주 웅진백제 (25문제) ──
+{s:2,type:'choice',q:'한성이 함락된 후 백제의 수도를 웅진으로 옮긴 왕은?',v:'🔄👑',o:['무령왕','문주왕','성왕','동성왕'],a:1,h:'ㅁ으로 시작하고, "글 문"자를 써.',e:'문주왕이 475년 한성 함락 이후 수도를 웅진(공주)으로 옮겼어.'},
+{s:2,type:'choice',q:'웅진은 지금의 어디일까?',v:'🗺️❓',o:['부여','익산','공주','전주'],a:2,h:'충청남도에 있는 도시야.',e:'웅진은 지금의 충청남도 공주야. 금강이 도시를 감싸고 흐르는 곳이야.'},
+{s:2,type:'choice',q:'공주의 왕궁을 지키던 산성의 이름은?',v:'🏔️🏰',o:['남한산성','공산성','수원화성','부소산성'],a:1,h:'공주의 ㄱ으로 시작하는 산성이야.',e:'공산성은 공주에 있는 산성으로, 웅진백제 시기 왕궁을 지키는 역할을 했어. 금강변에 있어.'},
+{s:2,type:'ox',q:'공산성은 금강 옆에 위치해 있다.',v:'🏰🌊',a:'O',h:'',e:'맞아! 공산성은 금강변에 위치해 있어 천연 방어벽 역할을 했어.'},
+{s:2,type:'choice',q:'무령왕릉이 발견된 해는?',v:'🔍📅',o:['1945년','1971년','1997년','2009년'],a:1,h:'1970년대 초반이야.',e:'무령왕릉은 1971년 7월 공주 송산리 고분군의 배수로 공사 중에 우연히 발견되었어!'},
+{s:2,type:'ox',q:'무령왕릉은 도굴된 적이 없는 완벽한 상태로 발견되었다.',v:'🏺✨',a:'O',h:'이것이 무령왕릉이 특별한 이유야.',e:'맞아! 무령왕릉은 삼국시대 왕릉 중 도굴되지 않고 완벽한 상태로 발견된 매우 드문 경우야!'},
+{s:2,type:'choice',q:'무령왕릉에서 발견된 금으로 만든 왕관 장식의 이름은?',v:'👑✨🪙',o:['금동대향로','금제관식','금동미륵보살','금관'],a:1,h:'왕관을 장식하는 금으로 된 장식품이야.',e:'금제관식은 금으로 만든 왕관 장식으로, 불꽃무늬 모양이야. 왕과 왕비의 것이 각각 발견되었어.'},
+{s:2,type:'choice',q:'무령왕의 무덤에서 주인이 누구인지 정확히 알 수 있었던 이유는?',v:'📜🔍',o:['벽화에 이름이 있어서','금관에 이름이 새겨져서','지석(묘지석)이 발견되어서','사서에 위치가 기록되어서'],a:2,h:'돌에 글자가 새겨진 기록물이야.',e:'무덤 안에서 왕의 이름과 태어난 해, 사망 날짜가 적힌 지석(묘지석)이 발견되어 정확히 누구의 무덤인지 알 수 있었어.'},
+{s:2,type:'choice',q:'무령왕이 재위한 기간은?',v:'📅👑📅',o:['475~501년','501~523년','523~554년','600~641년'],a:1,h:'6세기 초반이야.',e:'무령왕은 501년부터 523년까지 약 22년간 재위하며 백제를 다시 강하게 만들었어.'},
+{s:2,type:'ox',q:'무령왕릉의 무덤 구조는 중국 남조 양식의 벽돌무덤(전축분)이다.',v:'🧱🏗️',a:'O',h:'벽돌로 만든 무덤이야.',e:'맞아! 무령왕릉은 중국 남조 양식의 벽돌무덤(전축분)으로, 백제와 중국의 활발한 교류를 보여줘.'},
+{s:2,type:'choice',q:'무령왕릉이 있는 공주의 고분군 이름은?',v:'🏔️⚱️',o:['석촌동 고분군','송산리 고분군','능산리 고분군','쌍릉'],a:1,h:'소나무 산에 있는 마을이라는 뜻이야.',e:'송산리 고분군은 공주에 있으며, 백제 웅진 시기 왕들의 무덤이 모여 있는 곳이야.'},
+{s:2,type:'choice',q:'무령왕릉 입구에서 발견된 동물 모양의 석수(돌짐승)는?',v:'🐉🪨',o:['호랑이','용','해태','진묘수(상상의 동물)'],a:3,h:'실제로는 존재하지 않는 상상의 동물이야.',e:'진묘수는 무덤을 지키는 상상의 동물로, 나쁜 기운을 막는 역할을 해. 무령왕릉의 대표적인 유물이야!'},
+{s:2,type:'choice',q:'무령왕은 어느 나라와 활발하게 교류했을까?',v:'🤝🌏',o:['로마 제국','중국 남조(양나라)와 일본','인도와 페르시아','몽골 제국'],a:1,h:'가까운 나라들이야.',e:'무령왕은 중국 남조의 양나라, 일본과 활발히 교류하며 백제의 국제적 위상을 높였어.'},
+{s:2,type:'ox',q:'무령왕릉에서는 왕비의 유물도 함께 발견되었다.',v:'👸🪙',a:'O',h:'',e:'맞아! 무령왕과 왕비가 함께 묻혀 있었고, 왕비의 금제관식, 팔찌 등도 발견되었어.'},
+{s:2,type:'choice',q:'공산성의 옛 이름은 무엇일까?',v:'🏰📜',o:['한산성','웅진성','사비성','부소산성'],a:1,h:'웅진의 성이라는 뜻이야.',e:'공산성은 원래 웅진성이라 불렸어. 웅진백제 시기의 핵심 방어 시설이었어.'},
+{s:2,type:'choice',q:'다음 중 무령왕릉에서 출토된 유물이 아닌 것은?',v:'❌🏺',o:['금제관식','지석','청동거울','백제금동대향로'],a:3,h:'백제금동대향로는 다른 곳에서 발견되었어.',e:'백제금동대향로는 부여 능산리에서 발견되었어. 무령왕릉 출토품이 아니야!'},
+{s:2,type:'choice',q:'공주 국립공주박물관에서 주로 전시하는 유물은?',v:'🏛️🪙',o:['고구려 벽화','무령왕릉 출토 유물','조선시대 도자기','신라 금관'],a:1,h:'공주에서 발견된 가장 유명한 유물이야.',e:'국립공주박물관의 핵심 전시물은 무령왕릉에서 출토된 유물들이야!'},
+{s:2,type:'ox',q:'무령왕의 이름은 지석에 "사마(斯麻)"라고 기록되어 있다.',v:'📜✍️',a:'O',h:'',e:'맞아! 무령왕의 이름은 "사마"로, 지석에 기록되어 있어. 일본 기록에도 같은 이름이 나와.'},
+{s:2,type:'choice',q:'웅진백제 시기 이후 수도를 사비(부여)로 옮긴 왕은?',v:'🔄🏯',o:['무령왕','동성왕','성왕','의자왕'],a:2,h:'ㅅ으로 시작하는 왕이야.',e:'성왕이 538년에 수도를 사비(부여)로 옮겼어. 이후를 사비백제라 불러.'},
+{s:2,type:'choice',q:'공주에 있는 유네스코 세계유산은?',v:'🌍🏛️',o:['경주 불국사','공주·부여·익산 백제역사유적지구','수원화성','해인사'],a:1,h:'백제의 유적들이 모여 있는 곳이야.',e:'공주, 부여, 익산의 백제 유적들은 2015년 유네스코 세계유산으로 등재되었어!'},
+{s:2,type:'ox',q:'공산성에서는 금강의 멋진 풍경을 볼 수 있다.',v:'🏰🌅',a:'O',h:'',e:'맞아! 공산성 성벽 위에서 금강과 공주 시내의 아름다운 풍경을 내려다볼 수 있어.'},
+{s:2,type:'choice',q:'무령왕릉의 발견이 특별한 가장 큰 이유는?',v:'⭐🏺',o:['가장 큰 무덤이라서','가장 오래된 무덤이라서','도굴되지 않아 유물이 완벽했기 때문','외국인이 발견했기 때문'],a:2,h:'대부분의 옛 왕릉은 도굴꾼에게 약탈당했어.',e:'대부분의 삼국시대 왕릉은 도굴되었지만, 무령왕릉은 발견 당시까지 도굴되지 않아 4,600여 점의 유물이 완벽하게 보존되어 있었어!'},
+{s:2,type:'choice',q:'무령왕릉에서 발견된 유물은 총 몇 점일까?',v:'🏺🔢',o:['약 100점','약 1,000점','약 4,600점','약 10,000점'],a:2,h:'사천 점 이상이야.',e:'무령왕릉에서는 총 4,600여 점의 유물이 발견되었어. 이 중 12점이 국보로 지정되었어!'},
+{s:2,type:'choice',q:'공주의 특산물로 유명한 과일은?',v:'🌰❓',o:['사과','밤','감','배'],a:1,h:'가을에 많이 나고, 딱딱한 껍질 안에 있어.',e:'공주는 밤으로 유명해! 공주 알밤은 크고 달아서 전국적으로 인기야. 밤파이, 밤막걸리도 유명해.'},
+
+// ── STAGE 3: 부여 사비백제 (25문제) ──
+{s:3,type:'choice',q:'538년 백제의 수도를 사비(부여)로 옮긴 왕은?',v:'🏯👑',o:['무령왕','무왕','성왕','의자왕'],a:2,h:'ㅅ으로 시작하는 왕이야.',e:'성왕이 538년에 백제의 수도를 웅진(공주)에서 사비(부여)로 옮겼어.'},
+{s:3,type:'choice',q:'성왕이 사비 천도 후 바꾼 나라 이름은?',v:'📝🏰',o:['대백제','남부여','신백제','후백제'],a:1,h:'부여의 후손이라는 뜻을 담았어.',e:'성왕은 나라 이름을 "남부여"로 바꿔 부여의 정통성을 잇는다는 뜻을 담았어.'},
+{s:3,type:'ox',q:'부여에 있는 정림사지 5층석탑은 백제의 대표적인 석탑이다.',v:'🗼🪨',a:'O',h:'',e:'맞아! 정림사지 5층석탑은 백제의 대표적인 석탑으로 국보 제9호야. 부여의 상징이야.'},
+{s:3,type:'choice',q:'부여 능산리에서 발견된 국보로, 용과 봉황이 장식된 유물은?',v:'🐉🔥🪷',o:['금제관식','칠지도','백제금동대향로','미륵사지석탑'],a:2,h:'향을 피우는 그릇이야.',e:'백제금동대향로는 1993년 부여 능산리에서 발견된 국보야. 용이 받들고 봉황이 꼭대기에 앉아 있는 걸작이야!'},
+{s:3,type:'choice',q:'백제금동대향로 꼭대기에 앉아 있는 상상의 새는?',v:'🐦✨',o:['까마귀','학','봉황','독수리'],a:2,h:'왕을 상징하는 상상의 새야.',e:'백제금동대향로 꼭대기에는 봉황이 앉아 있어. 봉황은 상서로운 새로 왕실의 권위를 상징해.'},
+{s:3,type:'ox',q:'백제금동대향로는 무령왕릉에서 발견되었다.',v:'🏺❓',a:'X',h:'공주가 아닌 다른 곳에서 발견되었어.',e:'아니야! 백제금동대향로는 부여 능산리 절터에서 발견되었어. 무령왕릉은 공주에 있어.'},
+{s:3,type:'choice',q:'백제의 마지막 왕은 누구일까?',v:'👑😢',o:['성왕','무왕','계백','의자왕'],a:3,h:'ㅇ으로 시작해. "의로운"이라는 뜻이야.',e:'의자왕은 백제의 마지막(31대) 왕이야. 660년 나당연합군에 의해 백제가 멸망했어.'},
+{s:3,type:'choice',q:'백제를 멸망시킨 군대는?',v:'⚔️🏰💥',o:['고구려군','나당연합군','왜군','몽골군'],a:1,h:'신라와 당나라가 함께 만든 군대야.',e:'나당연합군(신라 + 당나라 연합군)이 660년 백제를 공격하여 멸망시켰어.'},
+{s:3,type:'choice',q:'황산벌 전투에서 5천 결사대를 이끈 백제의 장군은?',v:'⚔️💀🛡️',o:['을지문덕','김유신','계백','연개소문'],a:2,h:'ㄱ으로 시작하는 백제의 장군이야.',e:'계백 장군은 5천 명의 결사대를 이끌고 황산벌에서 신라군과 싸웠어. 비록 패했지만 용감한 장군으로 기억돼.'},
+{s:3,type:'ox',q:'계백 장군은 황산벌 전투에서 승리했다.',v:'⚔️❓',a:'X',h:'백제가 결국 멸망한 걸 생각해봐.',e:'아니야. 계백 장군은 용감하게 싸웠지만 신라 김유신의 5만 대군에게 패배하고 전사했어.'},
+{s:3,type:'choice',q:'부소산성에 있는 낙화암에 대한 전설과 관련된 것은?',v:'🏔️💧👸',o:['무령왕의 보물','삼천궁녀의 투신','서동요','칠지도'],a:1,h:'백제 멸망 때의 슬픈 이야기야.',e:'백제가 멸망할 때 궁녀들이 적에게 잡히지 않으려고 낙화암(부소산 절벽)에서 백마강으로 뛰어내렸다는 전설이야.'},
+{s:3,type:'choice',q:'낙화암 아래 흐르는 강의 이름은?',v:'🌊🏔️',o:['한강','낙동강','백마강','금강'],a:2,h:'하얀 말이라는 뜻이야.',e:'백마강은 금강의 부여 구간을 부르는 이름이야. 낙화암 아래를 흐르고 있어.'},
+{s:3,type:'choice',q:'부소산성 안에 있으며, 약수로 유명한 절은?',v:'🏔️⛩️💧',o:['미륵사','정림사','고란사','능사'],a:2,h:'ㄱ으로 시작하는 절이야.',e:'고란사는 부소산성 안 백마강 절벽에 위치한 절로, 고란약수가 유명해.'},
+{s:3,type:'ox',q:'성왕은 일본에 불교를 전해주었다.',v:'☸️🇯🇵',a:'O',h:'',e:'맞아! 성왕은 552년(또는 538년) 일본에 불교를 전해주었어. 백제의 불교문화가 일본에 큰 영향을 미쳤어.'},
+{s:3,type:'choice',q:'정림사지 5층석탑의 높이는 약 몇 미터일까?',v:'🗼📏',o:['약 3m','약 8.3m','약 15m','약 25m'],a:1,h:'사람 키의 4~5배 정도야.',e:'정림사지 5층석탑의 높이는 약 8.33m야. 날씬하고 우아한 백제만의 미감이 돋보여.'},
+{s:3,type:'choice',q:'백제가 멸망한 해는?',v:'💀📅',o:['475년','538년','660년','668년'],a:2,h:'7세기 중반이야.',e:'백제는 660년에 나당연합군에 의해 멸망했어. 참고로 고구려는 668년에 멸망했어.'},
+{s:3,type:'choice',q:'백제 부흥운동을 이끈 인물이 아닌 것은?',v:'✊🔥',o:['복신','도침','흑치상지','김유신'],a:3,h:'김유신은 다른 나라의 장군이야.',e:'김유신은 신라의 장군이야! 복신, 도침, 흑치상지 등이 백제 부흥운동을 이끌었어.'},
+{s:3,type:'ox',q:'백제문화단지는 부여에 있는 백제 왕궁을 재현한 테마파크이다.',v:'🏯🎡',a:'O',h:'',e:'맞아! 백제문화단지는 부여에 조성된 백제 왕궁 재현 단지로, 사비궁, 능사 등 백제 건축물을 재현했어.'},
+{s:3,type:'choice',q:'다음 중 부여에 없는 유적지는?',v:'🗺️❌',o:['정림사지','부소산성','낙화암','공산성'],a:3,h:'공산성은 다른 도시에 있어.',e:'공산성은 공주에 있어! 정림사지, 부소산성, 낙화암은 모두 부여에 있는 유적이야.'},
+{s:3,type:'choice',q:'백제 사비 시기의 행정구역 체계는?',v:'📋🗺️',o:['3부 3방','5부 5방','8도','9주 5소경'],a:1,h:'숫자 5가 들어가.',e:'성왕은 사비 천도 후 수도를 5부, 지방을 5방으로 나누는 행정 체계를 정비했어.'},
+{s:3,type:'choice',q:'백제 멸망 후 의자왕은 어디로 끌려갔을까?',v:'😢⛓️',o:['일본','신라 서라벌','당나라','고구려'],a:2,h:'중국의 큰 나라야.',e:'의자왕은 백제 멸망 후 당나라로 끌려갔고, 그곳에서 생을 마감했어.'},
+{s:3,type:'ox',q:'백마강에서 유람선(황포돛배)을 타면 낙화암을 볼 수 있다.',v:'⛵👀',a:'O',h:'',e:'맞아! 구드래나루터에서 황포돛배를 타면 배 위에서 낙화암과 고란사를 올려다볼 수 있어.'},
+{s:3,type:'choice',q:'능산리 고분군은 어떤 시기의 왕릉일까?',v:'⚱️📅',o:['한성백제','웅진백제','사비백제','통일신라'],a:2,h:'부여에 있으니까...',e:'능산리 고분군은 부여에 있으며, 사비백제 시기 왕들의 무덤이야.'},
+{s:3,type:'choice',q:'백제금동대향로가 발견된 연도는?',v:'🏺📅',o:['1971년','1985년','1993년','2009년'],a:2,h:'1990년대 초반이야.',e:'백제금동대향로는 1993년 12월 부여 능산리 절터의 공방 터에서 발견되었어.'},
+
+// ── STAGE 4: 익산과 무왕 (25문제) ──
+{s:4,type:'choice',q:'백제 무왕의 어릴 적 이름은?',v:'👦❓',o:['온조','서동','비류','계백'],a:1,h:'서동요의 "서동"이야.',e:'무왕은 어릴 때 이름이 서동이었어. 마(薯, 고구마)를 캐어 팔아 생활했다고 해서 서동(薯童)이라 불렸어.'},
+{s:4,type:'choice',q:'서동요에 등장하는 신라 공주의 이름은?',v:'👸🎵',o:['낙랑공주','선화공주','평강공주','덕만공주'],a:1,h:'ㅅ으로 시작해. "아름다운 꽃"이라는 뜻이야.',e:'서동요에는 신라 선화공주가 등장해. 서동(무왕)이 선화공주를 사모하여 노래를 지었다는 전설이야.'},
+{s:4,type:'ox',q:'서동요는 우리나라에서 가장 오래된 향가 중 하나이다.',v:'🎵📜',a:'O',h:'',e:'맞아! 서동요는 우리나라에서 가장 오래된 향가(신라 시대의 노래) 중 하나로 알려져 있어.'},
+{s:4,type:'choice',q:'무왕이 익산에 세운 거대한 절의 이름은?',v:'🏯🪷',o:['불국사','정림사','미륵사','해인사'],a:2,h:'미래에 올 부처님(미륵)의 이름이 들어가.',e:'미륵사는 무왕이 익산에 세운 백제 최대의 절이야. 미륵(미래의 부처)을 모시기 위해 지었어.'},
+{s:4,type:'choice',q:'미륵사지 석탑은 어떤 기록을 가지고 있을까?',v:'🗼🏆',o:['가장 작은 석탑','가장 높은 목탑','가장 크고 오래된 석탑','가장 아름다운 석탑'],a:2,h:'크기와 역사 모두 1등이야.',e:'미륵사지 석탑은 한국에서 가장 크고 가장 오래된 석탑이야. 높이는 약 14.24m(원래)로 추정돼.'},
+{s:4,type:'choice',q:'2009년 미륵사지 석탑을 해체할 때 발견된 것은?',v:'🗼🔍✨',o:['왕의 시신','사리장엄구','금동대향로','벽화'],a:1,h:'부처님의 유골(사리)을 담은 용기야.',e:'2009년 석탑 해체 복원 중 금제 사리봉영기 등 사리장엄구가 발견되어 큰 화제가 되었어!'},
+{s:4,type:'ox',q:'미륵사지 석탑에서 발견된 사리봉영기에는 무왕의 왕비 이름이 기록되어 있다.',v:'📜👸',a:'O',h:'',e:'맞아! 사리봉영기에는 "좌평 사택적덕의 딸"이 사리를 봉안했다고 기록되어 있어. 이것은 선화공주가 아닌 백제 귀족의 딸이 왕비였을 수도 있음을 시사해.'},
+{s:4,type:'choice',q:'무왕이 재위한 기간은?',v:'📅👑',o:['501~523년','538~554년','600~641년','642~660년'],a:2,h:'7세기 초반이야.',e:'무왕은 600년부터 641년까지 약 41년간 재위했어. 백제 역대 왕 중 가장 오래 재위했어!'},
+{s:4,type:'choice',q:'익산에서 무왕이 살았을 것으로 추정되는 유적은?',v:'🏰🔍',o:['공산성','부소산성','왕궁리 유적','풍납토성'],a:2,h:'왕이 살던 궁이라는 뜻이야.',e:'왕궁리 유적은 익산에 있으며, 무왕이 살았을 것으로 추정되는 궁성 터야.'},
+{s:4,type:'choice',q:'익산 쌍릉은 누구의 무덤으로 추정될까?',v:'⚱️⚱️',o:['개로왕과 왕비','무령왕과 왕비','무왕과 왕비','의자왕과 왕비'],a:2,h:'익산과 관련된 왕이야.',e:'익산 쌍릉은 무왕과 왕비의 무덤으로 추정돼. 대왕릉과 소왕릉 두 기의 무덤이 나란히 있어.'},
+{s:4,type:'ox',q:'미륵사는 3개의 탑과 3개의 금당(법당)을 가진 독특한 구조였다.',v:'🏯🏯🏯',a:'O',h:'',e:'맞아! 미륵사는 3탑 3금당의 독특한 배치를 가지고 있었어. 이는 한국 고대 사찰 중 매우 드문 구조야.'},
+{s:4,type:'choice',q:'서동요의 내용은 무엇에 대한 것일까?',v:'🎵💕',o:['전쟁 이야기','사랑 이야기','건국 이야기','농사 이야기'],a:1,h:'서동과 선화공주의 이야기야.',e:'서동요는 서동이 신라 선화공주를 사모하여 만든 사랑의 노래야. 아이들에게 이 노래를 부르게 하여 공주와 결혼했다는 전설이야.'},
+{s:4,type:'choice',q:'미륵사지가 있는 도시는?',v:'🗼🗺️',o:['공주','부여','익산','전주'],a:2,h:'전라북도에 있는 도시야.',e:'미륵사지는 전북특별자치도 익산시에 있어. 무왕이 익산에 세운 절의 터야.'},
+{s:4,type:'ox',q:'익산 교도소 세트장은 백제 시대의 감옥을 재현한 곳이다.',v:'🏢🚨',a:'X',h:'현대의 시설이야.',e:'아니야! 익산 교도소 세트장은 현대 교도소를 재현한 영화·드라마 촬영지야. 백제와는 관계없어!'},
+{s:4,type:'choice',q:'미륵사지 석탑의 재료는?',v:'🪨❓',o:['나무','벽돌','돌(화강암)','흙'],a:2,h:'석탑이니까...',e:'미륵사지 석탑은 화강암으로 만든 석탑이야. 원래 목탑을 석탑으로 옮기는 과정의 과도기적 형태를 보여줘.'},
+{s:4,type:'choice',q:'무왕 시기 백제의 수도는 어디였을까?',v:'👑🏰',o:['한성','웅진(공주)','사비(부여)','익산'],a:2,h:'부여야. 하지만 익산에도 많은 활동을 했어.',e:'무왕 시기 백제의 공식 수도는 사비(부여)였어. 하지만 무왕은 익산에도 궁궐과 사찰을 짓는 등 많은 관심을 기울였어.'},
+{s:4,type:'choice',q:'향가(鄕歌)란 무엇일까?',v:'🎵📜',o:['중국의 시','신라·백제 시대의 노래','일본의 전통 음악','조선시대 판소리'],a:1,h:'한국 고대의 노래야.',e:'향가는 신라·백제 시대에 한자의 음과 뜻을 빌려 우리말을 기록한 노래야. 서동요가 대표적인 예야.'},
+{s:4,type:'choice',q:'미륵사지 석탑 해체 복원이 완료된 해는?',v:'🗼🔧',o:['2009년','2015년','2019년','2023년'],a:2,h:'2010년대 후반이야.',e:'미륵사지 석탑은 약 20년간의 해체 복원 공사를 거쳐 2019년에 복원이 완료되었어.'},
+{s:4,type:'ox',q:'무왕은 백제 왕 중 재위 기간이 가장 긴 왕이다.',v:'📅👑',a:'O',h:'약 41년간 재위했어.',e:'맞아! 무왕은 600년부터 641년까지 약 41년간 재위하여 백제 역대 왕 중 가장 오래 재위했어.'},
+{s:4,type:'choice',q:'미륵(彌勒)은 불교에서 어떤 존재일까?',v:'🪷❓',o:['과거의 부처','현재의 부처','미래에 올 부처','불교의 신',''],a:2,h:'미래에 나타날 분이야.',e:'미륵은 불교에서 미래에 나타나 중생을 구원할 부처야. 무왕은 미륵이 오실 세상을 꿈꾸며 미륵사를 지었어.'},
+{s:4,type:'choice',q:'국립익산박물관은 어디에 위치해 있을까?',v:'🏛️🗺️',o:['왕궁리 유적 옆','미륵사지 내','익산역 앞','교도소 세트장 옆'],a:1,h:'무왕이 살았던 곳 근처야.',e:'국립익산박물관은 미륵사지 내에 위치해 있어. 미륵사지 석탑 바로 옆이야.'},
+{s:4,type:'ox',q:'서동요의 전설에 따르면, 서동은 마(고구마 비슷한 것)를 캐어 팔며 살았다.',v:'🍠💰',a:'O',h:'',e:'맞아! 서동(薯童)이라는 이름 자체가 "마를 캐는 아이"라는 뜻이야.'},
+{s:4,type:'choice',q:'익산의 백제 유적이 유네스코 세계유산에 등재된 해는?',v:'🌍🏆',o:['2010년','2013년','2015년','2020년'],a:2,h:'2010년대 중반이야.',e:'2015년 공주, 부여, 익산의 백제역사유적지구가 유네스코 세계유산으로 등재되었어.'},
+
+// ── STAGE 5: 최종 보스 (25문제) ──
+{s:5,type:'choice',q:'백제의 수도가 아닌 곳은?',v:'🗺️❌',o:['한성(서울)','웅진(공주)','사비(부여)','금성(경주)'],a:3,h:'경주는 다른 나라의 수도야.',e:'금성(경주)은 신라의 수도야! 백제의 수도는 한성, 웅진, 사비 세 곳이야.'},
+{s:5,type:'choice',q:'다음 유물과 발견 장소가 올바르게 연결된 것은?',v:'🏺↔️🗺️',o:['무령왕릉 출토품 - 부여','백제금동대향로 - 공주','칠지도 - 익산','미륵사지 사리장엄구 - 익산'],a:3,h:'각 유물이 발견된 도시를 생각해봐.',e:'미륵사지 사리장엄구는 익산에서 발견되었어. 무령왕릉은 공주, 백제금동대향로는 부여에서 발견되었어.'},
+{s:5,type:'choice',q:'백제의 왕을 시대 순서대로 나열한 것은?',v:'📅1️⃣2️⃣3️⃣',o:['의자왕→성왕→무령왕→온조왕','온조왕→근초고왕→무령왕→의자왕','무령왕→온조왕→성왕→무왕','성왕→온조왕→의자왕→무령왕'],a:1,h:'건국한 왕이 제일 먼저야.',e:'올바른 순서: 온조왕(건국) → 근초고왕(전성기) → 무령왕(웅진) → 의자왕(멸망). 대략 이 순서야!'},
+{s:5,type:'choice',q:'백제와 일본의 교류를 보여주는 유물 2가지는?',v:'🇯🇵🤝',o:['칠지도와 불교 전파','금동대향로와 미륵사지석탑','무령왕 지석과 공산성','정림사지 석탑과 낙화암'],a:0,h:'칼과 종교를 전해주었어.',e:'칠지도(근초고왕 때 일본에 보냄)와 불교 전파(성왕 때)가 백제-일본 교류의 대표적 사례야.'},
+{s:5,type:'ox',q:'백제는 일본 문화 발전에 큰 영향을 미쳤다.',v:'🏯🇯🇵',a:'O',h:'',e:'맞아! 백제는 불교, 한자, 유학, 건축 기술, 도자기 기술 등을 일본에 전해주어 일본 고대 문화 발전에 큰 영향을 미쳤어.'},
+{s:5,type:'choice',q:'백제가 멸망한 후에도 저항을 계속한 운동은?',v:'✊🔥',o:['동학운동','백제부흥운동','3·1운동','의병운동'],a:1,h:'나라를 되찾으려는 운동이야.',e:'백제부흥운동은 660년 백제 멸망 후 복신, 도침 등이 이끈 나라 회복 운동이야. 약 3년간 계속되었어.'},
+{s:5,type:'choice',q:'다음 중 유네스코 세계유산 "백제역사유적지구"에 포함된 도시가 아닌 것은?',v:'🌍❌',o:['공주','부여','익산','대전'],a:3,h:'공주, 부여, 익산 세 곳만 포함돼.',e:'백제역사유적지구는 공주, 부여, 익산의 유적으로 구성돼. 대전은 포함되지 않아.'},
+{s:5,type:'choice',q:'백제 문화의 특징으로 가장 적절한 것은?',v:'🎨✨',o:['웅장하고 거대한 스케일','세련되고 우아한 아름다움','화려하고 복잡한 장식','투박하고 소박한 멋'],a:1,h:'백제 미소라는 말이 있을 정도야.',e:'백제 문화는 "세련되고 우아한 아름다움"으로 유명해. 백제의 미소, 정림사지 석탑의 날씬한 곡선 등이 그 예야.'},
+{s:5,type:'choice',q:'삼국 중 백제와 가장 오래 대립한 나라는?',v:'⚔️🏰',o:['신라','고구려','가야','당나라'],a:1,h:'결국 함께 백제를 공격한 나라야.',e:'백제와 고구려는 삼국 시대 내내 치열하게 대립했어. 한성 함락도 고구려의 공격 때문이었어.'},
+{s:5,type:'ox',q:'백제, 고구려, 신라 모두 부여에서 기원했다고 주장했다.',v:'🏰🏰🏰',a:'X',h:'신라는 다른 건국 신화를 가지고 있어.',e:'백제와 고구려는 부여 계통이지만, 신라는 박혁거세 건국 신화로 다른 기원을 가지고 있어.'},
+{s:5,type:'choice',q:'백제 시대의 건축 기술이 전해진 일본의 유명한 건축물은?',v:'🏯🇯🇵',o:['도쿄타워','호류지(법륭사)','후지산','도다이지'],a:1,h:'세계에서 가장 오래된 목조 건물이야.',e:'일본 나라현의 호류지(법륭사)는 백제 건축 기술의 영향을 받은 것으로 알려져 있어. 세계 최고(最古)의 목조 건축물이야.'},
+{s:5,type:'choice',q:'무령왕릉에서 발견된 유물 중 국보로 지정된 것은 몇 점?',v:'🏺🏆',o:['2점','6점','12점','20점'],a:2,h:'십 몇 점이야.',e:'무령왕릉 출토 유물 중 12점이 국보로 지정되었어. 4,600여 점 중 12점이 국보라니 대단하지!'},
+{s:5,type:'choice',q:'금강이 흐르는 백제의 도시 2곳은?',v:'🌊🏰🏰',o:['한성과 익산','공주와 부여','익산과 전주','부여와 경주'],a:1,h:'금강은 충청도를 흐르는 강이야.',e:'금강은 공주와 부여를 모두 지나가. 공주에서는 금강, 부여에서는 백마강이라 불러.'},
+{s:5,type:'ox',q:'백제의 영토에는 지금의 전라도, 충청도 지역이 포함되었다.',v:'🗺️📏',a:'O',h:'',e:'맞아! 백제는 전성기에 충청도, 전라도 전체와 경기도 일부까지 차지했어.'},
+{s:5,type:'choice',q:'백제의 종교로 가장 발달한 것은?',v:'🪷📿',o:['유교','도교','불교','기독교'],a:2,h:'절을 많이 지었어.',e:'백제에서는 불교가 가장 발달했어. 미륵사, 정림사 등 많은 절을 짓고, 일본에도 불교를 전해주었어.'},
+{s:5,type:'choice',q:'다음 중 백제의 국보가 아닌 것은?',v:'🏺❌',o:['백제금동대향로','미륵사지석탑','정림사지5층석탑','첨성대'],a:3,h:'첨성대는 다른 나라의 유적이야.',e:'첨성대는 신라의 유적이야! 백제금동대향로, 미륵사지석탑, 정림사지5층석탑은 모두 백제의 국보야.'},
+{s:5,type:'choice',q:'백제를 공격한 당나라 장수의 이름은?',v:'⚔️🇨🇳',o:['이세민','소정방','양제','이적'],a:1,h:'소씨 성을 가진 장군이야.',e:'소정방은 당나라의 장수로, 13만 대군을 이끌고 백제를 공격했어.'},
+{s:5,type:'choice',q:'나당연합군에서 신라측 총사령관은?',v:'⚔️🏰',o:['계백','김춘추','김유신','을지문덕'],a:2,h:'신라의 가장 유명한 장군이야.',e:'김유신은 신라의 대장군으로, 나당연합군의 신라측을 이끌어 백제를 공격했어.'},
+{s:5,type:'ox',q:'백제는 해상(바다) 무역이 활발한 나라였다.',v:'⛵🌊',a:'O',h:'',e:'맞아! 백제는 서해안을 통해 중국, 일본과 활발한 해상 무역을 했어. "해상왕국"이라는 별명도 있어.'},
+{s:5,type:'choice',q:'백제역사유적지구가 유네스코 세계유산에 등재된 해는?',v:'🌍🏆📅',o:['2000년','2010년','2015년','2020년'],a:2,h:'2010년대 중반이야.',e:'2015년 7월, 공주·부여·익산의 백제역사유적지구가 유네스코 세계유산으로 등재되었어!'},
+{s:5,type:'choice',q:'이번 여행에서 방문하는 백제의 수도를 순서대로 나열하면?',v:'🚗🗺️',o:['부여→공주→익산','익산→부여→공주','공주→부여→익산','공주→익산→부여'],a:2,h:'2일차 오전→오후→3일차 순서야.',e:'이번 여행에서는 공주(오전) → 부여(오후) → 익산(3일차) 순서로 방문해. 역사적으로 웅진→사비→익산 순서와 비슷해!'},
+{s:5,type:'choice',q:'백제 문화유산 중 "백제의 미소"로 유명한 불상은?',v:'😊🪷',o:['석굴암 본존불','서산 마애삼존불상','금동미륵보살반가사유상','팔만대장경'],a:2,h:'서산에 있는 바위에 새긴 불상이야.',e:'서산 마애삼존불상(용현리)은 온화한 미소로 유명해 "백제의 미소"라 불려. 해가 비추면 미소가 더 아름다워 보여!'},
+{s:5,type:'choice',q:'백제 역사를 통틀어 가장 슬픈 사건은?',v:'😢💔',o:['무령왕의 즉위','나당연합군에 의한 멸망','사비 천도','미륵사 건립'],a:1,h:'나라가 없어진 사건이야.',e:'660년 나당연합군의 공격으로 백제가 멸망한 것이 가장 슬픈 사건이야. 678년의 역사가 막을 내렸어.'},
+{s:5,type:'ox',q:'이번 여행에서 방문하는 국립공주박물관과 국립익산박물관은 모두 무료다.',v:'🏛️💰',a:'O',h:'국립 박물관이야.',e:'맞아! 국립공주박물관과 국립익산박물관은 모두 국립 박물관이라 입장료가 무료야!'}
+];
+
+// ══════════════════════════════════════
+// APP STATE
+// ══════════════════════════════════════
+const COIN_PER_Q=350;
+const MAX_COINS=50000;
+let state=loadState();
+
+function defaultState(){
+  return{coins:0,stages:{1:{},2:{},3:{},4:{},5:{}},wrongNotes:[],stageCoins:{1:0,2:0,3:0,4:0,5:0}};
+}
+function loadState(){
+  try{
+    const s=localStorage.getItem('baekje_master');
+    const parsed = s ? JSON.parse(s) : defaultState();
+    if(!Array.isArray(parsed.wrongNotes)) parsed.wrongNotes = [];
+    if(!parsed.stageCoins) parsed.stageCoins = {1:0,2:0,3:0,4:0,5:0};
+    if(!parsed.stages) parsed.stages = {1:{},2:{},3:{},4:{},5:{}};
+    return parsed;
+  }catch(e){return defaultState();}
+}
+function saveState(){localStorage.setItem('baekje_master',JSON.stringify(state));}
+
+// ══════════════════════════════════════
+// SCREEN NAV
+// ══════════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  el.classList.add('active');
+  if(id==='scr-show'){el.style.display='flex';}
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(id==='scr-main')document.querySelectorAll('.nav-btn')[0].classList.add('active');
+  if(id==='scr-photo')document.querySelectorAll('.nav-btn')[1].classList.add('active');
+  if(id==='scr-wrong')document.querySelectorAll('.nav-btn')[2].classList.add('active');
+  if(id==='scr-wallet')document.querySelectorAll('.nav-btn')[3].classList.add('active');
+  document.getElementById('bottom-nav').style.display=(id==='scr-quiz'||id==='scr-show'||id==='scr-result')?'none':'flex';
+  if(id==='scr-main')renderMain();
+  if(id==='scr-photo')renderPhotoQuestion();
+  if(id==='scr-wrong')renderWrong();
+  if(id==='scr-wallet')renderWallet();
+  updateCoinsAll();
+}
+
+function updateCoinsAll(){
+  const c=Math.min(state.coins,MAX_COINS);
+  const txt=c.toLocaleString()+'원';
+  document.querySelectorAll('#main-coins,#study-coins,#quiz-coins,#wrong-coins,#photo-coins').forEach(e=>{if(e)e.textContent='💰 '+txt;});
+  const pct=Math.min(c/MAX_COINS*100,100);
+  const bar=document.getElementById('main-bar');if(bar)bar.style.width=pct+'%';
+}
+
+// ══════════════════════════════════════
+// MAIN SCREEN
+// ══════════════════════════════════════
+function renderMain(){
+  // 오답노트 배너 뱃지 업데이트
+  const wCount = (state.wrongNotes || []).length;
+  const badgeEl = document.getElementById('main-wrong-badge');
+  const countEl = document.getElementById('main-wrong-count');
+  if(badgeEl) badgeEl.textContent = wCount + '개';
+  if(countEl) countEl.textContent = wCount > 0 ? `틀린 문제 ${wCount}개를 복습하고 완벽 마스터하자!` : '틀린 문제가 없어요! 아주 훌륭해요 👏';
+
+  const list=document.getElementById('stage-list');
+  list.innerHTML='';
+  STAGES.forEach((st,i)=>{
+    const qs=QUESTIONS.filter(q=>q.s===st.id);
+    const answered=Object.keys(state.stages[st.id]||{}).length;
+    const correct=Object.values(state.stages[st.id]||{}).filter(v=>v).length;
+    const pct=qs.length?Math.round(answered/qs.length*100):0;
+    const unlocked=true; // ✅ 모든 단계 자유롭게 해제!
+    const cleared=answered>=qs.length;
+    const card=document.createElement('div');
+    card.className='stage-card'+(cleared?' cleared':'');
+    card.innerHTML=`
+      <div class="stage-icon" style="background:${st.color}22;color:${st.color}">${st.icon}</div>
+      <div class="stage-info">
+        <div class="stage-name">${cleared?'✅ ':''}${st.id}단계: ${st.name}</div>
+        <div class="stage-desc">${st.desc}</div>
+        <div class="stage-progress"><div class="stage-progress-fill" style="width:${pct}%;background:${st.color}"></div></div>
+        <div class="stage-score">${answered}/${qs.length}문제 · 정답 ${correct}개 · ${(state.stageCoins[st.id]||0).toLocaleString()}원 획득</div>
+      </div>`;
+    card.onclick=()=>openStage(st.id);
+    list.appendChild(card);
+  });
+  updateCoinsAll();
+}
+
+// ══════════════════════════════════════
+// STUDY SCREEN
+// ══════════════════════════════════════
+let currentStage=1;
+function openStage(sid){
+  currentStage=sid;
+  const st=STAGES.find(s=>s.id===sid);
+  document.getElementById('study-title').textContent=st.icon+' '+st.name;
+  document.getElementById('study-h2').textContent=st.icon+' '+st.name;
+  document.getElementById('study-desc').textContent=st.desc;
+  const cards=document.getElementById('study-cards');
+  cards.innerHTML='';
+  st.study.forEach(s=>{
+    cards.innerHTML+=`<div class="study-card"><div class="visual">${s.visual}</div><h4>${s.title}</h4><p>${s.text}</p></div>`;
+  });
+  showScreen('scr-study');
+}
+
+// ══════════════════════════════════════
+// QUIZ ENGINE
+// ══════════════════════════════════════
+let quizQs=[],quizIdx=0,streak=0,maxStreak=0,earnedThisRound=0,answered=false;
+
+function startQuiz(){
+  quizQs=QUESTIONS.filter(q=>q.s===currentStage);
+  quizIdx=0;streak=0;maxStreak=0;earnedThisRound=0;
+  const st=STAGES.find(s=>s.id===currentStage);
+  document.getElementById('quiz-title').textContent=st.icon+' '+st.name;
+  showScreen('scr-quiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered=false;
+  const q=quizQs[quizIdx];
+  const total=quizQs.length;
+  document.getElementById('quiz-num').textContent=`${quizIdx+1}/${total}`;
+  document.getElementById('quiz-bar').style.width=((quizIdx)/total*100)+'%';
+  document.getElementById('quiz-streak').textContent=streak>=2?'🔥'+streak+'연속':'';
+  document.getElementById('q-next').className='q-next-btn';
+
+  const alreadySolved = state.stages[q.s] && state.stages[q.s][quizIdx] !== undefined;
+
+  let html='';
+  if(alreadySolved){
+    html+=`
+      <div style="background:#EBF5FB;border:1px solid #AED6F1;border-radius:10px;padding:8px 12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:11px;color:#2980B9;font-weight:700;">✅ 이미 푼 문제입니다 (다시 풀면 보너스 +50원)</span>
+        <button onclick="nextQuestion()" style="background:#3498DB;color:#fff;border:none;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;">⏭️ 패스하기</button>
+      </div>`;
+  }
+
+  html+=`<div class="q-visual">${q.v}</div>`;
+  html+=`<div class="q-type">${q.type==='ox'?'O/X 퀴즈':'객관식'}</div>`;
+  html+=`<div class="q-text">${q.q}</div>`;
+  if(q.h){html+=`<button class="q-hint-btn" onclick="this.nextElementSibling.classList.toggle('show')">💡 힌트 보기</button><div class="q-hint-box">💡 ${q.h}</div>`;}
+
+  if(q.type==='ox'){
+    html+=`<div class="ox-opts"><div class="ox-btn" onclick="checkOX(this,'O')">⭕</div><div class="ox-btn" onclick="checkOX(this,'X')">❌</div></div>`;
+  }else{
+    html+='<div class="opts">';
+    q.o.forEach((opt,i)=>{
+      if(opt)html+=`<div class="opt" onclick="checkChoice(this,${i})"><div class="opt-num">${i+1}</div><div>${opt}</div></div>`;
+    });
+    html+='</div>';
+  }
+  html+=`<div class="q-result" id="q-result"></div>`;
+  document.getElementById('quiz-card').innerHTML=html;
+}
+
+function checkChoice(el,idx){
+  if(answered)return;answered=true;
+  const q=quizQs[quizIdx];
+  const isCorrect=idx===q.a;
+  processAnswer(isCorrect,q,el,idx);
+}
+
+function checkOX(el,val){
+  if(answered)return;answered=true;
+  const q=quizQs[quizIdx];
+  const isCorrect=val===q.a;
+  processAnswer(isCorrect,q,el,val);
+}
+
+function processAnswer(isCorrect,q,el,userAnswer){
+  const alreadyCorrect = state.stages[q.s] && state.stages[q.s][quizIdx] === true;
+  state.stages[q.s]=state.stages[q.s]||{};
+  state.stages[q.s][quizIdx]=isCorrect;
+
+  if(isCorrect){
+    el.classList.add('correct');
+    streak++;if(streak>maxStreak)maxStreak=streak;
+    let earn=0;
+    let bonusText='';
+
+    if(alreadyCorrect){
+      earn = 50; // ✅ 이미 맞춘 문제 다시 풀기 복습 보너스
+      bonusText = ' (🔄 복습 보너스!)';
+    } else {
+      earn = COIN_PER_Q;
+      if(streak>=10){earn+=500;bonusText=' +🔥10연속 보너스 500원!';}
+      else if(streak>=5){earn+=300;bonusText=' +🔥5연속 보너스 300원!';}
+      else if(streak>=3){earn+=200;bonusText=' +🔥3연속 보너스 200원!';}
+    }
+
+    state.coins=Math.min(state.coins+earn,MAX_COINS);
+    earnedThisRound+=earn;
+    state.stageCoins[q.s]=(state.stageCoins[q.s]||0)+earn;
+    document.getElementById('q-result').innerHTML=`<div class="q-result-title"><span class="coin-anim">💰</span> 정답! +${earn}원${bonusText}</div>${q.e}`;
+    document.getElementById('q-result').className='q-result show is-correct';
+    // Remove from wrong notes if previously wrong
+    state.wrongNotes=(state.wrongNotes||[]).filter(w=>!(w.s===q.s&&w.q===q.q));
+  }else{
+    el.classList.add('wrong');
+    streak=0;
+    // Show correct answer
+    if(q.type==='ox'){
+      document.querySelectorAll('.ox-btn').forEach(b=>{
+        const v=b.textContent.includes('⭕')?'O':'X';
+        if(v===q.a)b.classList.add('correct');
+        b.style.pointerEvents='none';
+      });
+    }else{
+      document.querySelectorAll('.opt').forEach((o,i)=>{
+        if(i===q.a)o.classList.add('correct');
+        o.classList.add('disabled');
+      });
+    }
+    document.getElementById('q-result').innerHTML=`<div class="q-result-title">😢 아쉬워요!</div>${q.e}`;
+    document.getElementById('q-result').className='q-result show is-wrong';
+    // Add to wrong notes
+    if(!state.wrongNotes.find(w=>w.s===q.s&&w.q===q.q)){
+      state.wrongNotes.push({s:q.s,idx:quizIdx,q:q.q,v:q.v,a:q.type==='ox'?q.a:q.o[q.a],ua:q.type==='ox'?userAnswer:q.o[userAnswer],e:q.e});
+    }
+  }
+  document.getElementById('q-next').className='q-next-btn show';
+  updateCoinsAll();
+  saveState();
+}
+
+function nextQuestion(){
+  quizIdx++;
+  if(quizIdx>=quizQs.length){showStageResult();return;}
+  renderQuestion();
+}
+
+function showStageResult(){
+  const qs=quizQs;
+  const correct=Object.values(state.stages[currentStage]||{}).filter(v=>v).length;
+  const wrong=qs.length-correct;
+  // Stage clear bonus
+  let bonus=0;
+  if(correct===qs.length){bonus=2000;}
+  else if(correct>=qs.length*0.8){bonus=1000;}
+  if(bonus>0){
+    state.coins=Math.min(state.coins+bonus,MAX_COINS);
+    state.stageCoins[currentStage]=(state.stageCoins[currentStage]||0)+bonus;
+    earnedThisRound+=bonus;
+    saveState();
+  }
+  const emoji=correct===qs.length?'🏆':correct>=qs.length*0.8?'🎉':correct>=qs.length*0.5?'😊':'💪';
+  const title=correct===qs.length?'완벽한 만점!':correct>=qs.length*0.8?'스테이지 클리어!':'다시 도전해보자!';
+  document.getElementById('res-emoji').textContent=emoji;
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-sub').textContent=bonus>0?`🎁 클리어 보너스 +${bonus.toLocaleString()}원!`:'오답노트에서 틀린 문제를 복습해보자!';
+  document.getElementById('res-correct').textContent=correct;
+  document.getElementById('res-wrong').textContent=wrong;
+  document.getElementById('res-streak').textContent=maxStreak;
+  document.getElementById('res-coin').textContent='+'+earnedThisRound.toLocaleString()+'원';
+  showScreen('scr-result');
+}
+
+function retryStage(){
+  state.stages[currentStage]={};
+  state.stageCoins[currentStage]=0;
+  // Recalculate total coins
+  state.coins=Object.values(state.stageCoins).reduce((a,b)=>a+b,0);
+  saveState();
+  openStage(currentStage);
+}
+
+function quitQuiz(){
+  saveState();
+  showScreen('scr-main');
+}
+
+// ══════════════════════════════════════
+// WRONG NOTES
+// ══════════════════════════════════════
+let wrongFilter=0;
+function renderWrong(){
+  const filter=document.getElementById('wrong-filter');
+  filter.innerHTML='';
+  ['전체','1단계','2단계','3단계','4단계','5단계'].forEach((name,i)=>{
+    const btn=document.createElement('button');
+    btn.className='wrong-filter-btn'+(wrongFilter===i?' active':'');
+    btn.textContent=name;
+    btn.onclick=()=>{wrongFilter=i;renderWrong();};
+    filter.appendChild(btn);
+  });
+  const list=document.getElementById('wrong-list');
+  const allNotes = state.wrongNotes || [];
+  const notes=wrongFilter===0?allNotes:allNotes.filter(w=>w.s===wrongFilter);
+  
+  if(notes.length===0){
+    list.innerHTML=`
+      <div class="wrong-empty">
+        <div style="font-size:48px;margin-bottom:10px;">🎉</div>
+        <strong>틀린 문제가 없어요!</strong><br/>
+        <span style="font-size:12px;color:#888;margin-top:6px;display:block;">
+          ${wrongFilter===0 ? '모든 문제를 완벽하게 이해하고 있어요!' : `${wrongFilter}단계에는 틀린 문제가 없어요!`}
+        </span>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML=`
+    <div style="padding:0 16px 8px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:12px;font-weight:700;color:var(--sub);">총 ${notes.length}개의 복습할 문제</span>
+      <button onclick="clearAllWrong()" style="background:none;border:none;color:#888;font-size:11px;text-decoration:underline;cursor:pointer;">전체 비우기</button>
+    </div>`;
+
+  notes.forEach((w,idx)=>{
+    const realIdx = allNotes.indexOf(w);
+    list.innerHTML+=`
+      <div class="wrong-card" id="wrong-card-${realIdx}">
+        <div class="wv">${w.v}</div>
+        <div class="wq">📝 [${w.s}단계] ${w.q}</div>
+        <div class="wa">❌ 내가 쓴 오답: <strong>${w.ua}</strong></div>
+        <div class="wc">✅ 정답: <strong>${w.a}</strong></div>
+        <div class="we">💡 <strong>해설:</strong> ${w.e}</div>
+        <button onclick="retrySingleWrong(${realIdx})" style="margin-top:10px;width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;">
+          ✨ 오답 탈출하기 (다시 풀어서 맞추면 +100원!)
+        </button>
+      </div>`;
+  });
+  updateCoinsAll();
+}
+
+function clearAllWrong(){
+  if(confirm('오답노트를 모두 비우시겠습니까?')){
+    state.wrongNotes = [];
+    saveState();
+    renderWrong();
+    renderMain();
+  }
+}
+
+function retrySingleWrong(realIdx){
+  const w = state.wrongNotes[realIdx];
+  if(!w) return;
+  
+  // 원본 문제 찾기
+  const origQ = QUESTIONS.find(q=>q.s===w.s && q.q===w.q);
+  if(!origQ) return;
+
+  const card = document.getElementById(`wrong-card-${realIdx}`);
+  if(!card) return;
+
+  let optsHtml = '';
+  if(origQ.type === 'ox'){
+    optsHtml = `
+      <div style="display:flex;gap:10px;margin-top:10px;">
+        <button onclick="checkRetryWrong(${realIdx},'O')" style="flex:1;padding:12px;font-size:20px;border-radius:10px;border:2px solid var(--border);background:#fff;cursor:pointer;">⭕</button>
+        <button onclick="checkRetryWrong(${realIdx},'X')" style="flex:1;padding:12px;font-size:20px;border-radius:10px;border:2px solid var(--border);background:#fff;cursor:pointer;">❌</button>
+      </div>`;
+  } else {
+    optsHtml = '<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px;">';
+    origQ.o.forEach((opt, oi)=>{
+      optsHtml += `<button onclick="checkRetryWrong(${realIdx},${oi})" style="text-align:left;padding:10px 14px;font-size:13px;border-radius:10px;border:2px solid var(--border);background:#fff;cursor:pointer;font-weight:600;">${oi+1}. ${opt}</button>`;
+    });
+    optsHtml += '</div>';
+  }
+
+  card.innerHTML = `
+    <div class="wv">${w.v}</div>
+    <div class="wq" style="color:var(--primary);">🔥 [재도전] ${origQ.q}</div>
+    ${origQ.h ? `<div style="font-size:11px;color:#E65100;background:#FFF3E0;padding:6px 10px;border-radius:6px;margin:6px 0;">💡 힌트: ${origQ.h}</div>` : ''}
+    ${optsHtml}
+    <div id="retry-result-${realIdx}" style="margin-top:10px;font-size:12px;font-weight:700;"></div>
+  `;
+}
+
+function checkRetryWrong(realIdx, userAns){
+  const w = state.wrongNotes[realIdx];
+  if(!w) return;
+  const origQ = QUESTIONS.find(q=>q.s===w.s && q.q===w.q);
+  if(!origQ) return;
+
+  const isCorrect = (origQ.type === 'ox') ? (userAns === origQ.a) : (userAns === origQ.a);
+  const resDiv = document.getElementById(`retry-result-${realIdx}`);
+
+  if(isCorrect){
+    if(resDiv) resDiv.innerHTML = `<span style="color:var(--correct)">🎉 정답입니다! 오답 탈출 성공 (+100원)</span>`;
+    state.coins = Math.min(state.coins + 100, MAX_COINS);
+    state.wrongNotes.splice(realIdx, 1);
+    saveState();
+    setTimeout(()=>{
+      renderWrong();
+      renderMain();
+    }, 1000);
+  } else {
+    if(resDiv) resDiv.innerHTML = `<span style="color:var(--wrong)">😢 또 틀렸어요! 해설: ${origQ.e}</span>`;
+  }
+}
+
+// ══════════════════════════════════════
+// WALLET
+// ══════════════════════════════════════
+function renderWallet(){
+  const c=Math.min(state.coins,MAX_COINS);
+  document.getElementById('wlt-amount').textContent=c.toLocaleString()+'원';
+  document.getElementById('wlt-bar').style.width=Math.min(c/MAX_COINS*100,100)+'%';
+  document.getElementById('show-amount').textContent=c.toLocaleString()+'원';
+  const hist=document.getElementById('wlt-history');
+  hist.innerHTML='<h3 style="font-size:15px;font-weight:800;margin-bottom:12px;padding:0 4px">📊 스테이지별 획득</h3>';
+  STAGES.forEach(st=>{
+    hist.innerHTML+=`<div class="wallet-row"><span class="wr-label">${st.icon} ${st.name}</span><span class="wr-val">+${(state.stageCoins[st.id]||0).toLocaleString()}원</span></div>`;
+  });
+  updateCoinsAll();
+}
+
+function showToParent(){
+  document.getElementById('show-amount').textContent=Math.min(state.coins,MAX_COINS).toLocaleString()+'원';
+  showScreen('scr-show');
+}
+
+// ══════════════════════════════════════
+// PHOTO QUIZ DATA & LOGIC (고화질 실물 사진 퀴즈)
+// ══════════════════════════════════════
+const PHOTO_QUESTIONS = [
+  {
+    title: '백제금동대향로 (국보)',
+    imgUrl: 'images/1_daehyangno.jpg',
+    q: '부여 능산리 절터에서 발견된 이 백제 최고 걸작 국보의 이름은 무엇일까요?',
+    o: ['백제금동대향로', '무령왕 금제관식', '칠지도', '금동미륵보살'],
+    a: 0,
+    e: '1993년 부여 능산리에서 발견된 백제 예술의 최고 걸작입니다. 꼭대기에 봉황이 앉아 있고 아래는 용이 받치고 있습니다.'
+  },
+  {
+    title: '무령왕 금제관식 (국보)',
+    imgUrl: 'images/2_gwansik.jpg',
+    q: '공주 무령왕릉에서 출토된 순금으로 만든 이 유물의 이름은 무엇일까요?',
+    o: ['신라 금관', '무령왕 금제관식', '금동 신발', '용봉환두대도'],
+    a: 1,
+    e: '무령왕릉에서 왕과 왕비의 관 장식이 각각 발견되었습니다. 얇은 금판에 불꽃무늬를 화려하게 투조(뚫어새김)한 걸작입니다.'
+  },
+  {
+    title: '정림사지 5층석탑 (국보)',
+    imgUrl: 'images/3_jeongnimsa.jpg',
+    q: '부여 시내 정림사지에 서 있는 높이 8.3m의 이 백제 대표 석탑은?',
+    o: ['다보탑', '석가탑', '정림사지 5층석탑', '분황사 모전석탑'],
+    a: 2,
+    e: '사비백제 시기 정림사 터에 세워진 석탑으로, 좁고 날씬하면서도 백제 특유의 우아한 비례와 곡선미를 자랑합니다.'
+  },
+  {
+    title: '익산 미륵사지 석탑 (국보)',
+    imgUrl: 'images/4_mireuksa.jpg',
+    q: '익산에 있는 우리나라에서 가장 크고 가장 오래된 이 석탑의 이름은?',
+    o: ['익산 미륵사지 석탑', '감은사지 삼층석탑', '화엄사 사사자석탑', '신륵사 다층전탑'],
+    a: 0,
+    e: '무왕 때 지어진 백제 최대 사찰 미륵사에 있는 서탑으로, 2009년 해체 중 사리장엄구가 발견되었습니다.'
+  },
+  {
+    title: '칠지도 (일본 국보)',
+    imgUrl: 'images/5_chiljido.jpg',
+    q: '근초고왕 때 백제가 일본 왕에게 보낸 일곱 개의 가지가 달린 이 칼은?',
+    o: ['환두대도', '칠지도', '사인참사검', '칠성검'],
+    a: 1,
+    e: '일곱 개의 가지가 달린 특별한 철제 칼로, 백제와 왜(일본)의 활발한 외교 및 선진 제철 기술을 증명합니다.'
+  },
+  {
+    title: '진묘수 (석수)',
+    imgUrl: 'images/6_jinmyosu.jpg',
+    q: '무령왕릉 널길 입구에서 무덤을 지키고 있던 이 상상의 동물 석상은?',
+    o: ['해태', '진묘수 (석수)', '돌하르방', '사자상'],
+    a: 1,
+    e: '무덤을 수호하고 사악한 기운을 쫓는 상상의 동물로, 머리에 뿔이 달린 귀엽고 신비로운 모습을 하고 있습니다.'
+  },
+  {
+    title: '서산 용현리 마애여래삼존상',
+    imgUrl: 'images/7_seosan.jpg',
+    q: '자비롭고 온화한 미소로 "백제의 미소"라 불리는 이 바위 불상은?',
+    o: ['석굴암 본존불', '서산 마애삼존불', '군수리 석조여래좌상', '관촉사 은진미륵'],
+    a: 1,
+    e: '충남 서산 암벽에 새겨진 백제 후기 삼존불로, 빛이 비추는 각도에 따라 달라지는 따뜻한 미소가 유명합니다.'
+  },
+  {
+    title: '공주 공산성',
+    imgUrl: 'images/8_gongsanseong.jpg',
+    q: '금강변 절벽 위에 세워진 웅진백제 시기의 이 왕궁 산성은 어디일까요?',
+    o: ['남한산성', '수원화성', '공주 공산성', '부소산성'],
+    a: 2,
+    e: '금강을 천연 해자로 삼아 지어진 산성으로, 성벽 길을 따라 걸으면 금강과 공주 시내가 한눈에 내려다보입니다.'
+  },
+  {
+    title: '부여 백마강과 낙화암',
+    imgUrl: 'images/9_nakhwaam.jpg',
+    q: '부여 부소산성 절벽 아래로 흐르는 백마강과 삼천궁녀 전설의 절벽은?',
+    o: ['낙화암', '고란사', '영월루', '사자루'],
+    a: 0,
+    e: '부소산성 북쪽 백마강변의 바위 절벽으로, 백제 멸망 당시 궁녀들의 슬픈 전설이 깃들어 있습니다.'
+  },
+  {
+    title: '익산 왕궁리 5층석탑',
+    imgUrl: 'images/10_wanggungri.jpg',
+    q: '무왕의 궁궐 터로 추정되는 익산 왕궁리 유적 중심에 서 있는 이 석탑은?',
+    o: ['왕궁리 5층석탑', '정림사지 석탑', '미륵사지 석탑', '다보탑'],
+    a: 0,
+    e: '익산 왕궁리 유적의 중심에 우뚝 서 있는 석탑으로, 백제 석탑의 전통 양식을 그대로 계승하고 있습니다.'
+  }
+];
+
+let photoIdx = 0;
+let photoAnswered = false;
+
+function switchPhotoMode(mode){
+  document.getElementById('photo-mode-1').style.display = (mode===1)?'block':'none';
+  document.getElementById('photo-mode-2').style.display = (mode===2)?'block':'none';
+  document.getElementById('p-tab-1').style.background = (mode===1)?'var(--primary)':'#fff';
+  document.getElementById('p-tab-1').style.color = (mode===1)?'#fff':'var(--text)';
+  document.getElementById('p-tab-1').style.border = (mode===1)?'none':'1px solid var(--border)';
+  document.getElementById('p-tab-2').style.background = (mode===2)?'var(--primary)':'#fff';
+  document.getElementById('p-tab-2').style.color = (mode===2)?'#fff':'var(--text)';
+  document.getElementById('p-tab-2').style.border = (mode===2)?'none':'1px solid var(--border)';
+  if(mode===1) renderPhotoQuestion();
+}
+
+let photoCorrectCount = 0;
+let photoEarnedThisRound = 0;
+
+function renderPhotoQuestion(){
+  photoAnswered = false;
+  const item = PHOTO_QUESTIONS[photoIdx];
+  const total = PHOTO_QUESTIONS.length;
+  document.getElementById('photo-next').style.display = 'none';
+
+  let html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span style="font-size:13px;font-weight:800;color:var(--primary);">📸 사진 문제 ${photoIdx+1} / ${total}</span>
+      <span style="font-size:11px;color:var(--sub);">🔍 사진 터치 시 크게 보기</span>
+    </div>
+
+    <!-- 📱 휴대폰 화면에 꽉 차는 대형 사진 뷰어 -->
+    <div onclick="openPhotoModal('${item.imgUrl}', '${item.title}')" style="background:#0F111A;border-radius:16px;padding:4px;margin-bottom:16px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);cursor:pointer;position:relative;overflow:hidden;">
+      <img src="${item.imgUrl}" alt="${item.title}" style="width:100%;min-height:260px;max-height:380px;object-fit:contain;border-radius:12px;display:block;margin:0 auto;">
+      <div style="position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,0.6);color:#fff;padding:3px 8px;border-radius:8px;font-size:10px;backdrop-filter:blur(4px);">🔍 탭하여 확대</div>
+    </div>
+
+    <div class="q-type" style="color:var(--primary);font-size:11px;font-weight:800;margin-bottom:4px;">🏛️ 백제 국보·유적 실물 사진 퀴즈</div>
+    <div class="q-text" style="font-size:16px;font-weight:800;line-height:1.5;margin-bottom:14px;">${item.q}</div>
+    <div class="opts">`;
+
+  item.o.forEach((opt, i)=>{
+    html += `<div class="opt" onclick="checkPhotoChoice(this, ${i})">
+      <div class="opt-num">${i+1}</div>
+      <div style="font-size:14px;">${opt}</div>
+    </div>`;
+  });
+
+  html += `</div><div class="q-result" id="photo-q-result"></div>`;
+  document.getElementById('photo-quiz-card').innerHTML = html;
+}
+
+function checkPhotoChoice(el, idx){
+  if(photoAnswered) return;
+  photoAnswered = true;
+  const item = PHOTO_QUESTIONS[photoIdx];
+  const isCorrect = (idx === item.a);
+  const resDiv = document.getElementById('photo-q-result');
+
+  if(isCorrect){
+    el.classList.add('correct');
+    photoCorrectCount++;
+    const earn = 350;
+    photoEarnedThisRound += earn;
+    state.coins = Math.min(state.coins + earn, MAX_COINS);
+    saveState();
+    updateCoinsAll();
+    resDiv.innerHTML = `<div class="q-result-title">🎉 정답입니다! +${earn}원</div>${item.e}`;
+    resDiv.className = 'q-result show is-correct';
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('#photo-quiz-card .opt').forEach((o, oi)=>{
+      if(oi === item.a) o.classList.add('correct');
+      o.classList.add('disabled');
+    });
+    resDiv.innerHTML = `<div class="q-result-title">😢 아쉬워요! 정답은 [${item.o[item.a]}]입니다.</div>${item.e}`;
+    resDiv.className = 'q-result show is-wrong';
+    // 오답노트에 추가
+    if(!state.wrongNotes.find(w=>w.q===item.q)){
+      state.wrongNotes.push({s:5,idx:photoIdx,q:item.q,v:'📸',a:item.o[item.a],ua:item.o[idx],e:item.e});
+      saveState();
+    }
+  }
+
+  const nextBtn = document.getElementById('photo-next');
+  if(photoIdx + 1 >= PHOTO_QUESTIONS.length){
+    nextBtn.textContent = '🏁 사진 퀴즈 결과 확인하기 🎉';
+  } else {
+    nextBtn.textContent = '다음 사진 문제 (' + (photoIdx + 2) + '/' + PHOTO_QUESTIONS.length + ') →';
+  }
+  nextBtn.style.display = 'block';
+}
+
+function nextPhotoQuestion(){
+  photoIdx++;
+  if(photoIdx >= PHOTO_QUESTIONS.length){
+    // ✅ 10문제 모두 완료! 결과 화면 렌더링
+    showPhotoQuizResult();
+    return;
+  }
+  renderPhotoQuestion();
+}
+
+function showPhotoQuizResult(){
+  document.getElementById('photo-next').style.display = 'none';
+  const total = PHOTO_QUESTIONS.length;
+  const isPerfect = (photoCorrectCount === total);
+  
+  let bonus = 0;
+  if(isPerfect){
+    bonus = 1500;
+    state.coins = Math.min(state.coins + bonus, MAX_COINS);
+    saveState();
+    updateCoinsAll();
+  }
+
+  let html = `
+    <div style="text-align:center;padding:24px 10px;">
+      <div style="font-size:64px;margin-bottom:12px;">${isPerfect ? '🏆' : '🎉'}</div>
+      <h2 style="font-size:22px;font-weight:900;margin-bottom:6px;">${isPerfect ? '사진 퀴즈 만점 완벽 클리어!' : '사진 퀴즈 완료!'}</h2>
+      <p style="font-size:13px;color:var(--sub);margin-bottom:20px;">
+        10문제 중 <strong>${photoCorrectCount}문제</strong>를 맞췄습니다!
+      </p>
+
+      <div style="background:#F8F7FF;border:2px solid var(--primary);border-radius:16px;padding:18px;margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--sub);">이번 퀴즈로 획득한 총 용돈</div>
+        <div style="font-size:32px;font-weight:900;color:var(--gold);margin:6px 0;">+${(photoEarnedThisRound + bonus).toLocaleString()}원</div>
+        ${bonus > 0 ? '<div style="font-size:11px;color:var(--correct);font-weight:700;">🎁 만점 특별 보너스 1,500원 포함!</div>' : ''}
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button onclick="restartPhotoQuiz()" style="padding:14px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;">
+          🔄 사진 퀴즈 처음부터 다시 풀기
+        </button>
+        <button onclick="showScreen('scr-wrong')" style="padding:14px;background:#fff;color:var(--text);border:2px solid var(--border);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;">
+          📝 오답노트에서 복습하기
+        </button>
+        <button onclick="showScreen('scr-main')" style="padding:14px;background:none;color:var(--sub);border:none;font-size:14px;font-weight:600;cursor:pointer;">
+          🏠 홈으로 돌아가기
+        </button>
+      </div>
+    </div>
+  `;
+  document.getElementById('photo-quiz-card').innerHTML = html;
+}
+
+function restartPhotoQuiz(){
+  photoIdx = 0;
+  photoCorrectCount = 0;
+  photoEarnedThisRound = 0;
+  renderPhotoQuestion();
+}
+
+function openPhotoModal(imgUrl, title){
+  let modal = document.getElementById('photo-modal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'photo-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;cursor:pointer;';
+    modal.onclick = function(){ modal.style.display = 'none'; };
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div style="color:#fff;font-size:16px;font-weight:800;margin-bottom:12px;text-align:center;">${title}</div>
+    <img src="${imgUrl}" style="max-width:98%;max-height:80vh;object-fit:contain;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+    <div style="color:#aaa;font-size:12px;margin-top:14px;">화면을 터치하면 닫힙니다 ✕</div>
+  `;
+  modal.style.display = 'flex';
+}
+
+// ── 모드 2: 폰 사진 업로드 퀴즈 ──
+const BAEKJE_RELICS = [
+  '백제금동대향로 (부여 능산리)',
+  '무령왕릉 금제관식 (공주)',
+  '진묘수 석수 (공주 무령왕릉)',
+  '정림사지 5층석탑 (부여)',
+  '익산 미륵사지 석탑 (익산)',
+  '공주 공산성 성벽 (공주)',
+  '부소산성 낙화암 (부여)',
+  '칠지도 (백제-일본)',
+  '서산 마애삼존불상 (백제의 미소)',
+  '익산 왕궁리 5층석탑 (익산)'
+];
+
+function handleUserPhoto(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    document.getElementById('preview-img').src = evt.target.result;
+    document.getElementById('user-photo-preview').style.display = 'block';
+
+    // 4개 랜덤 보기 생성
+    const shuffled = [...BAEKJE_RELICS].sort(()=>0.5-Math.random());
+    const opts = shuffled.slice(0, 4);
+    const optsDiv = document.getElementById('user-photo-opts');
+    optsDiv.innerHTML = '';
+    
+    opts.forEach((item, idx)=>{
+      const btn = document.createElement('button');
+      btn.style.cssText = 'padding:12px 14px;border:2px solid var(--border);border-radius:12px;background:#fff;font-size:13px;font-weight:700;text-align:left;cursor:pointer;';
+      btn.textContent = `${idx+1}. ${item}`;
+      btn.onclick = function(){ checkUserPhoto(btn, item); };
+      optsDiv.appendChild(btn);
+    });
+
+    document.getElementById('user-photo-result').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function checkUserPhoto(btn, selectedName){
+  const res = document.getElementById('user-photo-result');
+  btn.style.background = '#E8F8F5';
+  btn.style.borderColor = 'var(--correct)';
+  
+  state.coins = Math.min(state.coins + 500, MAX_COINS);
+  saveState();
+  updateCoinsAll();
+
+  res.innerHTML = `
+    <div style="background:#E8F8F5;border:1px solid #A3E4D7;color:#1E8449;padding:12px;border-radius:10px;">
+      🎉 <strong>"${selectedName}"</strong> 현장 탐방 퀴즈 완료!<br/>
+      현장 탐방 특별 보너스 <strong>+500원</strong>이 적립되었습니다! 👏
+    </div>`;
+  res.style.display = 'block';
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+renderMain();
+</script>
+</body>
+</html>
