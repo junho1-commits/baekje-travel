@@ -602,28 +602,59 @@ body {
 <div class="screen" id="scr-wallet">
   <div class="topbar">
     <button class="topbar-back" onclick="showScreen('scr-main')">←</button>
-    <div class="topbar-title">💰 용돈 정산</div>
+    <div class="topbar-title">💰 기념품 용돈 정산</div>
     <div></div>
   </div>
   <div class="big-wallet">
-    <div class="big-wallet-emoji">💰</div>
-    <div class="big-wallet-label">내 기념품 용돈</div>
+    <div class="big-wallet-emoji" id="wlt-emoji">🔒</div>
+    <div class="big-wallet-label" id="wlt-status-label">용돈 적립 진행 중 (잠금 상태)</div>
     <div class="big-wallet-amount" id="wlt-amount">0원</div>
     <div class="big-wallet-bar"><div class="big-wallet-fill" id="wlt-bar" style="width:0%"></div></div>
-    <div style="font-size:12px;color:var(--sub)">목표 금액: 최대 50,000원까지 모을 수 있어요</div>
+    
+    <!-- 🔒 125문제 전체 완료 잠금 해제 안내 박스 -->
+    <div id="wlt-lock-info" style="margin-top:14px;padding:14px;background:#FEF3C7;border:1px solid #FCD34D;border-radius:12px;text-align:left;">
+      <div style="font-size:13px;font-weight:800;color:#92400E;display:flex;align-items:center;gap:6px;">
+        <span id="wlt-lock-icon">🔒</span>
+        <span id="wlt-lock-title">히든 용돈 인출 조건 (125문제 완성)</span>
+      </div>
+      <div style="font-size:12px;color:#B45309;margin-top:6px;line-height:1.5;" id="wlt-lock-desc">
+        역사 퀴즈 1~5단계 <strong>총 125문제를 모두 풀어야</strong> 50,000원 용돈 잠금이 해제되고 부모님께 인출 요청할 수 있어요!
+      </div>
+      <div style="margin-top:10px;font-size:13px;font-weight:800;color:#1E3A8A;background:#DBEAFE;padding:8px 12px;border-radius:8px;text-align:center;" id="wlt-progress-text">
+        현재 진행: 0 / 125문제 (남은 문제: 125개)
+      </div>
+    </div>
   </div>
+
   <div class="wallet-history" id="wlt-history"></div>
-  <button class="show-btn" onclick="showToParent()">부모님께 용돈 확인 요청</button>
+  
+  <div style="padding:0 16px 20px;">
+    <button class="show-btn" id="wlt-parent-btn" onclick="showToParent()" style="width:100%;padding:16px;border-radius:14px;border:none;font-size:15px;font-weight:800;cursor:pointer;transition:all 0.2s;">
+      🔒 125문제 완료 시 인출 요청 가능
+    </button>
+  </div>
 </div>
 
-<!-- ═══════ SHOW TO PARENT ═══════ -->
-<div class="screen" id="scr-show" style="background:linear-gradient(135deg,#2D1B69,#6C5CE7);display:none;justify-content:center;align-items:center;text-align:center;color:#fff;min-height:100vh" onclick="showScreen('scr-wallet')">
-  <div style="padding:40px 20px">
-    <div style="font-size:80px;margin-bottom:20px">👑</div>
-    <div style="font-size:18px;opacity:.8">백제 역사 탐험 학습 완료!</div>
-    <div style="font-size:56px;font-weight:900;margin:20px 0;color:var(--gold)" id="show-amount">0원</div>
-    <div style="font-size:16px;opacity:.9">기념품 용돈으로 사용할 수 있어요</div>
-    <div style="font-size:13px;opacity:.5;margin-top:30px">(화면을 터치하면 돌아갑니다)</div>
+<!-- ═══════ SHOW TO PARENT (용돈 지급 인증서) ═══════ -->
+<div class="screen" id="scr-show" style="background:linear-gradient(135deg,#0F172A,#1E1B4B);display:none;justify-content:center;align-items:center;text-align:center;color:#fff;min-height:100vh" onclick="showScreen('scr-wallet')">
+  <div style="padding:40px 20px;max-width:440px;margin:0 auto;">
+    <div style="font-size:70px;margin-bottom:12px;">👑</div>
+    <div style="font-size:13px;color:#38BDF8;font-weight:800;letter-spacing:1px;margin-bottom:6px;">MISSION ACCOMPLISHED</div>
+    <div style="font-size:22px;font-weight:900;color:#FFFFFF;">백제·과학 탐험 125문제 마스터!</div>
+    <div style="font-size:13px;color:#94A3B8;margin-top:4px;">1~5단계 모든 퀴즈를 완벽하게 완수하였습니다.</div>
+
+    <div style="background:rgba(255,255,255,0.08);border:2px solid #F59E0B;border-radius:18px;padding:24px 16px;margin:24px 0;backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(245,158,11,0.25);">
+      <div style="font-size:13px;color:#FBBF24;font-weight:800;">🎉 최종 지급 용돈 금액 🎉</div>
+      <div style="font-size:46px;font-weight:900;color:#FBBF24;margin:8px 0;letter-spacing:-1px;" id="show-amount">50,000원</div>
+      <div style="font-size:13px;color:#E2E8F0;font-weight:700;">(금 오만 원 정 - 기념품 용돈 지급 승인)</div>
+    </div>
+
+    <div style="font-size:14px;color:#A5B4FC;line-height:1.6;">
+      👏 정말 수고 많았어, 우리 아들!<br/>
+      약속대로 <strong>50,000원</strong> 용돈을 지급합니다.
+    </div>
+
+    <div style="margin-top:24px;font-size:12px;color:#64748B;">(화면을 터치하면 지갑으로 돌아갑니다)</div>
   </div>
 </div>
 
@@ -2406,8 +2437,10 @@ const QUESTIONS = [
 // ══════════════════════════════════════
 // APP STATE (통합 지갑 연동)
 // ══════════════════════════════════════
-const COIN_PER_Q=350;
+const COIN_PER_Q=300;
 const MAX_COINS=50000;
+const TOTAL_QUESTIONS_COUNT=125;
+const STAGE_CLEAR_REWARD=2500;
 let state=loadState();
 
 function defaultState(){
@@ -2422,10 +2455,6 @@ function loadState(){
       const s = localStorage.getItem('baekje_master');
       parsed = s ? JSON.parse(s) : defaultState();
     }
-    const legacyCoins = parseInt(localStorage.getItem('baekje_coins') || '0');
-    if(legacyCoins > (parsed.coins || 0)){
-      parsed.coins = legacyCoins;
-    }
     if(!Array.isArray(parsed.wrongNotes)) parsed.wrongNotes = [];
     if(!parsed.stageCoins) parsed.stageCoins = {1:0,2:0,3:0,4:0,5:0};
     if(!parsed.stages) parsed.stages = {1:{},2:{},3:{},4:{},5:{}};
@@ -2435,10 +2464,82 @@ function loadState(){
 }
 
 function saveState(){
+  if(state.coins > MAX_COINS) state.coins = MAX_COINS;
   localStorage.setItem('baekje_master_state', JSON.stringify(state));
   localStorage.setItem('baekje_master', JSON.stringify(state));
   localStorage.setItem('baekje_coins', state.coins.toString());
 }
+
+// ══════════════════════════════════════
+// ACCURATE COIN & LOCK CALCULATION
+// ══════════════════════════════════════
+function getDetailedProgress(){
+  let totalSolved = 0;
+  let totalCorrect = 0;
+  const stageStats = {};
+
+  STAGES.forEach(st => {
+    const stageMap = state.stages[st.id] || {};
+    const qs = QUESTIONS.filter(q => q.s === st.id);
+    let stageSolved = 0;
+    let stageCorrect = 0;
+
+    qs.forEach((q, i) => {
+      if(stageMap[i] !== undefined){
+        stageSolved++;
+        if(stageMap[i] === true) stageCorrect++;
+      }
+    });
+
+    const isStageCleared = (stageSolved >= qs.length);
+    const stageEarned = (stageCorrect * COIN_PER_Q) + (isStageCleared ? STAGE_CLEAR_REWARD : 0);
+
+    stageStats[st.id] = {
+      solved: stageSolved,
+      correct: stageCorrect,
+      total: qs.length,
+      cleared: isStageCleared,
+      earned: stageEarned
+    };
+
+    totalSolved += stageSolved;
+    totalCorrect += stageCorrect;
+  });
+
+  const isAllMastered = (totalSolved >= TOTAL_QUESTIONS_COUNT);
+  let calculatedCoins = 0;
+  Object.values(stageStats).forEach(s => {
+    calculatedCoins += s.earned;
+  });
+
+  if(isAllMastered) {
+    calculatedCoins = MAX_COINS;
+  } else {
+    calculatedCoins = Math.min(calculatedCoins, MAX_COINS);
+  }
+
+  return {
+    totalSolved,
+    totalCorrect,
+    totalCount: TOTAL_QUESTIONS_COUNT,
+    isAllMastered,
+    calculatedCoins,
+    stageStats
+  };
+}
+
+function syncStateCoins(){
+  const progress = getDetailedProgress();
+  state.coins = progress.calculatedCoins;
+  STAGES.forEach(st => {
+    state.stageCoins[st.id] = progress.stageStats[st.id].earned;
+  });
+  saveState();
+  return progress;
+}
+
+// 초기 로딩 시 코인 정상 동기화
+syncStateCoins();
 
 // ══════════════════════════════════════
 // SCREEN NAV
@@ -2473,7 +2574,7 @@ function updateCoinsAll(){
 // MAIN SCREEN
 // ══════════════════════════════════════
 function renderMain(){
-  // 오답 복습 배너 뱃지 업데이트
+  syncStateCoins();
   const wCount = (state.wrongNotes || []).length;
   const badgeEl = document.getElementById('main-wrong-badge');
   const countEl = document.getElementById('main-wrong-count');
@@ -2487,7 +2588,6 @@ function renderMain(){
     const answered=Object.keys(state.stages[st.id]||{}).length;
     const correct=Object.values(state.stages[st.id]||{}).filter(v=>v).length;
     const pct=qs.length?Math.round(answered/qs.length*100):0;
-    const unlocked=true; // ✅ 모든 단계 자유롭게 해제!
     const cleared=answered>=qs.length;
     const card=document.createElement('div');
     card.className='stage-card'+(cleared?' cleared':'');
@@ -2553,12 +2653,12 @@ function renderQuestion(){
   if(alreadySolved){
     html+=`
       <div style="background:#EBF5FB;border:1px solid #AED6F1;border-radius:10px;padding:8px 12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:11px;color:#2980B9;font-weight:700;">✅ 이미 푼 문제입니다 (다시 풀면 보너스 +50원)</span>
+        <span style="font-size:11px;color:#2980B9;font-weight:700;">✅ 이미 푼 문제입니다 (복습 완료)</span>
         <button onclick="nextQuestion()" style="background:#3498DB;color:#fff;border:none;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;">⏭️ 패스하기</button>
       </div>`;
   }
 
-  // 🖼️ 퀴즈 시각 자료 (실물 사진 or 대형 역사 그래픽 카드)
+  // 🖼️ 퀴즈 시각 자료
   if(q.img){
     html+=`
       <div onclick="openPhotoModal('${q.img}', '유물/유적 사진')" style="background:#0F111A;border-radius:16px;padding:4px;margin-bottom:14px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,0.18);cursor:pointer;position:relative;">
@@ -2604,37 +2704,27 @@ function checkOX(el,val){
 }
 
 function processAnswer(isCorrect,q,el,userAnswer){
-  const alreadyCorrect = state.stages[q.s] && state.stages[q.s][quizIdx] === true;
+  const alreadyAnswered = state.stages[q.s] && state.stages[q.s][quizIdx] !== undefined;
   state.stages[q.s]=state.stages[q.s]||{};
   state.stages[q.s][quizIdx]=isCorrect;
 
   if(isCorrect){
     el.classList.add('correct');
     streak++;if(streak>maxStreak)maxStreak=streak;
-    let earn=0;
-    let bonusText='';
-
-    if(alreadyCorrect){
-      earn = 50; // ✅ 이미 맞춘 문제 다시 풀기 복습 보너스
-      bonusText = ' (🔄 복습 보너스!)';
-    } else {
-      earn = COIN_PER_Q;
-      if(streak>=10){earn+=500;bonusText=' +🔥10연속 보너스 500원!';}
-      else if(streak>=5){earn+=300;bonusText=' +🔥5연속 보너스 300원!';}
-      else if(streak>=3){earn+=200;bonusText=' +🔥3연속 보너스 200원!';}
+    
+    let earnText = '+300원 적립!';
+    if(alreadyAnswered){
+      earnText = '정답 확인 완료!';
     }
-
-    state.coins=Math.min(state.coins+earn,MAX_COINS);
-    earnedThisRound+=earn;
-    state.stageCoins[q.s]=(state.stageCoins[q.s]||0)+earn;
-    document.getElementById('q-result').innerHTML=`<div class="q-result-title"><span class="coin-anim">💰</span> 정답! +${earn}원${bonusText}</div>${q.e}`;
+    
+    syncStateCoins();
+    document.getElementById('q-result').innerHTML=`<div class="q-result-title"><span class="coin-anim">💰</span> 정답! ${earnText}</div>${q.e}`;
     document.getElementById('q-result').className='q-result show is-correct';
     // Remove from wrong notes if previously wrong
     state.wrongNotes=(state.wrongNotes||[]).filter(w=>!(w.s===q.s&&w.q===q.q));
   }else{
     el.classList.add('wrong');
     streak=0;
-    // Show correct answer
     if(q.type==='ox'){
       document.querySelectorAll('.ox-btn').forEach(b=>{
         const v=b.textContent.includes('⭕')?'O':'X';
@@ -2649,14 +2739,13 @@ function processAnswer(isCorrect,q,el,userAnswer){
     }
     document.getElementById('q-result').innerHTML=`<div class="q-result-title">😢 아쉬워요!</div>${q.e}`;
     document.getElementById('q-result').className='q-result show is-wrong';
-    // Add to wrong notes
     if(!state.wrongNotes.find(w=>w.s===q.s&&w.q===q.q)){
       state.wrongNotes.push({s:q.s,idx:quizIdx,q:q.q,v:q.v,a:q.type==='ox'?q.a:q.o[q.a],ua:q.type==='ox'?userAnswer:q.o[userAnswer],e:q.e});
     }
+    syncStateCoins();
   }
   document.getElementById('q-next').className='q-next-btn show';
   updateCoinsAll();
-  saveState();
 }
 
 function nextQuestion(){
@@ -2669,39 +2758,30 @@ function showStageResult(){
   const qs=quizQs;
   const correct=Object.values(state.stages[currentStage]||{}).filter(v=>v).length;
   const wrong=qs.length-correct;
-  // Stage clear bonus
-  let bonus=0;
-  if(correct===qs.length){bonus=2000;}
-  else if(correct>=qs.length*0.8){bonus=1000;}
-  if(bonus>0){
-    state.coins=Math.min(state.coins+bonus,MAX_COINS);
-    state.stageCoins[currentStage]=(state.stageCoins[currentStage]||0)+bonus;
-    earnedThisRound+=bonus;
-    saveState();
-  }
-  const emoji=correct===qs.length?'🏆':correct>=qs.length*0.8?'🎉':correct>=qs.length*0.5?'😊':'💪';
-  const title=correct===qs.length?'완벽한 만점!':correct>=qs.length*0.8?'스테이지 클리어!':'다시 도전해보자!';
+  const progress=syncStateCoins();
+
+  const isFull=correct===qs.length;
+  const emoji=isFull?'🏆':correct>=qs.length*0.8?'🎉':correct>=qs.length*0.5?'😊':'💪';
+  const title=isFull?'완벽한 만점!':correct>=qs.length*0.8?'스테이지 클리어!':'다시 도전해보자!';
+  
   document.getElementById('res-emoji').textContent=emoji;
   document.getElementById('res-title').textContent=title;
-  document.getElementById('res-sub').textContent=bonus>0?`🎁 클리어 보너스 +${bonus.toLocaleString()}원!`:'오답 복습에서 틀린 문제를 복습해보자!';
+  document.getElementById('res-sub').textContent=isFull?`🎁 단계 클리어 보너스 +${STAGE_CLEAR_REWARD.toLocaleString()}원 달성!`:'오답 복습에서 틀린 문제를 복습해보자!';
   document.getElementById('res-correct').textContent=correct;
   document.getElementById('res-wrong').textContent=wrong;
   document.getElementById('res-streak').textContent=maxStreak;
-  document.getElementById('res-coin').textContent='+'+earnedThisRound.toLocaleString()+'원';
+  document.getElementById('res-coin').textContent=(state.stageCoins[currentStage]||0).toLocaleString()+'원';
   showScreen('scr-result');
 }
 
 function retryStage(){
   state.stages[currentStage]={};
-  state.stageCoins[currentStage]=0;
-  // Recalculate total coins
-  state.coins=Object.values(state.stageCoins).reduce((a,b)=>a+b,0);
-  saveState();
+  syncStateCoins();
   openStage(currentStage);
 }
 
 function quitQuiz(){
-  saveState();
+  syncStateCoins();
   showScreen('scr-main');
 }
 
@@ -2751,7 +2831,7 @@ function renderWrong(){
         <div class="wc">✅ 정답: <strong>${w.a}</strong></div>
         <div class="we">💡 <strong>해설:</strong> ${w.e}</div>
         <button onclick="retrySingleWrong(${realIdx})" style="margin-top:10px;width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;">
-          ✨ 오답 탈출하기 (다시 풀어서 맞추면 +100원!)
+          ✨ 오답 탈출하기 (다시 풀기)
         </button>
       </div>`;
   });
@@ -2771,7 +2851,6 @@ function retrySingleWrong(realIdx){
   const w = state.wrongNotes[realIdx];
   if(!w) return;
   
-  // 원본 문제 찾기
   const origQ = QUESTIONS.find(q=>q.s===w.s && q.q===w.q);
   if(!origQ) return;
 
@@ -2812,10 +2891,11 @@ function checkRetryWrong(realIdx, userAns){
   const resDiv = document.getElementById(`retry-result-${realIdx}`);
 
   if(isCorrect){
-    if(resDiv) resDiv.innerHTML = `<span style="color:var(--correct)">🎉 정답입니다! 오답 탈출 성공 (+100원)</span>`;
-    state.coins = Math.min(state.coins + 100, MAX_COINS);
+    if(resDiv) resDiv.innerHTML = `<span style="color:var(--correct)">🎉 정답입니다! 오답 탈출 성공!</span>`;
     state.wrongNotes.splice(realIdx, 1);
-    saveState();
+    // 정답 상태 반영
+    if(state.stages[w.s]) state.stages[w.s][w.idx] = true;
+    syncStateCoins();
     setTimeout(()=>{
       renderWrong();
       renderMain();
@@ -2826,23 +2906,90 @@ function checkRetryWrong(realIdx, userAns){
 }
 
 // ══════════════════════════════════════
-// WALLET
+// WALLET & HIDDEN UNLOCK
 // ══════════════════════════════════════
 function renderWallet(){
-  const c=Math.min(state.coins,MAX_COINS);
-  document.getElementById('wlt-amount').textContent=c.toLocaleString()+'원';
-  document.getElementById('wlt-bar').style.width=Math.min(c/MAX_COINS*100,100)+'%';
-  document.getElementById('show-amount').textContent=c.toLocaleString()+'원';
-  const hist=document.getElementById('wlt-history');
-  hist.innerHTML='<h3 style="font-size:15px;font-weight:800;margin-bottom:12px;padding:0 4px">📊 스테이지별 획득</h3>';
-  STAGES.forEach(st=>{
-    hist.innerHTML+=`<div class="wallet-row"><span class="wr-label">${st.icon} ${st.name}</span><span class="wr-val">+${(state.stageCoins[st.id]||0).toLocaleString()}원</span></div>`;
+  const progress = syncStateCoins();
+  const c = progress.calculatedCoins;
+  
+  document.getElementById('wlt-amount').textContent = c.toLocaleString() + '원';
+  document.getElementById('wlt-bar').style.width = Math.min(progress.totalSolved / TOTAL_QUESTIONS_COUNT * 100, 100) + '%';
+  document.getElementById('show-amount').textContent = '50,000원';
+  
+  const lockInfo = document.getElementById('wlt-lock-info');
+  const lockIcon = document.getElementById('wlt-lock-icon');
+  const lockTitle = document.getElementById('wlt-lock-title');
+  const lockDesc = document.getElementById('wlt-lock-desc');
+  const progText = document.getElementById('wlt-progress-text');
+  const parentBtn = document.getElementById('wlt-parent-btn');
+  const emojiEl = document.getElementById('wlt-emoji');
+  const statusLabel = document.getElementById('wlt-status-label');
+
+  if(progress.isAllMastered){
+    // 🔓 125문제 마스터 완료!
+    emojiEl.textContent = '👑';
+    statusLabel.textContent = '🎉 125문제 완벽 마스터! 용돈 잠금 해제 완료!';
+    lockInfo.style.background = '#ECFDF5';
+    lockInfo.style.borderColor = '#6EE7B7';
+    lockIcon.textContent = '🔓';
+    lockTitle.textContent = '히든 미션 완료! 50,000원 인출 가능';
+    lockTitle.style.color = '#065F46';
+    lockDesc.innerHTML = '축하합니다! 백제 역사 퀴즈 1~5단계 125문제를 모두 완료하여 <strong>50,000원 용돈 잠금이 해제</strong>되었습니다!';
+    lockDesc.style.color = '#047857';
+    progText.textContent = `🎯 125 / 125문제 전체 완료! (100% 마스터)`;
+    progText.style.background = '#D1FAE5';
+    progText.style.color = '#065F46';
+
+    parentBtn.style.opacity = '1';
+    parentBtn.style.pointerEvents = 'auto';
+    parentBtn.style.background = 'linear-gradient(135deg, #F59E0B, #D97706)';
+    parentBtn.style.color = '#FFFFFF';
+    parentBtn.style.boxShadow = '0 4px 14px rgba(245, 158, 11, 0.4)';
+    parentBtn.innerHTML = '👑 부모님께 50,000원 용돈 확인 요청하기 ➔';
+  } else {
+    // 🔒 아직 미완료 (잠금 상태)
+    const remain = TOTAL_QUESTIONS_COUNT - progress.totalSolved;
+    emojiEl.textContent = '🔒';
+    statusLabel.textContent = `용돈 잠금 상태 (${progress.totalSolved}/${TOTAL_QUESTIONS_COUNT} 완료)`;
+    lockInfo.style.background = '#FEF3C7';
+    lockInfo.style.borderColor = '#FCD34D';
+    lockIcon.textContent = '🔒';
+    lockTitle.textContent = '히든 용돈 인출 조건 (125문제 완성)';
+    lockTitle.style.color = '#92400E';
+    lockDesc.innerHTML = '역사 퀴즈 1~5단계 <strong>총 125문제를 모두 풀어야</strong> 50,000원 용돈 잠금이 해제되고 부모님께 인출 요청할 수 있어요!';
+    lockDesc.style.color = '#B45309';
+    progText.textContent = `현재 진행: ${progress.totalSolved} / 125문제 (남은 문제: ${remain}개)`;
+    progText.style.background = '#DBEAFE';
+    progText.style.color = '#1E3A8A';
+
+    parentBtn.style.opacity = '0.5';
+    parentBtn.style.pointerEvents = 'none';
+    parentBtn.style.background = '#64748B';
+    parentBtn.style.color = '#FFFFFF';
+    parentBtn.style.boxShadow = 'none';
+    parentBtn.innerHTML = `🔒 125문제 완료 시 인출 요청 가능 (${remain}개 남음)`;
+  }
+
+  const hist = document.getElementById('wlt-history');
+  hist.innerHTML = '<h3 style="font-size:15px;font-weight:800;margin-bottom:12px;padding:0 4px">📊 스테이지별 진행 및 적립</h3>';
+  STAGES.forEach(st => {
+    const s = progress.stageStats[st.id];
+    hist.innerHTML += `
+      <div class="wallet-row">
+        <span class="wr-label">${st.icon} ${st.id}단계: ${st.name} <small style="color:#64748B;font-size:11px;">(${s.solved}/${s.total} 풀이)</small></span>
+        <span class="wr-val">+${s.earned.toLocaleString()}원</span>
+      </div>`;
   });
   updateCoinsAll();
 }
 
 function showToParent(){
-  document.getElementById('show-amount').textContent=Math.min(state.coins,MAX_COINS).toLocaleString()+'원';
+  const progress = syncStateCoins();
+  if(!progress.isAllMastered){
+    alert(`아직 125문제를 모두 풀지 않았습니다! (${progress.totalSolved}/125 완료)\n모든 문제를 풀어야 용돈 인출 요청이 가능합니다.`);
+    return;
+  }
+  document.getElementById('show-amount').textContent = '50,000원';
   showScreen('scr-show');
 }
 
@@ -2875,12 +3022,12 @@ const PHOTO_QUESTIONS = [
     e: '사비백제 시기 정림사 터에 세워진 석탑으로, 좁고 날씬하면서도 백제 특유의 우아한 비례와 곡선미를 자랑합니다.'
   },
   {
-    title: '익산 미륵사지 석탑 (국보)',
-    imgUrl: 'images/4_mireuksa.jpg',
-    q: '익산에 있는 우리나라에서 가장 크고 가장 오래된 이 석탑의 이름은?',
-    o: ['익산 미륵사지 석탑', '감은사지 삼층석탑', '화엄사 사사자석탑', '신륵사 다층전탑'],
+    title: '전주 경기전과 태조 어진',
+    imgUrl: 'images/pic_jeonju_gyeonggijeon.jpg',
+    q: '전주한옥마을에 위치하며 조선 태조 이성계의 초상화를 모신 유서 깊은 사당은?',
+    o: ['전주 경기전', '오목대', '풍남문', '전주향교'],
     a: 0,
-    e: '무왕 때 지어진 백제 최대 사찰 미륵사에 있는 서탑으로, 2009년 해체 중 사리장엄구가 발견되었습니다.'
+    e: '조선을 건국한 태조 이성계의 국보 어진이 봉안되어 있는 전주의 대표적인 역사 명소입니다.'
   },
   {
     title: '칠지도 (일본 국보)',
@@ -2923,19 +3070,18 @@ const PHOTO_QUESTIONS = [
     e: '부소산성 북쪽 백마강변의 바위 절벽으로, 백제 멸망 당시 궁녀들의 슬픈 전설이 깃들어 있습니다.'
   },
   {
-    title: '익산 왕궁리 5층석탑',
-    imgUrl: 'images/10_wanggungri.jpg',
-    q: '무왕의 궁궐 터로 추정되는 익산 왕궁리 유적 중심에 서 있는 이 석탑은?',
-    o: ['왕궁리 5층석탑', '정림사지 석탑', '미륵사지 석탑', '다보탑'],
+    title: '사천 KAI 항공우주박물관 & 전투기',
+    imgUrl: 'images/pic_sacheon_aerospace.jpg',
+    q: '실제 야외 전투기와 대통령 전용기에 직접 탑승해볼 수 있는 사천의 명소는?',
+    o: ['KAI 항공우주박물관', '국립중앙박물관', '전쟁기념관', '독립기념관'],
     a: 0,
-    e: '익산 왕궁리 유적의 중심에 우뚝 서 있는 석탑으로, 백제 석탑의 전통 양식을 그대로 계승하고 있습니다.'
+    e: '사천에 위치하며 실제 퇴역한 전투기와 수송기, 대통령 전용기에 직접 타볼 수 있는 인기 명소입니다.'
   }
 ];
 
 let photoIdx = 0;
 let photoAnswered = false;
 let photoCorrectCount = 0;
-let photoEarnedThisRound = 0;
 
 function renderPhotoQuestion(){
   photoAnswered = false;
@@ -2955,7 +3101,7 @@ function renderPhotoQuestion(){
       <div style="position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,0.6);color:#fff;padding:3px 8px;border-radius:8px;font-size:10px;backdrop-filter:blur(4px);">🔍 탭하여 확대</div>
     </div>
 
-    <div class="q-type" style="color:var(--primary);font-size:11px;font-weight:800;margin-bottom:4px;">🏛️ 백제 국보·유적 실물 유물 사진 퀴즈</div>
+    <div class="q-type" style="color:var(--primary);font-size:11px;font-weight:800;margin-bottom:4px;">🏛️ 실물 사진 퀴즈 (탐험 학습)</div>
     <div class="q-text" style="font-size:16px;font-weight:800;line-height:1.5;margin-bottom:14px;">${item.q}</div>
     <div class="opts">`;
 
@@ -2980,12 +3126,7 @@ function checkPhotoChoice(el, idx){
   if(isCorrect){
     el.classList.add('correct');
     photoCorrectCount++;
-    const earn = 350;
-    photoEarnedThisRound += earn;
-    state.coins = Math.min(state.coins + earn, MAX_COINS);
-    saveState();
-    updateCoinsAll();
-    resDiv.innerHTML = `<div class="q-result-title">🎉 정답입니다! +${earn}원</div>${item.e}`;
+    resDiv.innerHTML = `<div class="q-result-title">🎉 정답입니다!</div>${item.e}`;
     resDiv.className = 'q-result show is-correct';
   } else {
     el.classList.add('wrong');
@@ -2995,11 +3136,6 @@ function checkPhotoChoice(el, idx){
     });
     resDiv.innerHTML = `<div class="q-result-title">😢 아쉬워요! 정답은 [${item.o[item.a]}]입니다.</div>${item.e}`;
     resDiv.className = 'q-result show is-wrong';
-    // 오답 복습에 추가
-    if(!state.wrongNotes.find(w=>w.q===item.q)){
-      state.wrongNotes.push({s:5,idx:photoIdx,q:item.q,v:'📸',a:item.o[item.a],ua:item.o[idx],e:item.e});
-      saveState();
-    }
   }
 
   const nextBtn = document.getElementById('photo-next');
