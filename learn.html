@@ -121,6 +121,69 @@ body {
 .quick-nav-title { font-size: 15px; font-weight: 700; color: var(--text); }
 .quick-nav-desc { font-size: 13px; color: var(--sub); margin-top: 2px; }
 
+/* ── Video Link Section (7분 이하 영상) ── */
+.video-section {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 0 16px 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.video-section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.video-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+.video-item:active {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+}
+.video-item-info {
+  flex: 1;
+}
+.video-item-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.video-item-sub {
+  font-size: 12px;
+  color: var(--sub);
+}
+.video-item-badge {
+  background: #DC2626;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
 /* ── Stage Cards ── */
 .stages { padding: 0 16px; }
 .stages h3 { font-size: 17px; font-weight: 800; margin-bottom: 12px; }
@@ -426,6 +489,36 @@ body {
     </a>
   </div>
 
+  <!-- 🎬 여행 전 5분 백제 영상 배움터 (7분 이하) -->
+  <div class="video-section">
+    <div class="video-section-title">
+      🎬 여행 전 쏙쏙! 5분 백제 영상 배움터 (7분 이하)
+    </div>
+    <div class="video-list">
+      <a href="https://www.youtube.com/results?search_query=지니스쿨+백제의+역사" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🏛️ 5분 만에 끝내는 백제 역사</div>
+          <div class="video-item-sub">한성 ➡️ 웅진 ➡️ 사비 도읍지 변천사</div>
+        </div>
+        <span class="video-item-badge">5분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=비디오머그+무령왕릉" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">👑 1,500년 만의 타임캡슐, 무령왕릉</div>
+          <div class="video-item-sub">도굴 안 된 유일한 백제 왕릉과 진묘수</div>
+        </div>
+        <span class="video-item-badge">6분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=EBS+역사채널e+백제금동대향로" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🪔 진흙 속 1,300년의 기적, 금동대향로</div>
+          <div class="video-item-sub">EBS 역사채널e 국보 제287호 명작의 탄생</div>
+        </div>
+        <span class="video-item-badge">4분</span>
+      </a>
+    </div>
+  </div>
+
   <div class="stages">
     <h3>학습 단계 선택</h3>
     <div id="stage-list"></div>
@@ -555,31 +648,31 @@ body {
 // DATA: STAGES
 // ══════════════════════════════════════
 const STAGES=[
-{id:1,name:"백제의 시작",color:"#2563EB",desc:"건국부터 한성백제까지",
+{id:1,name:"백제의 시작",icon:"🏛️",color:"#2563EB",desc:"건국부터 한성백제까지",
 study:[
 {title:"백제는 어떻게 시작되었을까요?",text:"백제는 기원전 18년, 고구려를 세운 주몽의 아들 <b>온조</b>가 형 비류와 함께 남쪽으로 내려와 세운 나라입니다. 온조는 지금의 서울 한강 유역인 <b>하남 위례성(한성)</b>에 도읍을 정했습니다. 이것이 바로 500년간 이어진 '한성백제'의 시작입니다."},
 {title:"백제의 황금기 - 4세기 근초고왕",text:"4세기 <b>근초고왕</b> 때 백제는 가장 강력한 전성기를 누렸습니다. 마한을 통합하고 고구려 평양성을 공격했으며, 일본(왜)에 <b>칠지도(七支刀)</b>를 하사하며 활발한 해상 교역을 펼쳤습니다. 역사서 <b>서기</b>도 이때 편찬되었습니다."},
 {title:"고구려의 남진과 한성 함락",text:"475년 고구려 <b>장수왕</b>이 3만 대군으로 한성을 기습 공격하여 <b>개로왕</b>이 전사하고 도읍이 함락되었습니다. 이후 백제는 국가를 수습하기 위해 남쪽의 <b>웅진(공주)</b>으로 도읍을 옮기게 됩니다."}
 ]},
-{id:2,name:"공주 웅진백제",color:"#D97706",desc:"무령왕과 웅진의 중흥",
+{id:2,name:"공주 웅진백제",icon:"👑",color:"#D97706",desc:"무령왕과 웅진의 중흥",
 study:[
 {title:"웅진(공주)으로의 천도",text:"475년 한성이 함락된 후, <b>문주왕</b>은 천연 요새인 금강과 <b>공산성</b>이 감싸고 있는 <b>웅진(공주)</b>으로 수도를 옮겨 방어를 굳건히 하였습니다."},
 {title:"다시 강한 나라가 되다 - 무령왕",text:"<b>무령왕</b>(재위 501~523)은 전국 22담로에 왕족을 파견하여 왕권을 안정시키고, 중국 남조 양나라 및 일본과 활발히 교류하며 백제를 '다시 강한 나라(갱위강국)'로 일으켜 세웠습니다."},
 {title:"무령왕릉과 국보 유물들",text:"1971년 발굴된 <b>무령왕릉</b>은 1,400년간 도굴되지 않은 온전한 상태로 발견되었습니다. <b>금제관식, 진묘수 석수, 사마왕 지석</b> 등 4,600여 점의 찬란한 백제 국보가 출토되었습니다."}
 ]},
-{id:3,name:"부여 사비백제",color:"#059669",desc:"사비 천도와 찬란한 문화",
+{id:3,name:"부여 사비백제",icon:"🪔",color:"#059669",desc:"사비 천도와 찬란한 문화",
 study:[
 {title:"성왕의 사비(부여) 천도",text:"538년 <b>성왕</b>은 넓은 평야와 백마강 수운이 발달한 <b>사비(부여)</b>로 수도를 옮기고, 국호를 <b>남부여</b>로 바꾸어 중흥을 도모하였습니다."},
 {title:"백제 문화의 정수 - 대향로와 정림사탑",text:"사비 시기에는 목조건물의 조형미를 돌로 승화시킨 <b>정림사지 5층석탑</b>과 동아시아 금속공예의 최고 걸작인 <b>백제금동대향로</b> 등 세계적인 문화유산이 탄생하였습니다."},
 {title:"황산벌 전투와 백제의 마지막",text:"660년 나당연합군의 공격에 맞서 <b>계백 장군</b>은 5천 결사대를 이끌고 <b>황산벌</b>에서 결사 항전하였으나, 수적 열세를 극복하지 못하고 백제는 678년의 역사를 마감하였습니다."}
 ]},
-{id:4,name:"익산과 무왕",color:"#EA580C",desc:"서동 설화와 미륵사지",
+{id:4,name:"익산과 무왕",icon:"📜",color:"#EA580C",desc:"서동 설화와 미륵사지",
 study:[
 {title:"무왕과 서동요 설화",text:"<b>무왕</b>(재위 600~641)은 어릴 적 서동이라 불렸으며 신라 선화공주와의 사랑을 담은 향가 '서동요'의 주인공입니다. 무왕은 왕권을 강화하기 위해 익산에 신도시를 경영하였습니다."},
 {title:"국내 최대 석탑 - 익산 미륵사지",text:"무왕이 세운 <b>미륵사</b>는 3탑 3금당의 동양 최대 사찰입니다. <b>미륵사지 석탑</b>은 우리나라에서 가장 오래되고 거대한 석탑이며, 2009년 내부에서 <b>금제사리봉영기</b>가 출토되었습니다."},
 {title:"왕궁리 유적과 익산 쌍릉",text:"익산에는 무왕이 거처하던 <b>왕궁리 유적</b>과 왕실 공방터가 있으며, <b>익산 쌍릉(대왕묘)</b>은 무왕의 무덤으로 확인되어 백제 왕실의 위상을 증명하고 있습니다."}
 ]},
-{id:5,name:"백제 역사 종합",color:"#CA8A04",desc:"백제 678년 총정리",
+{id:5,name:"백제 역사 종합",icon:"⚔️",color:"#CA8A04",desc:"백제 678년 총정리",
 study:[
 {title:"백제 678년의 위대한 발자취",text:"백제는 기원전 18년 온조왕의 한성 건국 이래 웅진, 사비를 거쳐 익산에 이르기까지 찬란한 문화를 꽃피웠습니다. '검이불루 화이불치(검소하지만 누추하지 않고 화려하지만 사치스럽지 않다)'의 아름다움은 오늘날 유네스코 세계유산으로 빛나고 있습니다."}
 ]}
@@ -2412,13 +2505,14 @@ let currentStage=1;
 function openStage(sid){
   currentStage=sid;
   const st=STAGES.find(s=>s.id===sid);
-  document.getElementById('study-title').textContent=st.icon+' '+st.name;
-  document.getElementById('study-h2').textContent=st.icon+' '+st.name;
-  document.getElementById('study-desc').textContent=st.desc;
+  const titleText = (st.icon ? st.icon + ' ' : '') + st.name;
+  document.getElementById('study-title').textContent = titleText;
+  document.getElementById('study-h2').textContent = titleText;
+  document.getElementById('study-desc').textContent = st.desc || '';
   const cards=document.getElementById('study-cards');
   cards.innerHTML='';
   st.study.forEach(s=>{
-    cards.innerHTML+=`<div class="study-card"><div class="visual">${s.visual}</div><h4>${s.title}</h4><p>${s.text}</p></div>`;
+    cards.innerHTML+=`<div class="study-card"><h4>${s.title}</h4><p>${s.text}</p></div>`;
   });
   showScreen('scr-study');
 }
@@ -2432,7 +2526,7 @@ function startQuiz(){
   quizQs=QUESTIONS.filter(q=>q.s===currentStage);
   quizIdx=0;streak=0;maxStreak=0;earnedThisRound=0;
   const st=STAGES.find(s=>s.id===currentStage);
-  document.getElementById('quiz-title').textContent=st.icon+' '+st.name;
+  document.getElementById('quiz-title').textContent = (st.icon ? st.icon + ' ' : '') + st.name;
   showScreen('scr-quiz');
   renderQuestion();
 }

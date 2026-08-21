@@ -163,6 +163,83 @@ body {
   margin-top: 10px;
 }
 
+/* ── Video Link Button & Section ── */
+.video-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  padding: 9px 14px;
+  border-radius: 8px;
+  color: #DC2626;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 10px;
+  margin-right: 6px;
+}
+.video-section {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.video-section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.video-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+.video-item:active {
+  background: #EFF6FF;
+}
+.video-item-info {
+  flex: 1;
+}
+.video-item-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.video-item-sub {
+  font-size: 13px;
+  color: var(--sub);
+}
+.video-item-badge {
+  background: #DC2626;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
 /* ── Checklists ── */
 .check-section {
   background: #FFFFFF;
@@ -229,8 +306,8 @@ body {
     <div class="tab-label">일 · 익산</div>
   </div>
   <div class="tab" data-day="cost" onclick="showDay('cost')">
-    비용
-    <div class="tab-label">체크리스트</div>
+    체크
+    <div class="tab-label">준비·주의</div>
   </div>
 </div>
 
@@ -238,7 +315,37 @@ body {
 <div class="day-content active" id="day-1">
   <div class="day-header day1">
     <h2>1일차 · 금요일</h2>
-    <p>부산 ➡️ 점촌 직행 & 약돌돼지 저녁</p>
+    <p>부산 ➡️ 점촌 도착 & 저녁 식사 및 휴식</p>
+  </div>
+
+  <!-- 🎬 여행 전 5분 영상 (7분 이하) -->
+  <div class="video-section">
+    <div class="video-section-title">
+      🎬 여행 전 쏙쏙! 5분 백제 역사 영상 (7분 이하)
+    </div>
+    <div class="video-list">
+      <a href="https://www.youtube.com/results?search_query=지니스쿨+백제의+역사" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🏛️ 5분 만에 끝내는 백제 역사</div>
+          <div class="video-item-sub">한성 ➡️ 웅진(공주) ➡️ 사비(부여) 천도 스토리</div>
+        </div>
+        <span class="video-item-badge">5분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=비디오머그+무령왕릉" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">👑 1,500년 만의 타임캡슐, 무령왕릉</div>
+          <div class="video-item-sub">도굴 안 된 유일한 백제 왕릉과 진묘수의 비밀</div>
+        </div>
+        <span class="video-item-badge">6분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=EBS+역사채널e+백제금동대향로" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🪔 진흙 속 1,300년의 기적, 금동대향로</div>
+          <div class="video-item-sub">EBS 역사채널e 국보 제287호 명작의 탄생</div>
+        </div>
+        <span class="video-item-badge">4분</span>
+      </a>
+    </div>
   </div>
 
   <div class="timeline">
@@ -272,12 +379,12 @@ body {
       <div class="tl-dot major"></div>
       <div class="tl-card highlight">
         <div class="tl-time">18:00 ~ 19:30</div>
-        <div class="tl-title">🥩 저녁 식사</div>
+        <div class="tl-title">🍚 저녁 식사</div>
         <div class="tl-desc">
-          문경 특산 <strong>약돌돼지 삼겹살</strong><br/>
-          고추장 석쇠구이로 여행 첫끼 든든하게!
+          점촌 시내에서 취향에 맞는 맛있는 저녁 식사하기<br/>
+          여행 첫날 든든하게 먹고 편안한 휴식
         </div>
-        <span class="tag tag-food">🍖 맛집</span>
+        <span class="tag tag-food">🍖 식사</span>
       </div>
     </div>
 
@@ -286,7 +393,7 @@ body {
       <div class="tl-card">
         <div class="tl-time">19:30 ~</div>
         <div class="tl-title">🌙 자유 시간</div>
-        <div class="tl-desc">점촌 시내 산책 또는 숙소에서 쉬기<br/>내일 08:40 출발이니 일찍 취침!</div>
+        <div class="tl-desc">점촌 시내 산책 또는 숙소에서 쉬기<br/>내일 09:30 여유 출발이니 푹 쉬기!</div>
       </div>
     </div>
   </div>
@@ -297,6 +404,36 @@ body {
   <div class="day-header day2">
     <h2>2일차 · 토요일</h2>
     <p>점촌(09:30 여유 출발) ➡️ 공주(고마열차·밤파이·산성시장) ➡️ 부여(국보 대향로·전기어차) ➡️ 전주(숙박·먹방)</p>
+  </div>
+
+  <!-- 🎬 여행 전 5분 영상 (7분 이하) -->
+  <div class="video-section">
+    <div class="video-section-title">
+      🎬 여행 전 쏙쏙! 5분 공주·부여 영상 (7분 이하)
+    </div>
+    <div class="video-list">
+      <a href="https://www.youtube.com/results?search_query=비디오머그+무령왕릉" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">👑 [공주] 1,500년 전 타임캡슐 무령왕릉</div>
+          <div class="video-item-sub">도굴 안 된 유일한 백제 왕릉과 진묘수 보물</div>
+        </div>
+        <span class="video-item-badge">6분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=EBS+역사채널e+백제금동대향로" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🪔 [부여] 백제 예술의 정수, 금동대향로</div>
+          <div class="video-item-sub">국보 제287호 진품 관람 전 필수 시청 영상</div>
+        </div>
+        <span class="video-item-badge">4분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=문화유산채널+백제문화단지" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🏛️ [부여] 38m 능사 목탑과 사비궁</div>
+          <div class="video-item-sub">전기어차 타고 둘러볼 백제문화단지 미리보기</div>
+        </div>
+        <span class="video-item-badge">5분</span>
+      </a>
+    </div>
   </div>
 
   <div class="timeline">
@@ -329,7 +466,12 @@ body {
             <li>시원한 바람 쐬며 공주 유네스코 세계유산 둘러보기 & 금서루 포토존</li>
           </ul>
         </div>
-        <a href="tel:041-856-7700" class="phone-btn">전화: 041-856-7700</a>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+          <a href="tel:041-856-7700" class="phone-btn">전화: 041-856-7700</a>
+          <a href="https://www.youtube.com/results?search_query=비디오머그+무령왕릉" target="_blank" rel="noopener noreferrer" class="video-btn">
+            🎬 [5분 영상] 무령왕릉의 비밀 보기
+          </a>
+        </div>
       </div>
     </div>
 
@@ -386,7 +528,12 @@ body {
             <li>100% <strong>실내 에어컨 & 무료 입장</strong> (09:00~18:00)</li>
           </ul>
         </div>
-        <a href="tel:041-833-8562" class="phone-btn">전화: 041-833-8562</a>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+          <a href="tel:041-833-8562" class="phone-btn">전화: 041-833-8562</a>
+          <a href="https://www.youtube.com/results?search_query=EBS+역사채널e+백제금동대향로" target="_blank" rel="noopener noreferrer" class="video-btn">
+            🎬 [4분 영상] 백제금동대향로의 기적 보기
+          </a>
+        </div>
       </div>
     </div>
 
@@ -443,6 +590,36 @@ body {
   <div class="day-header day3">
     <h2>3일차 · 일요일</h2>
     <p>전주 ➡️ 익산(교도소 세트장·미륵사지) ➡️ 부산 복귀</p>
+  </div>
+
+  <!-- 🎬 여행 전 5분 영상 (7분 이하) -->
+  <div class="video-section">
+    <div class="video-section-title">
+      🎬 여행 전 쏙쏙! 5분 익산 백제 영상 (7분 이하)
+    </div>
+    <div class="video-list">
+      <a href="https://www.youtube.com/results?search_query=문화유산채널+미륵사지+석탑" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🏛️ [익산] 20년 복원의 기적, 미륵사지 석탑</div>
+          <div class="video-item-sub">동양 최대 석탑과 백제 무왕의 꿈</div>
+        </div>
+        <span class="video-item-badge">5분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=EBS+역사+금제사리봉영기" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">📜 [익산] 서동요의 반전! 금제사리봉영기</div>
+          <div class="video-item-sub">무왕과 왕비의 진짜 이야기 & 국립익산박물관</div>
+        </div>
+        <span class="video-item-badge">4분</span>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=익산+교도소세트장" target="_blank" rel="noopener noreferrer" class="video-item">
+        <div class="video-item-info">
+          <div class="video-item-title">🚨 [익산] 영화·드라마 촬영지 교도소 세트장</div>
+          <div class="video-item-sub">죄수복 체험과 재미있는 상황극 미리보기</div>
+        </div>
+        <span class="video-item-badge">4분</span>
+      </a>
+    </div>
   </div>
 
   <div class="timeline">
@@ -503,6 +680,11 @@ body {
             <li>사전 예약 필수 (홈페이지). 현장 잔여분 예약 가능하나 마감 잦음</li>
           </ul>
         </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+          <a href="https://www.youtube.com/results?search_query=문화유산채널+미륵사지+석탑" target="_blank" rel="noopener noreferrer" class="video-btn">
+            🎬 [5분 영상] 미륵사지 석탑의 비밀 보기
+          </a>
+        </div>
         <span class="tag tag-indoor">❄️ 실내</span>
         <span class="tag tag-history">📜 역사</span>
         <span class="tag tag-free">무료</span>
@@ -546,47 +728,57 @@ body {
   </div>
 </div>
 
-<!-- ═══ COST & CHECKLIST ═══ -->
+<!-- ═══ PREPARATION & CHECKLIST ═══ -->
 <div class="day-content" id="day-cost">
-  <div class="cost-card">
-    <h3>💰 예상 비용 (2인 기준)</h3>
-    <div class="cost-row"><span class="label">🛣️ 고속도로 통행료 (3일)</span><span class="value">~60,000원</span></div>
-    <div class="cost-row"><span class="label">⛽ 유류비 (약 700km)</span><span class="value">~80,000원</span></div>
-    <div class="cost-row"><span class="label">🏨 숙박 2박</span><span class="value">100,000~200,000원</span></div>
-    <div class="cost-row"><span class="label">🛵 백제문화단지 입장+전기어차</span><span class="value">~35,000원</span></div>
-    <div class="cost-row"><span class="label">⛵ 황포돛배 왕복 ×2</span><span class="value">~22,000원</span></div>
-    <div class="cost-row"><span class="label">🚨 교도소 세트장 의상대여 ×2</span><span class="value">~4,000원</span></div>
-    <div class="cost-row"><span class="label">🏛️ 국립공주·익산박물관</span><span class="value">무료</span></div>
-    <div class="cost-row"><span class="label">🍚 식비 (6끼 + 간식)</span><span class="value">100,000~150,000원</span></div>
-    <div class="cost-total">
-      <span class="label">합계 (추정)</span>
-      <span class="value">약 38~55만원</span>
+  <!-- 1. 여행 필수 준비물 체크리스트 -->
+  <div class="check-section">
+    <h3>🎒 여행 필수 준비물 체크리스트</h3>
+
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox">
+      <div class="check-text">
+        <strong>운전면허증</strong> (부여 백제문화단지 전기어차 대여 시 필수 지참)
+      </div>
+    </div>
+
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox">
+      <div class="check-text">
+        <strong>편안한 운동화 & 모자 / 양산</strong> (야외 유적지 이동 대비)
+      </div>
+    </div>
+
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox">
+      <div class="check-text">
+        <strong>스마트폰 보조배터리 & 충전선</strong> (사진 촬영 및 학습앱 이용)
+      </div>
+    </div>
+
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox">
+      <div class="check-text">
+        <strong>개인 상비약 & 세면도구</strong> (소화제, 밴드, 모기기피제 등)
+      </div>
+    </div>
+
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox">
+      <div class="check-text">
+        <strong>점촌 숙소 & 전주 숙소</strong> 예약 확정 확인
+      </div>
     </div>
   </div>
 
+  <!-- 2. 방문지 사전 확인 & 예약 -->
   <div class="check-section">
-    <h3>📞 출발 전 체크리스트</h3>
+    <h3>📞 방문지 사전 확인 & 체크</h3>
 
     <div class="check-item" onclick="toggleCheck(this)">
       <input type="checkbox">
       <div class="check-text">
-        <strong>백제문화단지 전기어차</strong> 운영 확인<br/>
-        <a href="tel:041-408-7290" class="phone-btn" onclick="event.stopPropagation()">📞 041-408-7290</a>
-      </div>
-    </div>
-
-    <div class="check-item" onclick="toggleCheck(this)">
-      <input type="checkbox">
-      <div class="check-text">
-        <strong>백마강 황포돛배</strong> 당일 운항 확인<br/>
-        <a href="tel:041-835-4689" class="phone-btn" onclick="event.stopPropagation()">📞 041-835-4689</a>
-      </div>
-    </div>
-
-    <div class="check-item" onclick="toggleCheck(this)">
-      <input type="checkbox">
-      <div class="check-text">
-        <strong>익산 교도소 세트장</strong> 촬영일 여부 확인 (촬영 시 관람 불가)<br/>
+        <strong>익산 교도소 세트장</strong> 촬영일 여부 확인<br/>
+        <span style="font-size:12px;color:#EF4444;font-weight:700;">※ 영화/드라마 촬영이 있는 날은 관람 불가!</span><br/>
         <a href="tel:063-859-3836" class="phone-btn" onclick="event.stopPropagation()">📞 063-859-3836</a>
       </div>
     </div>
@@ -594,30 +786,64 @@ body {
     <div class="check-item" onclick="toggleCheck(this)">
       <input type="checkbox">
       <div class="check-text">
-        <strong>국립익산박물관 어린이박물관</strong> 온라인 사전 예약<br/>
-        <span style="font-size:11px;color:#888;">홈페이지: iksan.museum.go.kr</span>
+        <strong>부여 백제문화단지 전기어차</strong> 현장 대여 운영 확인<br/>
+        <a href="tel:041-408-7290" class="phone-btn" onclick="event.stopPropagation()">📞 041-408-7290</a>
       </div>
     </div>
 
     <div class="check-item" onclick="toggleCheck(this)">
       <input type="checkbox">
       <div class="check-text">
-        <strong>전주 숙소</strong> 예약 완료
+        <strong>국립익산박물관 어린이박물관</strong> 사전 예약 확인<br/>
+        <span style="font-size:12px;color:#64748B;">주말 5회차 운영 (홈페이지 iksan.museum.go.kr)</span>
       </div>
     </div>
 
     <div class="check-item" onclick="toggleCheck(this)">
       <input type="checkbox">
       <div class="check-text">
-        <strong>점촌 숙소</strong> 예약 완료
+        <strong>공주 공산성 고마열차</strong> 운행 확인<br/>
+        <span style="font-size:12px;color:#64748B;">매표소 무인발권기 현장 선착순 탑승</span><br/>
+        <a href="tel:041-856-7700" class="phone-btn" onclick="event.stopPropagation()">📞 041-856-7700</a>
       </div>
     </div>
   </div>
 
-  <div style="margin-top:16px; padding:14px; background:#F0F0F5; border-radius:12px; font-size:11px; color:#888; text-align:center; line-height:1.6;">
-    ⚠️ 이 계획서는 2026년 8월 20일 기준 팩트체크된 정보입니다.<br/>
-    운영 시간·요금·운행 여부는 현장 사정에 따라 변경될 수 있으니<br/>
-    위 전화번호로 출발 전 최종 확인해 주세요.
+  <!-- 3. 일정별 핵심 주의사항 & 꿀팁 -->
+  <div class="check-section">
+    <h3>⚠️ 2박 3일 일정별 핵심 주의사항</h3>
+
+    <div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+      <div style="font-size:15px;font-weight:800;color:#2563EB;margin-bottom:4px;">1일차 (금요일)</div>
+      <ul style="font-size:14px;color:#334155;padding-left:20px;line-height:1.6;">
+        <li>부산 14:00 정시 출발 시 금요일 퇴근길 정체 전 점촌 도착 가능</li>
+        <li>숙소 체크인 후 점촌 시내에서 여유롭게 저녁 식사 및 충분한 휴식</li>
+      </ul>
+    </div>
+
+    <div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+      <div style="font-size:15px;font-weight:800;color:#D97706;margin-bottom:4px;">2일차 (토요일)</div>
+      <ul style="font-size:14px;color:#334155;padding-left:20px;line-height:1.6;">
+        <li><strong>공주</strong>: 공산성 주차 후 11:30 고마열차 탑승 ➡️ 밤마을 디저트 ➡️ 산성시장 점심</li>
+        <li><strong>부여</strong>: 국립부여박물관 백제금동대향로 진품 관람 & 로비 돔 미디어쇼(정시 상영)</li>
+        <li><strong>백제문화단지</strong>: 매표 마감(17:30) 전 입장하여 지붕 달린 4인승 전기어차로 1시간 관람</li>
+        <li><strong>전주</strong>: 남부시장 야시장(매주 금·토 17:00~23:00) 먹방 투어 즐기기</li>
+      </ul>
+    </div>
+
+    <div>
+      <div style="font-size:15px;font-weight:800;color:#059669;margin-bottom:4px;">3일차 (일요일)</div>
+      <ul style="font-size:14px;color:#334155;padding-left:20px;line-height:1.6;">
+        <li><strong>익산 교도소 세트장</strong>: 매주 월요일 휴관 (일요일 정상 운영 ✅)</li>
+        <li><strong>국립익산박물관</strong>: 100% 지하 실내 에어컨 박물관에서 쾌적한 관람</li>
+        <li><strong>귀경길 안전</strong>: 일요일 오후 고속도로 정체를 감안하여 13:30~14:00경 부산 출발 ➡️ 17:00 귀가</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:16px; padding:14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; font-size:12px; color:#64748B; text-align:center; line-height:1.6;">
+    💡 위 체크 항목을 터치하면 체크 상태가 스마트폰에 자동 저장됩니다.<br/>
+    안전하고 행복한 2박 3일 백제 문화유산 여행 되세요!
   </div>
 </div>
 
