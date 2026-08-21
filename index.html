@@ -61,7 +61,7 @@ body {
 .tabs {
   display: flex;
   padding: 12px 16px 0;
-  gap: 8px;
+  gap: 6px;
   position: sticky;
   top: 0;
   background: var(--bg);
@@ -70,15 +70,32 @@ body {
 }
 .tab {
   flex: 1;
-  padding: 12px 6px;
+  padding: 10px 3px;
   border-radius: 12px;
   text-align: center;
-  font-size: 15px;
-  font-weight: 700;
   cursor: pointer;
   background: #FFFFFF;
   border: 1px solid var(--border);
   color: var(--sub);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 58px;
+}
+.tab-day {
+  font-size: 13.5px;
+  font-weight: 800;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.tab-label {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 3px;
+  white-space: nowrap;
+  line-height: 1.2;
+  opacity: 0.9;
 }
 .tab.active { color: #FFFFFF; border-color: transparent; }
 .tab[data-day="1"].active { background: var(--day1); }
@@ -294,20 +311,20 @@ body {
 <!-- ═══ TABS ═══ -->
 <div class="tabs">
   <div class="tab active" data-day="1" onclick="showDay(1)">
-    1일차
-    <div class="tab-label">금 · 점촌</div>
+    <div class="tab-day">1일차 (금)</div>
+    <div class="tab-label">점촌</div>
   </div>
   <div class="tab" data-day="2" onclick="showDay(2)">
-    2일차
-    <div class="tab-label">토 · 공주·부여</div>
+    <div class="tab-day">2일차 (토)</div>
+    <div class="tab-label">공주 · 부여</div>
   </div>
   <div class="tab" data-day="3" onclick="showDay(3)">
-    3일차
-    <div class="tab-label">일 · 전주·사천</div>
+    <div class="tab-day">3일차 (일)</div>
+    <div class="tab-label">전주 · 사천</div>
   </div>
   <div class="tab" data-day="cost" onclick="showDay('cost')">
-    체크
-    <div class="tab-label">준비·주의</div>
+    <div class="tab-day">체크리스트</div>
+    <div class="tab-label">준비 · 주의</div>
   </div>
 </div>
 
