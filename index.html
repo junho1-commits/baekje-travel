@@ -385,10 +385,11 @@ body {
 
     <div class="tl-item">
       <div class="tl-dot major"></div>
-      <div class="tl-card">
+      <div class="tl-card highlight" style="background:#F0FDF4;border-color:#86EFAC;">
         <div class="tl-time">16:40 ~ 17:00</div>
-        <div class="tl-title">📍 점촌(모전동) 도착</div>
-        <div class="tl-desc">숙소 체크인 & 짐 풀기</div>
+        <div class="tl-title">🏡 점촌 할머니집 도착</div>
+        <div class="tl-desc">할머니께 반갑게 인사드리고 짐 풀기 & 편안한 휴식</div>
+        <span class="tag tag-stay">🏡 할머니집</span>
       </div>
     </div>
 
@@ -396,10 +397,10 @@ body {
       <div class="tl-dot major"></div>
       <div class="tl-card highlight">
         <div class="tl-time">18:00 ~ 19:30</div>
-        <div class="tl-title">🍚 저녁 식사</div>
+        <div class="tl-title">🍚 저녁 식사 & 가족 힐링</div>
         <div class="tl-desc">
-          점촌 시내에서 취향에 맞는 맛있는 저녁 식사하기<br/>
-          여행 첫날 든든하게 먹고 편안한 휴식
+          점촌 시내 맛있는 식사 or 할머니표 맛있는 저녁 식사<br/>
+          여행 첫날 든든하게 먹고 할머니집에서 따뜻하고 편안한 시간!
         </div>
         <span class="tag tag-food">🍖 식사</span>
       </div>
@@ -409,8 +410,8 @@ body {
       <div class="tl-dot"></div>
       <div class="tl-card">
         <div class="tl-time">19:30 ~</div>
-        <div class="tl-title">🌙 자유 시간</div>
-        <div class="tl-desc">점촌 시내 산책 또는 숙소에서 쉬기<br/>내일 09:30 여유 출발이니 푹 쉬기!</div>
+        <div class="tl-title">🌙 할머니집 휴식 & 백제 여행 준비</div>
+        <div class="tl-desc">할머니와 도란도란 이야기 나누기 & 스마트폰 충전<br/>내일(2일차) 09:30 여유 출발이니 푹 쉬기!</div>
       </div>
     </div>
   </div>
@@ -581,7 +582,7 @@ body {
 
     <div class="tl-item">
       <div class="move-card">
-        <div class="move-info"><strong>약 55분</strong> 이동 (부여 ➡️ 전주 숙소)</div>
+        <div class="move-info"><strong>약 55분</strong> 이동 (부여 ➡️ 전주 카마 호텔)</div>
       </div>
     </div>
 
@@ -589,14 +590,20 @@ body {
       <div class="tl-dot major"></div>
       <div class="tl-card highlight">
         <div class="tl-time">19:00 ~ 21:30</div>
-        <div class="tl-title">전주 숙소 체크인 & 남부시장 야시장 먹방</div>
+        <div class="tl-title">🏨 전주 카마 호텔 체크인 & 남부시장 야시장 먹방</div>
         <div class="tl-desc">
           <ul>
-            <li><strong>숙소</strong>: 전주 시내 호텔 체크인 및 짐 풀기 (라한, 그랜드힐스턴, 베스트웨스턴 등)</li>
-            <li><strong>저녁</strong>: 전주 떡갈비 / 전주비빔밥</li>
-            <li><strong>남부시장 야시장</strong> (매주 금·토 17:00~23:00 운영): 불초밥, 닭꼬치, 탕후루, 십원빵 등 야시장 먹방 투어!</li>
+            <li><strong>숙소</strong>: <strong>전주 카마 호텔</strong> (프리미엄룸 / 고성능 PC 2대 💻💻 & 킹베드 1개)</li>
+            <li><strong>혜택</strong>: 무료 주차, 조식 포함, 욕조, 공기청정기, 무료 Wi-Fi 완비</li>
+            <li><strong>주소</strong>: 전북특별자치도 전주시 완산구 한두평2길 8-9 (중화산동2가)</li>
+            <li><strong>저녁 & 먹방</strong>: 전주 떡갈비 / 전주비빔밥 & <strong>남부시장 야시장</strong>(17:00~23:00) 불초밥, 닭꼬치, 탕후루, 십원빵 먹방 투어!</li>
           </ul>
         </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;">
+          <a href="tel:063-229-0051" class="phone-btn">📞 호텔: 063-229-0051</a>
+        </div>
+        <span class="tag tag-stay">🏨 카마 호텔 (PC 2대)</span>
+        <span class="tag tag-food">🍖 야시장 먹방</span>
       </div>
     </div>
   </div>
@@ -770,14 +777,23 @@ body {
     <div class="check-item" onclick="toggleCheck(this)">
       <input type="checkbox">
       <div class="check-text">
-        <strong>점촌 숙소 & 전주 숙소</strong> 예약 확정 확인
+        <strong>전주 카마 호텔 (프리미엄룸 PC 2대)</strong> 예약 확정 확인
       </div>
     </div>
   </div>
 
   <!-- 2. 방문지 사전 확인 & 체크 -->
   <div class="check-section">
-    <h3>📞 방문지 사전 확인 & 체크</h3>
+    <h3>📞 방문지 & 숙소 사전 확인</h3>
+
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox">
+      <div class="check-text">
+        <strong>전주 카마 호텔</strong> 체크인 확인<br/>
+        <span style="font-size:12px;color:#64748B;">완산구 한두평2길 8-9 (무료 주차)</span><br/>
+        <a href="tel:063-229-0051" class="phone-btn" onclick="event.stopPropagation()">📞 063-229-0051</a>
+      </div>
+    </div>
 
     <div class="check-item" onclick="toggleCheck(this)">
       <input type="checkbox">
@@ -814,7 +830,7 @@ body {
       <div style="font-size:15px;font-weight:800;color:#2563EB;margin-bottom:4px;">1일차 (금요일)</div>
       <ul style="font-size:14px;color:#334155;padding-left:20px;line-height:1.6;">
         <li>부산 14:00 정시 출발 시 금요일 퇴근길 정체 전 점촌 도착 가능</li>
-        <li>숙소 체크인 후 점촌 시내에서 여유롭게 저녁 식사 및 충분한 휴식</li>
+        <li><strong>점촌 할머니집</strong> 도착 후 반갑게 인사드리고 맛있는 저녁 식사 및 편안한 휴식</li>
       </ul>
     </div>
 
@@ -824,7 +840,7 @@ body {
         <li><strong>공주</strong>: 산성시장 점심 식사 후 <strong>13:00 고마열차(3회차)</strong> 탑승 (12시 타임 미운행)</li>
         <li><strong>부여</strong>: 국립부여박물관 백제금동대향로 진품 관람 & 로비 돔 미디어쇼(정시 상영)</li>
         <li><strong>백제문화단지</strong>: 매표 마감(17:30) 전 입장하여 지붕 달린 4인승 전기어차로 1시간 관람</li>
-        <li><strong>전주</strong>: 남부시장 야시장(매주 금·토 17:00~23:00) 먹방 투어 즐기기</li>
+        <li><strong>전주</strong>: <strong>카마 호텔(PC 2대 프리미엄룸)</strong> 체크인 후 남부시장 야시장(17:00~23:00) 먹방 투어</li>
       </ul>
     </div>
 
